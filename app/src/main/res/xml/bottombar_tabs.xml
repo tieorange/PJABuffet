@@ -1,0 +1,14 @@
+<tabs>
+  <tab
+      icon="@drawable/ic_restaurant_menu_white_24dp"
+      id="@+id/tab_menu"
+      title="Menu"/>
+  <tab
+      icon="@drawable/ic_history_white_24dp"
+      id="@+id/tab_orders"
+      title="Orders"/>
+  <tab
+      icon="@drawable/ic_bottom_profile"
+      id="@+id/tab_profile"
+      title="My Profile"/>
+</tabs>
