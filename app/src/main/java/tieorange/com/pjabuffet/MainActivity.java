@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
   private String TAG_ORDER = "order";
   private String TAG_PROFILE = "profile";
   private Handler mHandler;
+  private ProfileFragment mProfileFragment;
   //@BindView(R.id.bottomBar) public BottomBar mBottomBar;
 
   @Override protected void onCreate(Bundle savedInstanceState) {

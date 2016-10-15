@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="wrap_content" android:clickable="true" android:elevation="6dp" tools:layout_width="170dp"
+    android:foreground="?android:attr/selectableItemBackground" android:orientation="vertical">
+
+  <android.support.constraint.ConstraintLayout
+      android:layout_width="match_parent" android:layout_height="wrap_content" tools:layout_editor_absoluteX="0dp"
+      tools:layout_editor_absoluteY="0dp">
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="0dp"
+        android:layout_height="80dp" android:adjustViewBounds="false"
+        android:cropToPadding="false"
+        android:scaleType="centerCrop"
+        app:layout_constraintHorizontal_bias="0.0" app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" app:srcCompat="@drawable/pierogi_ruskie" tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"/>
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp" android:layout_marginTop="8dp" android:textSize="18dp"
+        app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintTop_toBottomOf="@+id/image" tools:text="Pierogi"/>
+    <TextView
+        android:id="@+id/nameSecondary"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp" android:layout_marginStart="8dp" android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintTop_toBottomOf="@+id/name"
+        tools:text="Ruskie"/>
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/name" app:layout_constraintRight_toRightOf="parent" tools:text="8.50 zł"/>
+    <TextView
+        android:id="@+id/cookingTime"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:alpha="0.7" android:background="@android:color/darker_gray" android:drawableLeft="@drawable/ic_time_white_18dp"
+        android:paddingRight="4dp" android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/image"
+        app:layout_constraintRight_toRightOf="parent" tools:text="15min"/>
+
+  </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

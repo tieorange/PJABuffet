@@ -1,15 +1,23 @@
 package tieorange.com.pjabuffet;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MenuFragment extends Fragment {
+
+  @BindView(R.id.recycler) RecyclerView recycler;
+  private MenuAdapter mAdapter;
 
   public MenuFragment() {
     // Required empty public constructor
@@ -24,6 +32,29 @@ public class MenuFragment extends Fragment {
 
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     // Inflate the layout for this fragment
-    return inflater.inflate(R.layout.fragment_menu, container, false);
+    View view = inflater.inflate(R.layout.fragment_menu, container, false);
+    ButterKnife.bind(this, view);
+    return view;
+  }
+
+  @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+
+    initRecycler();
+  }
+
+  private void initRecycler() {
+    int spanCount = 2;
+    recycler.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
+    int spacing = 30;
+    //recycler.addItemDecoration(new SpacesItemDecoration(spacing, spacing, spacing, spacing));
+    recycler.addItemDecoration(new GridItemSpacingDecorator(spanCount, 30));
+
+    initAdapter();
+  }
+
+  private void initAdapter() {
+    mAdapter = new MenuAdapter(getContext());
+    recycler.setAdapter(mAdapter);
   }
 }
