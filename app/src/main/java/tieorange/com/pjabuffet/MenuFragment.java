@@ -1,5 +1,6 @@
 package tieorange.com.pjabuffet;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,11 +47,18 @@ public class MenuFragment extends Fragment {
   }
 
   private void initRecycler() {
-    int spanCount = 2;
+    int spanCount;
+    int orientation = getResources().getConfiguration().orientation;
+    if (orientation == ORIENTATION_PORTRAIT) {
+      spanCount = 2;
+    } else {
+      spanCount = 3;
+    }
+
     recycler.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
-    int spacing = 30;
+    int spacing = 40;
     //recycler.addItemDecoration(new SpacesItemDecoration(spacing, spacing, spacing, spacing));
-    recycler.addItemDecoration(new GridItemSpacingDecorator(spanCount, 30));
+    recycler.addItemDecoration(new GridItemSpacingDecorator(spanCount, spacing));
 
     initAdapter();
   }

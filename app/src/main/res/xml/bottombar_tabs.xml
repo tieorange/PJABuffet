@@ -6,7 +6,7 @@
       title="Menu"/>
   <tab
       barColorWhenSelected="@color/tab_orders"
-      icon="@drawable/ic_history_white_24dp"
+      icon="@drawable/ic_shopping_cart_white_24dp"
       id="@+id/tab_orders"
       title="Orders"/>
   <tab

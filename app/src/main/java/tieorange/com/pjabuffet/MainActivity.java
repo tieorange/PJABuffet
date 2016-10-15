@@ -12,11 +12,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
   private String TAG_PROFILE = "profile";
   private Handler mHandler;
   private ProfileFragment mProfileFragment;
+  private BottomBarTab mBottomTabOrders;
   //@BindView(R.id.bottomBar) public BottomBar mBottomBar;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
       @Override public void run() {
         Fragment fragment = getSelectedProfile();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        //fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.replace(R.id.frameContainer, fragment, mCurrentTabTag);
         fragmentTransaction.commitAllowingStateLoss();
       }
@@ -75,12 +76,15 @@ public class MainActivity extends AppCompatActivity {
     } else if (mCurrentTabTag.equals(TAG_ORDER)) {
       fragment = mOrdersFragment;
     } else if (mCurrentTabTag.equals(TAG_PROFILE)) {
-      // TODO: 15/10/2016
+      fragment = mProfileFragment;
     }
     return fragment;
   }
 
   private void initViews() {
+    mBottomTabOrders = bottomBar.getTabWithId(R.id.tab_orders);
+    mBottomTabOrders.setBadgeCount(5);
+
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
     fab.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {

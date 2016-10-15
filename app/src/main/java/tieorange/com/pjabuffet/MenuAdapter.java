@@ -22,7 +22,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
   public MenuAdapter(Context mContext) {
     this.mContext = mContext;
-    mProducts = Product.getDummy(10);
+    mProducts = Product.getDummy(30);
   }
 
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -34,8 +34,8 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     Product product = mProducts.get(position);
     holder.name.setText(product.name);
     holder.nameSecondary.setText(product.nameSecondary);
-    holder.price.setText(String.valueOf(product.price));
-    String cookingTimeText = String.valueOf(product.cookingTime) + "min";
+    holder.price.setText(product.getStringPrice());
+    String cookingTimeText = String.valueOf(product.cookingTime) + " min";
     holder.cookingTime.setText(cookingTimeText);
   }
 
