@@ -25,7 +25,28 @@
 
   </android.support.design.widget.AppBarLayout>
 
-  <include layout="@layout/content_main"/>
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      >
+    <FrameLayout
+        android:id="@+id/frameContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <com.roughike.bottombar.BottomBar
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        app:bb_activeTabColor="@color/white"
+        app:bb_inActiveTabColor="@color/white"
+        app:bb_tabXmlResource="@xml/bottombar_tabs"
+        />
+
+  </RelativeLayout>
+
 
   <android.support.design.widget.FloatingActionButton
       android:id="@+id/fab"
@@ -33,7 +54,9 @@
       android:layout_height="wrap_content"
       android:layout_gravity="bottom|end"
       android:layout_margin="@dimen/fab_margin"
+      android:visibility="gone"
       app:srcCompat="@android:drawable/ic_dialog_email"
       />
+
 
 </android.support.design.widget.CoordinatorLayout>
