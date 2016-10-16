@@ -28,7 +28,7 @@ dependencies {
 
 
 
-
+  compile 'org.greenrobot:eventbus:3.0.0'
 
 
   compile 'com.android.support:appcompat-v7:24.2.1'

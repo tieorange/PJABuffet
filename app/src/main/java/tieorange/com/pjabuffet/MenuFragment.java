@@ -1,6 +1,5 @@
 package tieorange.com.pjabuffet;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import org.greenrobot.eventbus.EventBus;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
@@ -19,7 +19,7 @@ import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
  */
 public class MenuFragment extends Fragment {
 
-  @BindView(R.id.recycler) RecyclerView recycler;
+  @BindView(R.id.recycler) RecyclerView mRecycler;
   private MenuAdapter mAdapter;
 
   public MenuFragment() {
@@ -46,6 +46,16 @@ public class MenuFragment extends Fragment {
     initRecycler();
   }
 
+  @Override public void onStart() {
+    super.onStart();
+    //EventBus.getDefault().register(this);
+  }
+
+  @Override public void onStop() {
+    //EventBus.getDefault().unregister(this);
+    super.onStop();
+  }
+
   private void initRecycler() {
     int spanCount;
     int orientation = getResources().getConfiguration().orientation;
@@ -55,16 +65,23 @@ public class MenuFragment extends Fragment {
       spanCount = 3;
     }
 
-    recycler.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
+    mRecycler.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
     int spacing = 40;
-    //recycler.addItemDecoration(new SpacesItemDecoration(spacing, spacing, spacing, spacing));
-    recycler.addItemDecoration(new GridItemSpacingDecorator(spanCount, spacing));
+    //mRecycler.addItemDecoration(new SpacesItemDecoration(spacing, spacing, spacing, spacing));
+    mRecycler.addItemDecoration(new GridItemSpacingDecorator(spanCount, spacing));
+
+    ItemClickSupport.addTo(mRecycler).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+      @Override public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+        Product product = mAdapter.mProducts.get(position);
+        EventBus.getDefault().post(new EventProductAddedToCart(product));
+      }
+    });
 
     initAdapter();
   }
 
   private void initAdapter() {
     mAdapter = new MenuAdapter(getContext());
-    recycler.setAdapter(mAdapter);
+    mRecycler.setAdapter(mAdapter);
   }
 }

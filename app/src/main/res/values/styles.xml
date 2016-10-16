@@ -18,4 +18,10 @@
   <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
   <style name="AppTheme.TransNav" parent="AppTheme.NoActionBar"/>
+  <style name="productName">
+    <item name="android:textSize">18sp</item>
+  </style>
+  <style name="productPrice">
+    <item name="android:textStyle">bold</item>
+  </style>
 </resources>

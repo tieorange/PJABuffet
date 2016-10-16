@@ -37,10 +37,10 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="18dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image"
-        tools:text="Pierogi"/>
+        tools:text="Pierogi"
+        style="@style/productName"/>
     <TextView
         android:id="@+id/nameSecondary"
         android:layout_width="wrap_content"
@@ -59,10 +59,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@+id/name"
         app:layout_constraintRight_toRightOf="parent"
-        tools:text="8.50 zł"/>
+        tools:text="8.50 zł"
+        style="@style/productPrice"/>
     <TextView
         android:id="@+id/cookingTime"
         android:layout_width="wrap_content"

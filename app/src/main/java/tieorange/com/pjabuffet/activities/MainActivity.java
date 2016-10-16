@@ -1,4 +1,4 @@
-package tieorange.com.pjabuffet;
+package tieorange.com.pjabuffet.activities;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,11 +13,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import tieorange.com.pjabuffet.EventProductAddedToCart;
+import tieorange.com.pjabuffet.MenuFragment;
+import tieorange.com.pjabuffet.OrdersFragment;
+import tieorange.com.pjabuffet.ProfileFragment;
+import tieorange.com.pjabuffet.R;
 
 public class MainActivity extends AppCompatActivity {
   @BindView(R.id.toolbar) Toolbar toolbar;
@@ -33,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
   private Handler mHandler;
   private ProfileFragment mProfileFragment;
   private BottomBarTab mBottomTabOrders;
+  private int mBadgeCount = 0;
   //@BindView(R.id.bottomBar) public BottomBar mBottomBar;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +54,16 @@ public class MainActivity extends AppCompatActivity {
     initFragments();
     mHandler = new Handler();
     initViews();
+  }
+
+  @Override public void onStart() {
+    super.onStart();
+    EventBus.getDefault().register(this);
+  }
+
+  @Override public void onStop() {
+    EventBus.getDefault().unregister(this);
+    super.onStop();
   }
 
   private void initFragments() {
@@ -83,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
   private void initViews() {
     mBottomTabOrders = bottomBar.getTabWithId(R.id.tab_orders);
-    mBottomTabOrders.setBadgeCount(5);
+    mBottomTabOrders.setBadgeCount(mBadgeCount);
 
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
     fab.setOnClickListener(new View.OnClickListener() {
@@ -123,5 +143,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventProductAddedToCart event) {
+    String name = String.valueOf(event.product.cookingTime);
+    Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
+    mBottomTabOrders.setBadgeCount(++mBadgeCount);
   }
 }

@@ -17,12 +17,12 @@ import java.util.List;
  */
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
-  private List<Product> mProducts = new ArrayList<>();
+  public List<Product> mProducts = new ArrayList<>();
   private Context mContext;
 
   public MenuAdapter(Context mContext) {
     this.mContext = mContext;
-    mProducts = Product.getDummy(30);
+    mProducts = new ArrayList<>(MyApplication.mProducts);
   }
 
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

@@ -2,6 +2,7 @@ package tieorange.com.pjabuffet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by tieorange on 15/10/2016.
@@ -21,8 +22,11 @@ public class Product {
 
   public static List<Product> getDummy(int count) {
     List<Product> productList = new ArrayList<>();
+    Random random = new Random();
     for (int i = 0; i < count; i++) {
-      productList.add(new Product("Pierogi", "Ruskie", 4.50, 10));
+      int cookingTime = random.nextInt(20);
+      double price = random.nextDouble()*20;
+      productList.add(new Product("Pierogi", "Ruskie", price, cookingTime));
     }
     return productList;
   }
