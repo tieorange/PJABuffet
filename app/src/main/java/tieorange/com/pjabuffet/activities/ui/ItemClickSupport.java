@@ -1,7 +1,8 @@
-package tieorange.com.pjabuffet;
+package tieorange.com.pjabuffet.activities.ui;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import tieorange.com.pjabuffet.R;
 
 /**
  * Created by tieorange on 15/10/2016.

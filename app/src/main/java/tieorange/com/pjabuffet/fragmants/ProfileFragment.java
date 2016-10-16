@@ -1,10 +1,11 @@
-package tieorange.com.pjabuffet;
+package tieorange.com.pjabuffet.fragmants;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import tieorange.com.pjabuffet.R;
 
 /**
  * A simple {@link Fragment} subclass.

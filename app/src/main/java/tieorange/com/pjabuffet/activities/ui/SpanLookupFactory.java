@@ -1,4 +1,4 @@
-package tieorange.com.pjabuffet;
+package tieorange.com.pjabuffet.activities.ui;
 
 import android.support.v7.widget.GridLayoutManager;
 

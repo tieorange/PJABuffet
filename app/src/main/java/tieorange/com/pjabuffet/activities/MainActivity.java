@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.roughike.bottombar.BottomBar;
@@ -22,11 +21,11 @@ import com.roughike.bottombar.OnTabSelectListener;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import tieorange.com.pjabuffet.EventProductAddedToCart;
-import tieorange.com.pjabuffet.MenuFragment;
-import tieorange.com.pjabuffet.OrdersFragment;
-import tieorange.com.pjabuffet.ProfileFragment;
 import tieorange.com.pjabuffet.R;
+import tieorange.com.pjabuffet.fragmants.MenuFragment;
+import tieorange.com.pjabuffet.fragmants.OrdersFragment;
+import tieorange.com.pjabuffet.fragmants.ProfileFragment;
+import tieorange.com.pjabuffet.pojo.EventProductAddedToCart;
 
 public class MainActivity extends AppCompatActivity {
   @BindView(R.id.toolbar) Toolbar toolbar;
@@ -146,8 +145,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventProductAddedToCart event) {
-    String name = String.valueOf(event.product.cookingTime);
-    Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
+    //Toast.makeText(MainActivity.this, event.id, Toast.LENGTH_SHORT).show();
     mBottomTabOrders.setBadgeCount(++mBadgeCount);
   }
 }

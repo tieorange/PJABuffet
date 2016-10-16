@@ -1,4 +1,4 @@
-package tieorange.com.pjabuffet;
+package tieorange.com.pjabuffet.fragmants;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
+import tieorange.com.pjabuffet.R;
 
 /**
  * A simple {@link Fragment} subclass.

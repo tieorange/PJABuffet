@@ -1,4 +1,4 @@
-package tieorange.com.pjabuffet;
+package tieorange.com.pjabuffet.activities.ui;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -11,16 +11,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.ArrayList;
 import java.util.List;
+import tieorange.com.pjabuffet.MyApplication;
+import tieorange.com.pjabuffet.api.Product;
+import tieorange.com.pjabuffet.R;
 
 /**
  * Created by tieorange on 15/10/2016.
  */
-public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
+public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolder> {
 
   public List<Product> mProducts = new ArrayList<>();
   private Context mContext;
 
-  public MenuAdapter(Context mContext) {
+  public AdapterMenu(Context mContext) {
     this.mContext = mContext;
     mProducts = new ArrayList<>(MyApplication.mProducts);
   }

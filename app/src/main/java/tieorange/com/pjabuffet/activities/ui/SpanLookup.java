@@ -1,4 +1,4 @@
-package tieorange.com.pjabuffet;
+package tieorange.com.pjabuffet.activities.ui;
 
 /**
  * Created by tieorange on 15/10/2016.

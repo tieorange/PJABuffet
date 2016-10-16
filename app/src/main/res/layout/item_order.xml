@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="88dp"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
     android:orientation="vertical"
     tools:layout_height="88dp">
 
   <TextView
       android:id="@+id/name"
-      android:layout_width="wrap_content"
+      android:layout_width="59dp"
       android:layout_height="wrap_content"
       android:layout_marginBottom="16dp"
       android:layout_marginLeft="16dp"
@@ -19,26 +21,27 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      tools:text="Pierogi"
+      tools:text="Pierogi Ruskie "
       style="@style/productName"
   />
   <TextView
       android:id="@+id/nameSecondary"
-      android:layout_width="wrap_content"
+      android:layout_width="176dp"
       android:layout_height="wrap_content"
       android:layout_marginLeft="4dp"
       android:layout_marginStart="4dp"
       app:layout_constraintBaseline_toBaselineOf="@+id/name"
       app:layout_constraintLeft_toRightOf="@+id/name"
-      tools:text="Ruskie"/>
+      tools:text=" Ruskie Ruskie Ruskie Ruskie Ruskie Ruskie "/>
   <TextView
       android:id="@+id/price"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      tools:text="15 zł"
-      style="@style/productPrice"
       android:layout_marginEnd="16dp"
-      app:layout_constraintRight_toRightOf="parent"
       android:layout_marginRight="16dp"
-      app:layout_constraintBaseline_toBaselineOf="@+id/name"/>
+      android:visibility="visible"
+      app:layout_constraintBaseline_toBaselineOf="@+id/name"
+      app:layout_constraintRight_toRightOf="parent"
+      tools:text="15 zł"
+      style="@style/productPrice"/>
 </android.support.constraint.ConstraintLayout>

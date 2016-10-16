@@ -1,4 +1,4 @@
-package tieorange.com.pjabuffet;
+package tieorange.com.pjabuffet.fragmants;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +11,13 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import org.greenrobot.eventbus.EventBus;
+import tieorange.com.pjabuffet.MyApplication;
+import tieorange.com.pjabuffet.pojo.EventProductAddedToCart;
+import tieorange.com.pjabuffet.api.Product;
+import tieorange.com.pjabuffet.R;
+import tieorange.com.pjabuffet.activities.ui.GridItemSpacingDecorator;
+import tieorange.com.pjabuffet.activities.ui.ItemClickSupport;
+import tieorange.com.pjabuffet.activities.ui.AdapterMenu;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
@@ -20,7 +27,7 @@ import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 public class MenuFragment extends Fragment {
 
   @BindView(R.id.recycler) RecyclerView mRecycler;
-  private MenuAdapter mAdapter;
+  private AdapterMenu mAdapter;
 
   public MenuFragment() {
     // Required empty public constructor
@@ -73,7 +80,8 @@ public class MenuFragment extends Fragment {
     ItemClickSupport.addTo(mRecycler).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
       @Override public void onItemClicked(RecyclerView recyclerView, int position, View v) {
         Product product = mAdapter.mProducts.get(position);
-        EventBus.getDefault().post(new EventProductAddedToCart(product));
+        MyApplication.mProductsInCart.add(product);
+        EventBus.getDefault().postSticky(new EventProductAddedToCart());
       }
     });
 
@@ -81,7 +89,7 @@ public class MenuFragment extends Fragment {
   }
 
   private void initAdapter() {
-    mAdapter = new MenuAdapter(getContext());
+    mAdapter = new AdapterMenu(getContext());
     mRecycler.setAdapter(mAdapter);
   }
 }
