@@ -1,7 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="tieorange.com.pjabuffet.fragmants.OrdersFragment"
 >
 
@@ -10,6 +11,8 @@
       android:id="@id/recycler"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:clipToPadding="false"
+      android:overScrollMode="ifContentScrolls"
       tools:listitem="@layout/item_order"
       style="@style/recyclerViewWithToolbar"
   />
@@ -18,11 +21,12 @@
   <RelativeLayout android:id="@+id/footerLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_alignParentBottom="true">
+      android:layout_marginBottom="65dp"
+  >
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        tools:text="Total = 15 zł"/>
+        android:text="Total = 15 zł"/>
   </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>
