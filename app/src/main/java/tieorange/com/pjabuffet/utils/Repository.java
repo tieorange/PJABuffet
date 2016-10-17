@@ -21,4 +21,12 @@ public class Repository {
 
     return results;
   }
+
+  public static double getCartTotalPrice() {
+    double result = 0;
+    for (Product product : MyApplication.sProductsInCart) {
+      result += product.price;
+    }
+    return result;
+  }
 }

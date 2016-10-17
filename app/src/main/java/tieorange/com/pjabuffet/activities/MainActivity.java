@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.NestedScrollView;
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         //fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.replace(R.id.frameContainer, fragment, mCurrentTabTag);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
       }
     };
 
@@ -103,12 +102,13 @@ public class MainActivity extends AppCompatActivity {
     Fragment fragment = mMenuFragment;
     if (mCurrentTabTag.equals(TAG_MENU)) {
       fragment = mMenuFragment;
+      fab.hide();
     } else if (mCurrentTabTag.equals(TAG_ORDER)) {
       fragment = mOrdersFragment;
-      showToolbar();
+      fab.show();
     } else if (mCurrentTabTag.equals(TAG_PROFILE)) {
       fragment = mProfileFragment;
-      hideToolbar();
+      fab.hide();
     }
     return fragment;
   }
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
     fab.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
       }
     });
 
@@ -208,7 +208,12 @@ public class MainActivity extends AppCompatActivity {
   private void hideToolbar() {
     float alpha = toolbarContainer.getAlpha();
     if (alpha == 0f) return;
-    toolbarContainer.animate().translationY(-toolbar.getBottom() * 2).alpha(0).setDuration(200).setInterpolator(new AccelerateInterpolator(2)).start();
+    toolbarContainer.animate()
+        .translationY(-toolbar.getBottom() * 2)
+        .alpha(0)
+        .setDuration(200)
+        .setInterpolator(new AccelerateInterpolator(2))
+        .start();
   }
 
   private void showToolbar() {

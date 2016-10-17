@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.ArrayList;
@@ -15,6 +17,9 @@ import java.util.List;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.ui.AdapterOrderItem;
+import tieorange.com.pjabuffet.utils.Repository;
+
+import static android.view.View.GONE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,6 +27,8 @@ import tieorange.com.pjabuffet.activities.ui.AdapterOrderItem;
 public class OrdersFragment extends Fragment {
 
   @BindView(R.id.recycler) RecyclerView mRecycler;
+  @BindView(R.id.footerLayout) RelativeLayout footerLayout;
+  @BindView(R.id.footerTotalPrice) TextView footerTotalPrice;
   private List<String> mAddedIds = new ArrayList<>();
   private AdapterOrderItem mAdapter;
 
@@ -52,10 +59,21 @@ public class OrdersFragment extends Fragment {
   private void initRecycler() {
     mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
     initAdapter();
+    initFooter();
+  }
+
+  private void initFooter() {
+    if (MyApplication.sProductsInCart.isEmpty()) {
+      footerLayout.setVisibility(GONE);
+    } else {
+      footerLayout.setVisibility(View.VISIBLE);
+    }
+
+    footerTotalPrice.setText("Total price: " + String.format("%.2f", Repository.getCartTotalPrice()) + " zł");
   }
 
   private void initAdapter() {
-    mAdapter = new AdapterOrderItem(getContext(), MyApplication.mProductsInCart);
+    mAdapter = new AdapterOrderItem(getContext(), MyApplication.sProductsInCart);
     mRecycler.setAdapter(mAdapter);
   }
 

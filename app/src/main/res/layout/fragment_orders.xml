@@ -13,6 +13,7 @@
       android:layout_height="match_parent"
       android:clipToPadding="false"
       android:overScrollMode="ifContentScrolls"
+      android:paddingBottom="8dp"
       tools:listitem="@layout/item_order"
       style="@style/recyclerViewWithToolbar"
   />
@@ -22,11 +23,17 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="65dp"
+      android:alpha="0.7"
+      android:background="#FFEB3B"
+      android:padding="8dp"
   >
-    <TextView android:layout_width="wrap_content"
+    <TextView android:id="@+id/footerTotalPrice"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Total = 15 zł"/>
+        android:text="Total = 15 zł"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
   </RelativeLayout>
 
 </LinearLayout>

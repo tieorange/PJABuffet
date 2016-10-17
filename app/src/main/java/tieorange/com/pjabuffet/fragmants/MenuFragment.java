@@ -21,7 +21,6 @@ import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.ui.AdapterMenu;
 import tieorange.com.pjabuffet.activities.ui.GridItemSpacingDecorator;
 import tieorange.com.pjabuffet.activities.ui.ItemClickSupport;
-import tieorange.com.pjabuffet.activities.ui.SpacesItemDecoration;
 import tieorange.com.pjabuffet.api.Product;
 import tieorange.com.pjabuffet.api.retro.ProductSheet;
 import tieorange.com.pjabuffet.pojo.events.EventProductAddedToCart;
@@ -105,7 +104,7 @@ public class MenuFragment extends Fragment {
     ItemClickSupport.addTo(mRecycler).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
       @Override public void onItemClicked(RecyclerView recyclerView, int position, View v) {
         Product product = mAdapter.mProducts.get(position);
-        MyApplication.mProductsInCart.add(product);
+        MyApplication.sProductsInCart.add(product);
         EventBus.getDefault().post(new EventProductAddedToCart());
       }
     });

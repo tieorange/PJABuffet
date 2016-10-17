@@ -15,7 +15,7 @@ import tieorange.com.pjabuffet.api.Product;
 public class MyApplication extends Application {
   private static final String BASE_URL = "https://sheetlabs.com/";
   public static List<Product> mProducts = new ArrayList<>();
-  public static List<Product> mProductsInCart = new ArrayList<>();
+  public static List<Product> sProductsInCart = new ArrayList<>();
   public static String sSheetsLink = "https://sheetlabs.com/TIEO/jadlopis";
   public static Retrofit sRetrofit;
   public static MyEndpointInterface sApiService;
