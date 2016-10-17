@@ -56,12 +56,6 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolder> {
     Product product = mProducts.get(position);
     holder.name.setText(product.name);
 
-    if (!product.nameSecondary.isEmpty()) {
-      holder.nameSecondary.setText(product.nameSecondary);
-    } else {
-      holder.nameSecondary.setVisibility(GONE);
-    }
-
     holder.price.setText(product.getStringPrice());
     String cookingTimeText = String.valueOf(product.cookingTime) + " min";
     holder.cookingTime.setText(cookingTimeText);
@@ -75,7 +69,6 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolder> {
   static class ViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.image) ImageView image;
     @BindView(R.id.name) TextView name;
-    @BindView(R.id.nameSecondary) TextView nameSecondary;
     @BindView(R.id.price) TextView price;
     @BindView(R.id.cookingTime) TextView cookingTime;
 

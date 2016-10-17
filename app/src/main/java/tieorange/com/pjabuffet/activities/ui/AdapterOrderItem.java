@@ -36,7 +36,6 @@ public class AdapterOrderItem extends RecyclerView.Adapter<AdapterOrderItem.View
   @Override public void onBindViewHolder(ViewHolder holder, int position) {
     Product product = mProducts.get(position);
     holder.name.setText(product.name);
-    holder.nameSecondary.setText(product.nameSecondary);
     holder.price.setText(product.getStringPrice());
   }
 
@@ -46,7 +45,6 @@ public class AdapterOrderItem extends RecyclerView.Adapter<AdapterOrderItem.View
 
   public class ViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.name) TextView name;
-    @BindView(R.id.nameSecondary) TextView nameSecondary;
     @BindView(R.id.price) TextView price;
 
     public ViewHolder(View itemView) {
