@@ -59,8 +59,6 @@ public class MenuFragment extends Fragment {
     super.onViewCreated(view, savedInstanceState);
 
     initRecycler();
-    initRetrofit();
-
   }
 
   private void initRetrofit() {
@@ -78,6 +76,7 @@ public class MenuFragment extends Fragment {
 
   @Override public void onStart() {
     super.onStart();
+    initRetrofit();
     //EventBus.getDefault().register(this);
   }
 
