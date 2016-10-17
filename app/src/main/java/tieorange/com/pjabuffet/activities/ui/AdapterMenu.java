@@ -42,6 +42,9 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolder> {
         mProducts.add(new Product(product));
       }
     }
+
+    MyApplication.mProducts.clear();
+    MyApplication.mProducts.addAll(mProducts);
   }
 
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -27,6 +28,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import tieorange.com.pjabuffet.R;
+import tieorange.com.pjabuffet.activities.ui.HidingScrollListener;
 import tieorange.com.pjabuffet.fragmants.MenuFragment;
 import tieorange.com.pjabuffet.fragmants.OrdersFragment;
 import tieorange.com.pjabuffet.fragmants.ProfileFragment;
@@ -112,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void initViews() {
+    setStatusBarTranslucent(true);
     mBottomTabOrders = bottomBar.getTabWithId(R.id.tab_orders);
     mBottomTabOrders.setBadgeCount(mBadgeCount);
 
@@ -135,8 +138,8 @@ public class MainActivity extends AppCompatActivity {
     });
 
     nestedScroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-      int SENSITIVITY_HIDE = 1;
-      int SENSITIVITY_SHOW = -1;
+      int SENSITIVITY_HIDE = 30;
+      int SENSITIVITY_SHOW = -30;
 
       @Override public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
         int scrollYDelta = scrollY - oldScrollY;
@@ -149,6 +152,24 @@ public class MainActivity extends AppCompatActivity {
         }
       }
     });
+
+    nestedScroll.setOnScrollChangeListener(new HidingScrollListener() {
+      @Override public void onHide() {
+        hideToolbar();
+      }
+
+      @Override public void onShow() {
+        showToolbar();
+      }
+    });
+  }
+
+  protected void setStatusBarTranslucent(boolean makeTranslucent) {
+    if (makeTranslucent) {
+      getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    } else {
+      getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    }
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -185,10 +206,14 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void hideToolbar() {
-    toolbarContainer.animate().translationY(-toolbar.getBottom() * 2).alpha(0).setDuration(200).setInterpolator(new AccelerateInterpolator()).start();
+    float alpha = toolbarContainer.getAlpha();
+    if (alpha == 0f) return;
+    toolbarContainer.animate().translationY(-toolbar.getBottom() * 2).alpha(0).setDuration(200).setInterpolator(new AccelerateInterpolator(2)).start();
   }
 
   private void showToolbar() {
-    toolbarContainer.animate().translationY(0).alpha(1).setDuration(200).setInterpolator(new DecelerateInterpolator()).start();
+    float alpha = toolbarContainer.getAlpha();
+    if (alpha == 1f) return;
+    toolbarContainer.animate().translationY(0).alpha(1).setDuration(200).setInterpolator(new DecelerateInterpolator(2)).start();
   }
 }

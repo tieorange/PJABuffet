@@ -3,8 +3,8 @@ package tieorange.com.pjabuffet.fragmants;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +17,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import tieorange.com.pjabuffet.MyApplication;
-import tieorange.com.pjabuffet.api.retro.ProductSheet;
-import tieorange.com.pjabuffet.pojo.events.EventProductAddedToCart;
-import tieorange.com.pjabuffet.api.Product;
 import tieorange.com.pjabuffet.R;
+import tieorange.com.pjabuffet.activities.ui.AdapterMenu;
 import tieorange.com.pjabuffet.activities.ui.GridItemSpacingDecorator;
 import tieorange.com.pjabuffet.activities.ui.ItemClickSupport;
-import tieorange.com.pjabuffet.activities.ui.AdapterMenu;
+import tieorange.com.pjabuffet.activities.ui.SpacesItemDecoration;
+import tieorange.com.pjabuffet.api.Product;
+import tieorange.com.pjabuffet.api.retro.ProductSheet;
+import tieorange.com.pjabuffet.pojo.events.EventProductAddedToCart;
 import tieorange.com.pjabuffet.pojo.events.EventToolbarSetVisibility;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
@@ -64,7 +65,7 @@ public class MenuFragment extends Fragment {
   private void initRetrofit() {
     MyApplication.sApiService.getAllProducts().enqueue(new Callback<List<ProductSheet>>() {
       @Override public void onResponse(Call<List<ProductSheet>> call, Response<List<ProductSheet>> response) {
-        if(response == null || response.body() == null)return;
+        if (response == null || response.body() == null) return;
         initAdapter(response.body());
       }
 
@@ -94,8 +95,10 @@ public class MenuFragment extends Fragment {
       spanCount = 3;
     }
 
-    mRecycler.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
-    int spacing = 40;
+    StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
+    //layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+    mRecycler.setLayoutManager(layoutManager);
+    int spacing = 20;
     //mRecycler.addItemDecoration(new SpacesItemDecoration(spacing, spacing, spacing, spacing));
     mRecycler.addItemDecoration(new GridItemSpacingDecorator(spanCount, spacing));
 
@@ -130,5 +133,4 @@ public class MenuFragment extends Fragment {
     mAdapter = new AdapterMenu(getContext(), products);
     mRecycler.setAdapter(mAdapter);
   }
-
 }
