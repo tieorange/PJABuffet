@@ -12,13 +12,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.ArrayList;
 import java.util.List;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.ui.AdapterOrderItem;
-import tieorange.com.pjabuffet.pojo.EventProductAddedToCart;
 
 /**
  * A simple {@link Fragment} subclass.

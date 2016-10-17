@@ -7,11 +7,16 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,13 +30,17 @@ import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.fragmants.MenuFragment;
 import tieorange.com.pjabuffet.fragmants.OrdersFragment;
 import tieorange.com.pjabuffet.fragmants.ProfileFragment;
-import tieorange.com.pjabuffet.pojo.EventProductAddedToCart;
+import tieorange.com.pjabuffet.pojo.events.EventProductAddedToCart;
+import tieorange.com.pjabuffet.pojo.events.EventToolbarSetVisibility;
 
 public class MainActivity extends AppCompatActivity {
+  private static final String TAG = MainActivity.class.getCanonicalName();
   @BindView(R.id.toolbar) Toolbar toolbar;
   @BindView(R.id.bottomBar) BottomBar bottomBar;
   @BindView(R.id.fab) FloatingActionButton fab;
   @BindView(R.id.frameContainer) FrameLayout frameContainer;
+  @BindView(R.id.map_toolbar_container) CardView toolbarContainer;
+  @BindView(R.id.nestedScroll) NestedScrollView nestedScroll;
   private MenuFragment mMenuFragment;
   private OrdersFragment mOrdersFragment;
   private String mCurrentTabTag;
@@ -94,8 +103,10 @@ public class MainActivity extends AppCompatActivity {
       fragment = mMenuFragment;
     } else if (mCurrentTabTag.equals(TAG_ORDER)) {
       fragment = mOrdersFragment;
+      showToolbar();
     } else if (mCurrentTabTag.equals(TAG_PROFILE)) {
       fragment = mProfileFragment;
+      hideToolbar();
     }
     return fragment;
   }
@@ -119,6 +130,22 @@ public class MainActivity extends AppCompatActivity {
           switchTab(TAG_ORDER);
         } else if (tabId == R.id.tab_profile) {
           switchTab(TAG_PROFILE);
+        }
+      }
+    });
+
+    nestedScroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+      int SENSITIVITY_HIDE = 15;
+      int SENSITIVITY_SHOW = -15;
+
+      @Override public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        int scrollYDelta = scrollY - oldScrollY;
+        Log.d(TAG, "onScrollChange() called with:" + "], scrollX = [" + scrollYDelta);
+
+        if (scrollYDelta > SENSITIVITY_HIDE) {
+          hideToolbar();
+        } else if (scrollYDelta < SENSITIVITY_SHOW) {
+          showToolbar();
         }
       }
     });
@@ -147,5 +174,21 @@ public class MainActivity extends AppCompatActivity {
   @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventProductAddedToCart event) {
     //Toast.makeText(MainActivity.this, event.id, Toast.LENGTH_SHORT).show();
     mBottomTabOrders.setBadgeCount(++mBadgeCount);
+  }
+
+  @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventToolbarSetVisibility event) {
+    if (event.isVisible) {
+      showToolbar();
+    } else {
+      hideToolbar();
+    }
+  }
+
+  private void hideToolbar() {
+    toolbarContainer.animate().translationY(-toolbar.getBottom() * 2).alpha(0).setDuration(200).setInterpolator(new AccelerateInterpolator()).start();
+  }
+
+  private void showToolbar() {
+    toolbarContainer.animate().translationY(0).alpha(1).setDuration(200).setInterpolator(new DecelerateInterpolator()).start();
   }
 }

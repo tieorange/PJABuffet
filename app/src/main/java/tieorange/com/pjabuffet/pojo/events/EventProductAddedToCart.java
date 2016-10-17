@@ -1,4 +1,4 @@
-package tieorange.com.pjabuffet.pojo;
+package tieorange.com.pjabuffet.pojo.events;
 
 /**
  * Created by tieorange on 16/10/2016.

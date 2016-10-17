@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import org.greenrobot.eventbus.EventBus;
 import tieorange.com.pjabuffet.MyApplication;
-import tieorange.com.pjabuffet.pojo.EventProductAddedToCart;
+import tieorange.com.pjabuffet.pojo.events.EventProductAddedToCart;
 import tieorange.com.pjabuffet.api.Product;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.ui.GridItemSpacingDecorator;
 import tieorange.com.pjabuffet.activities.ui.ItemClickSupport;
 import tieorange.com.pjabuffet.activities.ui.AdapterMenu;
+import tieorange.com.pjabuffet.pojo.events.EventToolbarSetVisibility;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
@@ -26,6 +28,7 @@ import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
  */
 public class MenuFragment extends Fragment {
 
+  private static final String TAG = MenuFragment.class.getCanonicalName();
   @BindView(R.id.recycler) RecyclerView mRecycler;
   private AdapterMenu mAdapter;
 
@@ -81,11 +84,27 @@ public class MenuFragment extends Fragment {
       @Override public void onItemClicked(RecyclerView recyclerView, int position, View v) {
         Product product = mAdapter.mProducts.get(position);
         MyApplication.mProductsInCart.add(product);
-        EventBus.getDefault().postSticky(new EventProductAddedToCart());
+        EventBus.getDefault().post(new EventProductAddedToCart());
       }
     });
 
+    setRecyclerScrollListener();
+
     initAdapter();
+  }
+
+  private void setRecyclerScrollListener() {
+    mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+      int SENSITIVITY_HIDE = 30;
+      int SENSITIVITY_SHOW = -30;
+
+      @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        Log.d(TAG, "onScrolled: dy = " + dy);
+        if (dy > SENSITIVITY_HIDE) {
+          EventBus.getDefault().post(new EventToolbarSetVisibility(false));
+        } else if (dy < SENSITIVITY_SHOW) EventBus.getDefault().post(new EventToolbarSetVisibility(true));
+      }
+    });
   }
 
   private void initAdapter() {

@@ -5,12 +5,24 @@
     tools:context="tieorange.com.pjabuffet.fragmants.OrdersFragment"
 >
 
-  <!-- TODO: Update blank fragment layout -->
+
   <android.support.v7.widget.RecyclerView
       android:id="@id/recycler"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       tools:listitem="@layout/item_order"
+      style="@style/recyclerViewWithToolbar"
   />
+
+
+  <RelativeLayout android:id="@+id/footerLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true">
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        tools:text="Total = 15 zł"/>
+  </RelativeLayout>
 
 </RelativeLayout>

@@ -9,26 +9,37 @@
     tools:context="tieorange.com.pjabuffet.activities.MainActivity"
 >
 
-  <android.support.design.widget.AppBarLayout
+  <!-- <android.support.design.widget.AppBarLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:theme="@style/AppTheme.AppBarOverlay"
+   >-->
+
+  <android.support.v7.widget.CardView
+      android:id="@+id/map_toolbar_container"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:theme="@style/AppTheme.AppBarOverlay"
-  >
+      android:layout_margin="8dp"
+      app:cardElevation="8dp">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/white"
+        android:titleTextColor="@color/primary"
+        app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/AppTheme.PopupOverlay"
+        tools:title="PJA Buffet"
     />
 
-  </android.support.design.widget.AppBarLayout>
+  </android.support.v7.widget.CardView>
+  <!--</android.support.design.widget.AppBarLayout>-->
 
   <android.support.v4.widget.NestedScrollView
-      android:layout_width="match_parent"
+      android:layout_width="match_parent" android:id="@+id/nestedScroll"
       android:layout_height="match_parent"
-      android:layout_marginTop="?attr/actionBarSize"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"
   >
     <FrameLayout
         android:id="@+id/frameContainer"
@@ -44,7 +55,7 @@
       android:layout_alignParentBottom="true"
       android:layout_gravity="bottom"
       app:bb_activeTabColor="@color/white"
-      app:bb_behavior="shy"
+      app:bb_behavior="shifting"
       app:bb_inActiveTabAlpha="0.6"
       app:bb_inActiveTabColor="@color/white"
       app:bb_tabXmlResource="@xml/bottombar_tabs"
