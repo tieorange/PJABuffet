@@ -11,8 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import java.util.List;
 import org.greenrobot.eventbus.EventBus;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import tieorange.com.pjabuffet.MyApplication;
+import tieorange.com.pjabuffet.api.retro.ProductSheet;
 import tieorange.com.pjabuffet.pojo.events.EventProductAddedToCart;
 import tieorange.com.pjabuffet.api.Product;
 import tieorange.com.pjabuffet.R;
@@ -54,6 +59,21 @@ public class MenuFragment extends Fragment {
     super.onViewCreated(view, savedInstanceState);
 
     initRecycler();
+    initRetrofit();
+
+  }
+
+  private void initRetrofit() {
+    MyApplication.sApiService.getAllProducts().enqueue(new Callback<List<ProductSheet>>() {
+      @Override public void onResponse(Call<List<ProductSheet>> call, Response<List<ProductSheet>> response) {
+        if(response == null || response.body() == null)return;
+        initAdapter(response.body());
+      }
+
+      @Override public void onFailure(Call<List<ProductSheet>> call, Throwable t) {
+
+      }
+    });
   }
 
   @Override public void onStart() {
@@ -90,7 +110,7 @@ public class MenuFragment extends Fragment {
 
     setRecyclerScrollListener();
 
-    initAdapter();
+    initAdapter(null);
   }
 
   private void setRecyclerScrollListener() {
@@ -107,8 +127,9 @@ public class MenuFragment extends Fragment {
     });
   }
 
-  private void initAdapter() {
-    mAdapter = new AdapterMenu(getContext());
+  private void initAdapter(List<ProductSheet> products) {
+    mAdapter = new AdapterMenu(getContext(), products);
     mRecycler.setAdapter(mAdapter);
   }
+
 }

@@ -12,8 +12,9 @@ import butterknife.ButterKnife;
 import java.util.ArrayList;
 import java.util.List;
 import tieorange.com.pjabuffet.MyApplication;
-import tieorange.com.pjabuffet.api.Product;
 import tieorange.com.pjabuffet.R;
+import tieorange.com.pjabuffet.api.Product;
+import tieorange.com.pjabuffet.api.retro.ProductSheet;
 
 /**
  * Created by tieorange on 15/10/2016.
@@ -23,9 +24,21 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolder> {
   public List<Product> mProducts = new ArrayList<>();
   private Context mContext;
 
-  public AdapterMenu(Context mContext) {
+  public AdapterMenu(Context mContext, List<ProductSheet> products) {
     this.mContext = mContext;
-    mProducts = new ArrayList<>(MyApplication.mProducts);
+    if (products == null) {
+      mProducts = new ArrayList<>(MyApplication.mProducts);
+    } else {
+      initProducts(products);
+    }
+  }
+
+  private void initProducts(List<ProductSheet> products) {
+    for (ProductSheet product : products) {
+      if (product.price != null && product.photoUrl != null) {
+        mProducts.add(new Product(product));
+      }
+    }
   }
 
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

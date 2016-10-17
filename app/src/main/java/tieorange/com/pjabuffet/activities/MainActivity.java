@@ -135,8 +135,8 @@ public class MainActivity extends AppCompatActivity {
     });
 
     nestedScroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-      int SENSITIVITY_HIDE = 15;
-      int SENSITIVITY_SHOW = -15;
+      int SENSITIVITY_HIDE = 1;
+      int SENSITIVITY_SHOW = -1;
 
       @Override public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
         int scrollYDelta = scrollY - oldScrollY;
