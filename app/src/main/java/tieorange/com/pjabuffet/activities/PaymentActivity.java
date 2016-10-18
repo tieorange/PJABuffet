@@ -76,7 +76,6 @@ public class PaymentActivity extends AppCompatActivity {
       }
     });
 
-
     circularFillableLoaders.startAnimation(fadeOutWater);
 
     CodeLayout.setVisibility(View.VISIBLE);
@@ -93,13 +92,15 @@ public class PaymentActivity extends AppCompatActivity {
           final int finalI = i;
           runOnUiThread(new Runnable() {
             @Override public void run() {
-              Log.d(TAG, "run: progress = " + finalI);
               circularFillableLoaders.setProgress(finalI);
+
+              Log.d(TAG, "run: progress = " + finalI);
               if (finalI == 100) {
                 loadingFinished.finished();
               }
             }
           });
+
           try {
             Thread.sleep(50);
           } catch (InterruptedException e) {

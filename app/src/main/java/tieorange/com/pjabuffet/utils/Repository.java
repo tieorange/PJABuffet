@@ -29,4 +29,9 @@ public class Repository {
     }
     return result;
   }
+
+  public static String getCartTotalPriceString() {
+    double price = getCartTotalPrice();
+    return String.format("%.2f", price) + " zł";
+  }
 }

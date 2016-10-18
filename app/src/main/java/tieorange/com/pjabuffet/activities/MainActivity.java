@@ -15,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -220,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
 
   @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventProductAddedToCart event) {
     //Toast.makeText(MainActivity.this, event.id, Toast.LENGTH_SHORT).show();
+
     mBottomTabOrders.setBadgeCount(++mBadgeCount);
   }
 
