@@ -12,7 +12,7 @@ public class Repository {
   public static List<Product> getProductsByIds(List<String> ids) {
     List<Product> results = new ArrayList<>();
     for (String id : ids) {
-      for (Product mProduct : MyApplication.mProducts) {
+      for (Product mProduct : MyApplication.sProducts) {
         if (mProduct.id.equals(id)) {
           results.add(mProduct);
         }

@@ -25,7 +25,11 @@ public class Product implements Cloneable {
     this.id = id;
   }
 
-  public Product(ProductSheet productSheet) {
+  private Product(ProductSheet productSheet) {
+    if (productSheet.photoUrl.isEmpty() || productSheet.price == null) {
+      return;
+    }
+
     Random random = new Random();
     UUID uuid = UUID.randomUUID();
 
@@ -46,6 +50,11 @@ public class Product implements Cloneable {
       productList.add(new Product("Pierogi", "Ruskie", price, cookingTime, String.valueOf(i)));
     }
     return productList;
+  }
+
+  public static Product createProduct(ProductSheet productSheet) {
+    if (productSheet == null || productSheet.photoUrl == null || productSheet.price == null) return null;
+    return new Product(productSheet);
   }
 
   public String getStringPrice() {

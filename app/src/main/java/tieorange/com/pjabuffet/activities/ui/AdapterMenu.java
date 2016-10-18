@@ -17,8 +17,6 @@ import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.api.Product;
 import tieorange.com.pjabuffet.api.retro.ProductSheet;
 
-import static android.view.View.GONE;
-
 /**
  * Created by tieorange on 15/10/2016.
  */
@@ -30,7 +28,7 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolder> {
   public AdapterMenu(Context mContext, List<ProductSheet> products) {
     this.mContext = mContext;
     if (products == null) {
-      mProducts = new ArrayList<>(MyApplication.mProducts);
+      mProducts = new ArrayList<>(MyApplication.sProducts);
     } else {
       initProducts(products);
     }
@@ -39,12 +37,12 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolder> {
   private void initProducts(List<ProductSheet> products) {
     for (ProductSheet product : products) {
       if (product.price != null && product.photoUrl != null) {
-        mProducts.add(new Product(product));
+        mProducts.add(Product.createProduct(product));
       }
     }
 
-    MyApplication.mProducts.clear();
-    MyApplication.mProducts.addAll(mProducts);
+    MyApplication.sProducts.clear();
+    MyApplication.sProducts.addAll(mProducts);
   }
 
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

@@ -57,7 +57,6 @@ public class MenuFragment extends Fragment {
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-
     initRecycler();
   }
 
@@ -66,6 +65,8 @@ public class MenuFragment extends Fragment {
       @Override public void onResponse(Call<List<ProductSheet>> call, Response<List<ProductSheet>> response) {
         if (response == null || response.body() == null) return;
         initAdapter(response.body());
+
+        addTestProductsToCart(response.body());
       }
 
       @Override public void onFailure(Call<List<ProductSheet>> call, Throwable t) {
@@ -74,8 +75,23 @@ public class MenuFragment extends Fragment {
     });
   }
 
+  private void addTestProductsToCart(List<ProductSheet> products) {
+    if (MyApplication.sIsAddedTestProductsToCart) return;
+    
+    for (int i = 0; i < 6; i++) {
+      ProductSheet product = products.get(i);
+      Product addedProducts = Product.createProduct(product);
+      if (addedProducts != null) {
+        MyApplication.sProductsInCart.add(addedProducts);
+      }
+      EventBus.getDefault().post(new EventProductAddedToCart());
+    }
+    MyApplication.sIsAddedTestProductsToCart = true;
+  }
+
   @Override public void onStart() {
     super.onStart();
+
     initRetrofit();
     //EventBus.getDefault().register(this);
   }

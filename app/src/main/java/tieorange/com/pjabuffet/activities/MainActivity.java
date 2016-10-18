@@ -1,10 +1,12 @@
 package tieorange.com.pjabuffet.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +22,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -81,15 +84,23 @@ public class MainActivity extends AppCompatActivity {
     mProfileFragment = ProfileFragment.newInstance();
   }
 
-  private void switchTab(String tabTag) {
+  private void switchTab(final String tabTag) {
+    showToolbar();
+
     mCurrentTabTag = tabTag;
     Runnable mPendingRunnable = new Runnable() {
       @Override public void run() {
-        Fragment fragment = getSelectedProfile();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragmentByTag = fragmentManager.findFragmentByTag(tabTag);
+        if (fragmentByTag == null) {
+          fragmentByTag = getSelectedTab();
+        }
+        fragmentManager.beginTransaction().replace(R.id.frameContainer, fragmentByTag, tabTag).commitNow();
+
         //fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        fragmentTransaction.replace(R.id.frameContainer, fragment, mCurrentTabTag);
-        fragmentTransaction.commitAllowingStateLoss();
+        //fragmentTransaction.replace(R.id.frameContainer, fragment, mCurrentTabTag);
+        //fragmentTransaction.commitAllowingStateLoss();
       }
     };
 
@@ -98,32 +109,42 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
-  private Fragment getSelectedProfile() {
+  private Fragment getSelectedTab() {
     Fragment fragment = mMenuFragment;
     if (mCurrentTabTag.equals(TAG_MENU)) {
       fragment = mMenuFragment;
-      fab.hide();
+      setFabVisibility(false);
     } else if (mCurrentTabTag.equals(TAG_ORDER)) {
       fragment = mOrdersFragment;
-      fab.show();
+      setFabVisibility(true);
     } else if (mCurrentTabTag.equals(TAG_PROFILE)) {
       fragment = mProfileFragment;
-      fab.hide();
+      setFabVisibility(false);
     }
     return fragment;
+  }
+
+  private void setFabVisibility(boolean isVisible) {
+    int delayMillis = 200;
+    if (isVisible) {
+      fab.postDelayed(new Runnable() {
+        @Override public void run() {
+          fab.show();
+        }
+      }, delayMillis);
+    } else {
+      fab.postDelayed(new Runnable() {
+        @Override public void run() {
+          fab.hide();
+        }
+      }, delayMillis);
+    }
   }
 
   private void initViews() {
     setStatusBarTranslucent(true);
     mBottomTabOrders = bottomBar.getTabWithId(R.id.tab_orders);
     mBottomTabOrders.setBadgeCount(mBadgeCount);
-
-    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-    fab.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View view) {
-        //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-      }
-    });
 
     bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
       @Override public void onTabSelected(@IdRes int tabId) {
@@ -162,6 +183,11 @@ public class MainActivity extends AppCompatActivity {
         showToolbar();
       }
     });
+  }
+
+  @OnClick(R.id.fab) public void onClickFab() {
+    Intent intent = PaymentActivity.buildIntent(this);
+    startActivity(intent);
   }
 
   protected void setStatusBarTranslucent(boolean makeTranslucent) {
