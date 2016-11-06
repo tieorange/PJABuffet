@@ -254,7 +254,8 @@ public class MainActivity extends AppCompatActivity {
 
   @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventProductAddedToCart event) {
     //Toast.makeText(MainActivity.this, event.id, Toast.LENGTH_SHORT).show();
-    mBottomTabOrders.setBadgeCount(++mBadgeCount);
+    mBadgeCount++;
+    mBottomTabOrders.setBadgeCount(mBadgeCount - 1);
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventToolbarSetVisibility event) {
