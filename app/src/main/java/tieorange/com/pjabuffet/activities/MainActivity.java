@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -46,6 +47,7 @@ import tieorange.com.pjabuffet.pojo.events.EventProductAddedToCart;
 import tieorange.com.pjabuffet.pojo.events.EventProductTouch;
 import tieorange.com.pjabuffet.pojo.events.EventToolbarSetVisibility;
 import tieorange.com.pjabuffet.utils.FirebaseTools;
+import tieorange.com.pjabuffet.utils.Interfaces.IOrderPushed;
 
 import static android.view.View.GONE;
 
@@ -195,21 +197,31 @@ public class MainActivity extends AppCompatActivity {
   }
 
   @OnClick(R.id.fab) public void onClickFab() {
-    Intent intent = PaymentActivity.buildIntent(this);
-    startActivity(intent);
+    Order order = getCurrentOrder();
 
-    // send to order to firebase
-    orderToFirebase();
+    orderToFirebase(order);
   }
 
-  private void orderToFirebase() {
+  private void orderToFirebase(final Order order) {
+    // TODO: 06/11/2016 show progress bar
+
+    FirebaseTools.pushOrder(order, this, new IOrderPushed() {
+      @Override public void orderPushed(String key) {
+        // TODO: 06/11/2016 hide progress bar
+        order.key = key;  // TODO: 06/11/2016 check with debugger if it's already not with a key
+        Intent intent = Henson.with(MainActivity.this).gotoPaymentActivity().mOrder(order).build();
+        startActivity(intent);
+      }
+    });
+  }
+
+  @NonNull private Order getCurrentOrder() {
     List<Product> productsInCart = MyApplication.sProductsInCart;
     Order order = new Order();
     order.clientName = "Andrii";
     order.products = productsInCart;
     order.status = Order.STATE_ORDERED;
-
-    FirebaseTools.pushOrder(order, this);
+    return order;
   }
 
   protected void setStatusBarTranslucent(boolean makeTranslucent) {

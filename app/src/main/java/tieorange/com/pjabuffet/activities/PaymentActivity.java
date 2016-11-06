@@ -13,15 +13,24 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.f2prateek.dart.Dart;
+import com.f2prateek.dart.InjectExtra;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularfillableloaders.CircularFillableLoaders;
 import java.util.UUID;
+import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
+import tieorange.com.pjabuffet.pojo.api.Order;
 
 public class PaymentActivity extends AppCompatActivity {
 
   private static final String TAG = PaymentActivity.class.getCanonicalName();
+  @InjectExtra Order mOrder;
   @BindView(R.id.toolbar) Toolbar toolbar;
   @BindView(R.id.circularFillableLoaders) CircularFillableLoaders circularFillableLoaders;
   @BindView(R.id.tvYourCode) TextView tvYourCode;
@@ -39,20 +48,51 @@ public class PaymentActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_payment);
     ButterKnife.bind(this);
+    Dart.inject(this);
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
     initFAB();
 
     initViews();
+    initFirebase();
+  }
+
+  private void initFirebase() {
+    if (mOrder == null || mOrder.key == null) {
+      Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
+      return;
+    }
+    MyApplication.sReferenceOrders.child(mOrder.key).addValueEventListener(new ValueEventListener() {
+      @Override public void onDataChange(DataSnapshot dataSnapshot) {
+        Order value = dataSnapshot.getValue(Order.class);
+        if (value.status == Order.STATE_ACCEPTED) {
+          orderAccepted();
+        } else if (value.status == Order.STATE_READY) {
+          showCode();
+        }
+      }
+
+      @Override public void onCancelled(DatabaseError databaseError) {
+
+      }
+    });
+  }
+
+  private void orderAccepted() {
+
   }
 
   private void initViews() {
-    simulateLoading(new ISimulatedLoadingFinished() {
-      @Override public void finished() {
-        showCode();
-      }
-    });
+    //circularFillableLoaders.setProgress(0);
+
+    //simulateLoading(new ISimulatedLoadingFinished() {
+    //  @Override public void finished() {
+    //    showCode();
+    //  }
+    //});
+
+
     /*// 2. Hide water / show code
     circularFillableLoaders.setVisibility(View.GONE);
     CodeLayout.setVisibility(View.VISIBLE);
