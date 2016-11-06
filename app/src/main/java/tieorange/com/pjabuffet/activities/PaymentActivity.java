@@ -26,6 +26,7 @@ import java.util.UUID;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.api.Order;
+import tieorange.com.pjabuffet.utils.Tools;
 
 public class PaymentActivity extends AppCompatActivity {
 
@@ -38,6 +39,7 @@ public class PaymentActivity extends AppCompatActivity {
   @BindView(R.id.CodeLayout) ConstraintLayout CodeLayout;
   @BindView(R.id.rootLayout) ConstraintLayout rootLayout;
   @BindView(R.id.fab) FloatingActionButton fab;
+  @BindView(R.id.tvAccepted) TextView mTvAccepted;
 
   public static Intent buildIntent(Context context) {
     Intent intent = new Intent(context, PaymentActivity.class);
@@ -80,11 +82,12 @@ public class PaymentActivity extends AppCompatActivity {
   }
 
   private void orderAccepted() {
-
+    circularFillableLoaders.setProgress(50);
+    Tools.setViewVisibility(mTvAccepted, View.VISIBLE);
   }
 
   private void initViews() {
-    //circularFillableLoaders.setProgress(0);
+    circularFillableLoaders.setProgress(100);
 
     //simulateLoading(new ISimulatedLoadingFinished() {
     //  @Override public void finished() {
@@ -100,6 +103,9 @@ public class PaymentActivity extends AppCompatActivity {
   }
 
   private void showCode() {
+    Tools.setViewVisibility(mTvAccepted, View.GONE);
+    circularFillableLoaders.setProgress(0);
+
     Animation fadeInCode = AnimationUtils.loadAnimation(this, R.anim.fade_in_anim);
     Animation fadeOutWater = AnimationUtils.loadAnimation(this, R.anim.fade_out_anim);
     fadeOutWater.setAnimationListener(new Animation.AnimationListener() {
