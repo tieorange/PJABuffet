@@ -1,4 +1,4 @@
-package tieorange.com.pjabuffet.api.retro;
+package tieorange.com.pjabuffet.pojo.api.retro;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

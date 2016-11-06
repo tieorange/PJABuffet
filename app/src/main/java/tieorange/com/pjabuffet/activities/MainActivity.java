@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IdRes;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -17,7 +17,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,16 +28,26 @@ import butterknife.OnClick;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
+import io.codetail.animation.arcanimator.ArcAnimator;
+import io.codetail.animation.arcanimator.Side;
+import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.ui.HidingScrollListener;
 import tieorange.com.pjabuffet.fragmants.MenuFragment;
 import tieorange.com.pjabuffet.fragmants.OrdersFragment;
 import tieorange.com.pjabuffet.fragmants.ProfileFragment;
+import tieorange.com.pjabuffet.pojo.api.Order;
+import tieorange.com.pjabuffet.pojo.api.Product;
 import tieorange.com.pjabuffet.pojo.events.EventProductAddedToCart;
+import tieorange.com.pjabuffet.pojo.events.EventProductTouch;
 import tieorange.com.pjabuffet.pojo.events.EventToolbarSetVisibility;
+import tieorange.com.pjabuffet.utils.FirebaseTools;
+
+import static android.view.View.GONE;
 
 public class MainActivity extends AppCompatActivity {
   private static final String TAG = MainActivity.class.getCanonicalName();
@@ -44,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
   @BindView(R.id.frameContainer) FrameLayout frameContainer;
   @BindView(R.id.map_toolbar_container) CardView toolbarContainer;
   @BindView(R.id.nestedScroll) NestedScrollView nestedScroll;
+  @BindView(R.id.rootLayout) CoordinatorLayout rootLayout;
+  @BindView(R.id.button) Button button;
   private MenuFragment mMenuFragment;
   private OrdersFragment mOrdersFragment;
   private String mCurrentTabTag;
@@ -89,17 +104,12 @@ public class MainActivity extends AppCompatActivity {
     mCurrentTabTag = tabTag;
     Runnable mPendingRunnable = new Runnable() {
       @Override public void run() {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragmentByTag = fragmentManager.findFragmentByTag(tabTag);
         if (fragmentByTag == null) {
           fragmentByTag = getSelectedTab();
+          fragmentManager.beginTransaction().replace(R.id.frameContainer, fragmentByTag, tabTag).commitAllowingStateLoss();
         }
-        fragmentManager.beginTransaction().replace(R.id.frameContainer, fragmentByTag, tabTag).commitNow();
-
-        //fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        //fragmentTransaction.replace(R.id.frameContainer, fragment, mCurrentTabTag);
-        //fragmentTransaction.commitAllowingStateLoss();
       }
     };
 
@@ -187,6 +197,19 @@ public class MainActivity extends AppCompatActivity {
   @OnClick(R.id.fab) public void onClickFab() {
     Intent intent = PaymentActivity.buildIntent(this);
     startActivity(intent);
+
+    // send to order to firebase
+    orderToFirebase();
+  }
+
+  private void orderToFirebase() {
+    List<Product> productsInCart = MyApplication.sProductsInCart;
+    Order order = new Order();
+    order.clientName = "Andrii";
+    order.products = productsInCart;
+    order.status = Order.STATE_ORDERED;
+
+    FirebaseTools.pushOrder(order, this);
   }
 
   protected void setStatusBarTranslucent(boolean makeTranslucent) {
@@ -219,7 +242,6 @@ public class MainActivity extends AppCompatActivity {
 
   @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventProductAddedToCart event) {
     //Toast.makeText(MainActivity.this, event.id, Toast.LENGTH_SHORT).show();
-
     mBottomTabOrders.setBadgeCount(++mBadgeCount);
   }
 
@@ -229,6 +251,46 @@ public class MainActivity extends AppCompatActivity {
     } else {
       hideToolbar();
     }
+  }
+
+  @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventProductTouch event) {
+    Log.d(TAG, "onEvent() called with: event = [" + event + "]");
+    button.setX(event.x);
+    button.setY(event.y);
+    //experiment();
+  }
+
+  private void experiment() {
+    int widthPixels = getResources().getDisplayMetrics().widthPixels;
+    int heightPixels = getResources().getDisplayMetrics().heightPixels;
+
+    int endX = widthPixels / 2;
+    int endY = heightPixels;
+    ArcAnimator arcAnimator = ArcAnimator.createArcAnimator(button, endX, endY, 100, Side.LEFT).setDuration(3000);
+
+    Animation animationFadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out_anim);
+    animationFadeOut.setDuration(2000);
+    animationFadeOut.setAnimationListener(new Animation.AnimationListener() {
+      @Override public void onAnimationStart(Animation animation) {
+
+      }
+
+      @Override public void onAnimationEnd(Animation animation) {
+        button.setVisibility(GONE);
+      }
+
+      @Override public void onAnimationRepeat(Animation animation) {
+
+      }
+    });
+
+    arcAnimator.start();
+    button.startAnimation(animationFadeOut);
+
+    //TransitionManager.beginDelayedTransition(transitionsContainer, new ChangeBounds().setPathMotion(new ArcMotion()).setDuration(500));
+
+    //ArcDebugView arcDebugView = new ArcDebugView(getContext());
+    //arcDebugView.drawArcAnimator(arcAnimator);
   }
 
   private void hideToolbar() {

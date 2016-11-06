@@ -2,7 +2,9 @@ package tieorange.com.pjabuffet.activities.ui;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,16 +14,18 @@ import butterknife.ButterKnife;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
-import tieorange.com.pjabuffet.api.Product;
-import tieorange.com.pjabuffet.api.retro.ProductSheet;
+import tieorange.com.pjabuffet.pojo.api.Product;
+import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
+import tieorange.com.pjabuffet.pojo.events.EventProductTouch;
 
 /**
  * Created by tieorange on 15/10/2016.
  */
 public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolder> {
-
+  private static final String TAG = AdapterMenu.class.getCanonicalName();
   public List<Product> mProducts = new ArrayList<>();
   private Context mContext;
 
@@ -73,6 +77,23 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolder> {
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
+
+      //experimentAnimation(itemView);
+    }
+
+    private void experimentAnimation(View itemView) {
+      itemView.setOnTouchListener(new View.OnTouchListener() {
+        @Override public boolean onTouch(View v, MotionEvent event) {
+          Log.d(TAG, "onTouch() called with: v = [" + v + "], event = [" + event + "]");
+
+          if (event.getAction() == MotionEvent.ACTION_UP) {
+            float x = event.getRawX();
+            float y = event.getRawY();
+            EventBus.getDefault().post(new EventProductTouch(x, y));
+          }
+          return true;
+        }
+      });
     }
   }
 }

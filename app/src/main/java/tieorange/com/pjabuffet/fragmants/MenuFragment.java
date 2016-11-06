@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.List;
@@ -21,8 +22,8 @@ import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.ui.AdapterMenu;
 import tieorange.com.pjabuffet.activities.ui.GridItemSpacingDecorator;
 import tieorange.com.pjabuffet.activities.ui.ItemClickSupport;
-import tieorange.com.pjabuffet.api.Product;
-import tieorange.com.pjabuffet.api.retro.ProductSheet;
+import tieorange.com.pjabuffet.pojo.api.Product;
+import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
 import tieorange.com.pjabuffet.pojo.events.EventProductAddedToCart;
 import tieorange.com.pjabuffet.pojo.events.EventToolbarSetVisibility;
 
@@ -35,6 +36,7 @@ public class MenuFragment extends Fragment {
 
   private static final String TAG = MenuFragment.class.getCanonicalName();
   @BindView(R.id.recycler) RecyclerView mRecycler;
+  @BindView(R.id.rootLayout) RelativeLayout rootLayout;
   private AdapterMenu mAdapter;
 
   public MenuFragment() {
@@ -65,7 +67,7 @@ public class MenuFragment extends Fragment {
       @Override public void onResponse(Call<List<ProductSheet>> call, Response<List<ProductSheet>> response) {
         if (response == null || response.body() == null) return;
         initAdapter(response.body());
-
+        //FirebaseTools.pushProducts(response.body());
         addTestProductsToCart(response.body());
       }
 
@@ -77,7 +79,7 @@ public class MenuFragment extends Fragment {
 
   private void addTestProductsToCart(List<ProductSheet> products) {
     if (MyApplication.sIsAddedTestProductsToCart) return;
-    
+
     for (int i = 0; i < 6; i++) {
       ProductSheet product = products.get(i);
       Product addedProducts = Product.createProduct(product);
@@ -117,17 +119,37 @@ public class MenuFragment extends Fragment {
     //mRecycler.addItemDecoration(new SpacesItemDecoration(spacing, spacing, spacing, spacing));
     mRecycler.addItemDecoration(new GridItemSpacingDecorator(spanCount, spacing));
 
+    setItemClickListener();
+
+    setRecyclerScrollListener();
+
+    initAdapter(null);
+  }
+
+  private void setItemClickListener() {
     ItemClickSupport.addTo(mRecycler).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
       @Override public void onItemClicked(RecyclerView recyclerView, int position, View v) {
         Product product = mAdapter.mProducts.get(position);
         MyApplication.sProductsInCart.add(product);
         EventBus.getDefault().post(new EventProductAddedToCart());
+
+       /* View price = v.findViewById(R.id.price);
+
+        int[] coordinatesArray = new int[2];
+        price.getLocationOnScreen(coordinatesArray);
+
+        int x = coordinatesArray[0];
+        int y = coordinatesArray[1];
+
+        Log.d(TAG, "onItemClicked: x= " + x + "; y = " + y + " fragmentSizeY = " + rootLayout.getMeasuredHeight());
+
+        button.setX(x);
+        button.setY(y);
+*/
+        //ArcAnimator arcAnimator = ArcAnimator.createArcAnimator(price, 0, 1000, 100, Side.LEFT).setDuration(3000);
+        //arcAnimator.start();
       }
     });
-
-    setRecyclerScrollListener();
-
-    initAdapter(null);
   }
 
   private void setRecyclerScrollListener() {

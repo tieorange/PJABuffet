@@ -1,15 +1,13 @@
 package tieorange.com.pjabuffet.utils;
 
-import java.util.ArrayList;
-import java.util.List;
 import tieorange.com.pjabuffet.MyApplication;
-import tieorange.com.pjabuffet.api.Product;
+import tieorange.com.pjabuffet.pojo.api.Product;
 
 /**
  * Created by tieorange on 16/10/2016.
  */
 public class Repository {
-  public static List<Product> getProductsByIds(List<String> ids) {
+  /*public static List<Product> getProductsByIds(List<String> ids) {
     List<Product> results = new ArrayList<>();
     for (String id : ids) {
       for (Product mProduct : MyApplication.sProducts) {
@@ -20,18 +18,14 @@ public class Repository {
     }
 
     return results;
-  }
+  }*/
 
-  public static double getCartTotalPrice() {
-    double result = 0;
+  public static String getCartTotalPrice() {
+    int resultInt = 0;
     for (Product product : MyApplication.sProductsInCart) {
-      result += product.price;
+      resultInt += product.price;
     }
-    return result;
-  }
-
-  public static String getCartTotalPriceString() {
-    double price = getCartTotalPrice();
-    return String.format("%.2f", price) + " zł";
+    double resultDouble = Product.convertIntToDoublePrice(resultInt);
+    return String.format("%.2f", resultDouble);
   }
 }

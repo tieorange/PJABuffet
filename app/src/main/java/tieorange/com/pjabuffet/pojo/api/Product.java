@@ -1,28 +1,33 @@
-package tieorange.com.pjabuffet.api;
+package tieorange.com.pjabuffet.pojo.api;
 
+import com.google.firebase.database.Exclude;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
-import tieorange.com.pjabuffet.api.retro.ProductSheet;
+import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
+import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
 
 /**
  * Created by tieorange on 15/10/2016.
  */
-public class Product implements Cloneable {
-  public String id;
+@Parcel public class Product implements Cloneable {
   public String name;
-  public String nameSecondary;
-  public double price;
+  public int price;
   public int cookingTime;
   public String photoUrl;
 
-  public Product(String name, String nameSecondary, double price, int cookingTime, String id) {
+  @ParcelConstructor public Product() {
+  }
+
+  public Product(String name, double price, int cookingTime) {
     this.name = name;
-    this.nameSecondary = nameSecondary;
-    this.price = price;
+    this.price = convertPriceDoubleToInt(price);
     this.cookingTime = cookingTime;
-    this.id = id;
+  }
+
+  private static int convertPriceDoubleToInt(double price) {
+    return (int) (price * 100);
   }
 
   private Product(ProductSheet productSheet) {
@@ -31,13 +36,10 @@ public class Product implements Cloneable {
     }
 
     Random random = new Random();
-    UUID uuid = UUID.randomUUID();
 
     this.name = productSheet.name;
-    this.nameSecondary = "";
-    this.price = productSheet.price;
+    this.price = convertPriceDoubleToInt(productSheet.price);
     this.cookingTime = random.nextInt(20);
-    this.id = uuid.toString();
     this.photoUrl = productSheet.photoUrl;
   }
 
@@ -47,7 +49,7 @@ public class Product implements Cloneable {
     for (int i = 0; i < count; i++) {
       int cookingTime = random.nextInt(20);
       double price = random.nextDouble() * 20;
-      productList.add(new Product("Pierogi", "Ruskie", price, cookingTime, String.valueOf(i)));
+      productList.add(new Product("Pierogi", price, cookingTime));
     }
     return productList;
   }
@@ -57,11 +59,20 @@ public class Product implements Cloneable {
     return new Product(productSheet);
   }
 
-  public String getStringPrice() {
-    return String.format("%.2f", price) + " zł";
+  @Exclude public String getStringPrice() {
+    double priceDouble = price / 100f;
+    return String.format("%.2f", priceDouble) + " zł";
   }
 
   protected Object clone() throws CloneNotSupportedException {
     return super.clone();
+  }
+
+  public double getDoublePrice() {
+    return price / 100f;
+  }
+
+  public static double convertIntToDoublePrice(int result) {
+    return result / 100f;
   }
 }

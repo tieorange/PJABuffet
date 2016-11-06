@@ -11,8 +11,7 @@ import butterknife.ButterKnife;
 import java.util.ArrayList;
 import java.util.List;
 import tieorange.com.pjabuffet.R;
-import tieorange.com.pjabuffet.api.Product;
-import tieorange.com.pjabuffet.utils.Repository;
+import tieorange.com.pjabuffet.pojo.api.Product;
 
 /**
  * Created by tieorange on 16/10/2016.

@@ -17,6 +17,7 @@ import java.util.List;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.ui.AdapterOrderItem;
+import tieorange.com.pjabuffet.utils.Constants;
 import tieorange.com.pjabuffet.utils.Repository;
 
 import static android.view.View.GONE;
@@ -69,7 +70,7 @@ public class OrdersFragment extends Fragment {
       footerLayout.setVisibility(View.VISIBLE);
     }
 
-    footerTotalPrice.setText("Total price: " + String.format("%.2f", Repository.getCartTotalPrice()) + " zł");
+    footerTotalPrice.setText("Total price: " + Repository.getCartTotalPrice() + Constants.CURRENCY);
   }
 
   private void initAdapter() {
