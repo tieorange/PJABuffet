@@ -16,10 +16,9 @@ import butterknife.ButterKnife;
 import com.f2prateek.dart.InjectExtra;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.Query;
-import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.api.Order;
-import tieorange.com.pjabuffet.utils.Constants;
+import tieorange.com.pjabuffet.utils.FirebaseTools;
 
 public class LineActivity extends AppCompatActivity {
   @BindView(R.id.recycler) RecyclerView mRecycler;
@@ -43,9 +42,7 @@ public class LineActivity extends AppCompatActivity {
   }
 
   private void initAdapter() {
-    Query query = MyApplication.sReferenceOrders.orderByChild(Constants.STATUS)
-        .startAt(Order.ORDERED_ORDERS_START_WITH)
-        .endAt(Order.ORDERED_ORDERS_ENDS_WITH);
+    Query query = FirebaseTools.getQueryOrdersOrdered();
     //        Query query = MyApplication.sReferenceOrders.orderByChild(Constants.STATUS).startAt(1);
 
     FirebaseRecyclerAdapter<Order, ViewHolderLineOrder> adapter =
@@ -74,6 +71,9 @@ public class LineActivity extends AppCompatActivity {
       mContext = context;
       if (isCurrentUserOrder(model)) return;
 
+      if (model.status.equals(Order.STATE_ACCEPTED)) {
+        mProductsAmount.setTypeface(null, Typeface.BOLD);
+      }
       String text = model.products.size() + " " + context.getString(R.string.products_ordered);
       mProductsAmount.setText(text);
     }
@@ -83,7 +83,15 @@ public class LineActivity extends AppCompatActivity {
 
       int bgColor = ContextCompat.getColor(mContext, R.color.material_color_amber_100);
       mRootLayout.setBackgroundColor(bgColor);
+
       mProductsAmount.setTypeface(null, Typeface.BOLD);
+      final String textViewContent = mContext.getString(R.string.your_order)
+          + "\n"
+          + model.products.size()
+          + " "
+          + mContext.getString(R.string.products_ordered);
+      mProductsAmount.setText(textViewContent);
+
       return true;
     }
   }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import java.util.List;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.pojo.api.Order;
@@ -38,5 +39,11 @@ public class FirebaseTools {
         iOrderPushed.orderPushed(key);
       }
     });
+  }
+
+  public static Query getQueryOrdersOrdered() {
+    return MyApplication.sReferenceOrders.orderByChild(Constants.STATUS)
+        .startAt(Order.ORDERED_ORDERS_START_WITH)
+        .endAt(Order.ORDERED_ORDERS_ENDS_WITH);
   }
 }
