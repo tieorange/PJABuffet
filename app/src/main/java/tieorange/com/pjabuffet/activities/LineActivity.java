@@ -46,7 +46,7 @@ public class LineActivity extends AppCompatActivity {
     }
 
     private void initAdapter() {
-        Query query = MyApplication.sReferenceOrders.orderByChild(Constants.STATUS).startAt(Order.ORDERED_ORDERS_START_WITH);
+        Query query = MyApplication.sReferenceOrders.orderByChild(Constants.STATUS).startAt(Order.ORDERED_ORDERS_START_WITH).endAt(Order.ORDERED_ORDERS_ENDS_WITH);
 //        Query query = MyApplication.sReferenceOrders.orderByChild(Constants.STATUS).startAt(1);
 
         FirebaseRecyclerAdapter<Order, ViewHolderLineOrder> adapter = new FirebaseRecyclerAdapter<Order, ViewHolderLineOrder>(Order.class,

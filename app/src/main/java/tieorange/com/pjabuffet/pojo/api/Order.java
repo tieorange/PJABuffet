@@ -14,6 +14,8 @@ import java.util.List;
 @Parcel
 public class Order {
     public static final String ORDERED_ORDERS_START_WITH = "1";
+    public static final String ORDERED_ORDERS_ENDS_WITH = ORDERED_ORDERS_START_WITH + "\\uf8ff";
+
     public static final String FINISHED_ORDERS_START_WITH = "2";
 
     public static final String STATE_ORDERED = "11";
