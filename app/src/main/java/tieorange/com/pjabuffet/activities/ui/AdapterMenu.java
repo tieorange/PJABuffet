@@ -24,7 +24,7 @@ import tieorange.com.pjabuffet.pojo.events.EventProductTouch;
 /**
  * Created by tieorange on 15/10/2016.
  */
-public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolder> {
+public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenuItem> {
   private static final String TAG = AdapterMenu.class.getCanonicalName();
   public List<Product> mProducts = new ArrayList<>();
   private Context mContext;
@@ -49,12 +49,12 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolder> {
     MyApplication.sProducts.addAll(mProducts);
   }
 
-  @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  @Override public ViewHolderMenuItem onCreateViewHolder(ViewGroup parent, int viewType) {
     View view = LayoutInflater.from(mContext).inflate(R.layout.item_menu, null);
-    return new ViewHolder(view);
+    return new ViewHolderMenuItem(view);
   }
 
-  @Override public void onBindViewHolder(ViewHolder holder, int position) {
+  @Override public void onBindViewHolder(ViewHolderMenuItem holder, int position) {
     Product product = mProducts.get(position);
     holder.name.setText(product.name);
 
@@ -68,13 +68,13 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolder> {
     return mProducts.size();
   }
 
-  static class ViewHolder extends RecyclerView.ViewHolder {
+  static class ViewHolderMenuItem extends RecyclerView.ViewHolder {
     @BindView(R.id.image) ImageView image;
     @BindView(R.id.name) TextView name;
     @BindView(R.id.price) TextView price;
     @BindView(R.id.cookingTime) TextView cookingTime;
 
-    public ViewHolder(View itemView) {
+    public ViewHolderMenuItem(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
 
