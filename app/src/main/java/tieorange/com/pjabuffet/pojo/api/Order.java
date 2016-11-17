@@ -17,6 +17,8 @@ public class Order {
   public static final int STATE_ACCEPTED = 12;
   public static final int STATE_READY = 21;
   public static final int STATE_REJECTED = 22;
+  public static final String ORDERED_ORDERS_START_WITH = "1";
+  public static final String FINISHED_ORDERS_START_WITH = "2";
 
   public List<Product> products = new ArrayList<>();
   public String clientName;
