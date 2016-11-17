@@ -1,10 +1,10 @@
-<resources>
-    <string name="app_name">PJA Buffet</string>
-    <string name="action_settings">Settings</string>
+<resources >
+  <string name="app_name" >PJA Buffet</string >
+  <string name="action_settings" >Settings</string >
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_payment">Payment</string>
-    <string name="title_activity_line">Line</string>
-    <string name="products_ordered">Products ordered</string>
-</resources>
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment" >Hello blank fragment</string >
+  <string name="title_activity_payment" >Payment</string >
+  <string name="title_activity_line" >Line</string >
+  <string name="products_ordered" >Products ordered</string >
+</resources >

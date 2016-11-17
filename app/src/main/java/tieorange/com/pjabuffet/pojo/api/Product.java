@@ -26,10 +26,6 @@ import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
     this.cookingTime = cookingTime;
   }
 
-  private static int convertPriceDoubleToInt(double price) {
-    return (int) (price * 100);
-  }
-
   private Product(ProductSheet productSheet) {
     if (productSheet.photoUrl.isEmpty() || productSheet.price == null) {
       return;
@@ -41,6 +37,10 @@ import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
     this.price = convertPriceDoubleToInt(productSheet.price);
     this.cookingTime = random.nextInt(20);
     this.photoUrl = productSheet.photoUrl;
+  }
+
+  private static int convertPriceDoubleToInt(double price) {
+    return (int) (price * 100);
   }
 
   public static List<Product> getDummy(int count) {
@@ -55,8 +55,14 @@ import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
   }
 
   public static Product createProduct(ProductSheet productSheet) {
-    if (productSheet == null || productSheet.photoUrl == null || productSheet.price == null) return null;
+    if (productSheet == null || productSheet.photoUrl == null || productSheet.price == null) {
+      return null;
+    }
     return new Product(productSheet);
+  }
+
+  public static double convertIntToDoublePrice(int result) {
+    return result / 100f;
   }
 
   @Exclude public String getStringPrice() {
@@ -70,9 +76,5 @@ import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
 
   public double getDoublePrice() {
     return price / 100f;
-  }
-
-  public static double convertIntToDoublePrice(int result) {
-    return result / 100f;
   }
 }

@@ -26,11 +26,13 @@ public class FirebaseTools {
     }
   }
 
-  public static void pushOrder(final Order order, final Context context, final IOrderPushed iOrderPushed) {
+  public static void pushOrder(final Order order, final Context context,
+      final IOrderPushed iOrderPushed) {
     DatabaseReference referenceOrders = MyApplication.sReferenceOrders;
 
     referenceOrders.push().setValue(order, new DatabaseReference.CompletionListener() {
-      @Override public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+      @Override
+      public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
         Toast.makeText(context, "Ordered", Toast.LENGTH_SHORT).show();
         String key = databaseReference.getKey();
         iOrderPushed.orderPushed(key);

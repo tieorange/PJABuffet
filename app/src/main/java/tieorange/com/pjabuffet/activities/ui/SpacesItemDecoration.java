@@ -9,7 +9,7 @@ import android.view.View;
  * Created by tieorange on 15/10/2016.
  */
 
-public class SpacesItemDecoration extends RecyclerView.ItemDecoration{
+public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
 
   private final int itemSplitMarginEven;
   private final int itemSplitMarginLarge;
@@ -17,7 +17,16 @@ public class SpacesItemDecoration extends RecyclerView.ItemDecoration{
 
   private final int verticalSpacing;
 
-  public static SpacesItemDecoration newInstance(int horizontalSpacing, int verticalSpacing, int spanCount) {
+  public SpacesItemDecoration(int itemSplitMarginEven, int itemSplitMarginLarge,
+      int itemSplitMarginSmall, int verticalSpacing) {
+    this.itemSplitMarginEven = itemSplitMarginEven;
+    this.itemSplitMarginLarge = itemSplitMarginLarge;
+    this.itemSplitMarginSmall = itemSplitMarginSmall;
+    this.verticalSpacing = verticalSpacing;
+  }
+
+  public static SpacesItemDecoration newInstance(int horizontalSpacing, int verticalSpacing,
+      int spanCount) {
     int maxNumberOfSpaces = spanCount - 1;
     int totalSpaceToSplitBetweenItems = maxNumberOfSpaces * horizontalSpacing;
 
@@ -25,25 +34,90 @@ public class SpacesItemDecoration extends RecyclerView.ItemDecoration{
     int itemSplitMarginLarge = totalSpaceToSplitBetweenItems / spanCount;
     int itemSplitMarginSmall = horizontalSpacing - itemSplitMarginLarge;
 
-    return new SpacesItemDecoration(itemSplitMarginEven, itemSplitMarginLarge, itemSplitMarginSmall, verticalSpacing);
+    return new SpacesItemDecoration(itemSplitMarginEven, itemSplitMarginLarge, itemSplitMarginSmall,
+        verticalSpacing);
   }
 
-  public SpacesItemDecoration(int itemSplitMarginEven, int itemSplitMarginLarge, int itemSplitMarginSmall, int verticalSpacing) {
-    this.itemSplitMarginEven = itemSplitMarginEven;
-    this.itemSplitMarginLarge = itemSplitMarginLarge;
-    this.itemSplitMarginSmall = itemSplitMarginSmall;
-    this.verticalSpacing = verticalSpacing;
+  private static boolean itemIsNextToAnItemThatStartsOnTheLeftEdge(SpanLookup spanLookup,
+      int itemPosition) {
+    return !itemStartsAtTheLeftEdge(spanLookup, itemPosition) && itemStartsAtTheLeftEdge(spanLookup,
+        itemPosition - 1);
   }
 
-  @Override
-  public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+  private static boolean itemIsNextToAnItemThatEndsOnTheRightEdge(SpanLookup spanLookup,
+      int itemPosition) {
+    return !itemEndsAtTheRightEdge(spanLookup, itemPosition) && itemEndsAtTheRightEdge(spanLookup,
+        itemPosition + 1);
+  }
+
+  private static boolean itemIsFullSpan(SpanLookup spanLookup, int itemPosition) {
+    return itemStartsAtTheLeftEdge(spanLookup, itemPosition) && itemEndsAtTheRightEdge(spanLookup,
+        itemPosition);
+  }
+
+  private static boolean itemStartsAtTheLeftEdge(SpanLookup spanLookup, int itemPosition) {
+    return spanLookup.getSpanIndex(itemPosition) == 0;
+  }
+
+  private static boolean itemEndsAtTheRightEdge(SpanLookup spanLookup, int itemPosition) {
+    return spanLookup.getSpanIndex(itemPosition) + spanLookup.getSpanSize(itemPosition)
+        == spanLookup.getSpanCount();
+  }
+
+  private static int getItemTopSpacing(SpanLookup spanLookup, int verticalSpacing, int itemPosition,
+      int spanCount, int childCount) {
+    if (itemIsOnTheTopRow(spanLookup, itemPosition, spanCount, childCount)) {
+      return 0;
+    } else {
+      return (int) (.5f * verticalSpacing);
+    }
+  }
+
+  private static boolean itemIsOnTheTopRow(SpanLookup spanLookup, int itemPosition, int spanCount,
+      int childCount) {
+    int latestCheckedPosition = 0;
+    for (int i = 0; i < childCount; i++) {
+      latestCheckedPosition = i;
+      int spanEndIndex = spanLookup.getSpanIndex(i) + spanLookup.getSpanSize(i) - 1;
+      if (spanEndIndex == spanCount - 1) {
+        break;
+      }
+    }
+    return itemPosition <= latestCheckedPosition;
+  }
+
+  private static int getItemBottomSpacing(SpanLookup spanLookup, int verticalSpacing,
+      int itemPosition, int childCount) {
+    if (itemIsOnTheBottomRow(spanLookup, itemPosition, childCount)) {
+      return 0;
+    } else {
+      return (int) (.5f * verticalSpacing);
+    }
+  }
+
+  private static boolean itemIsOnTheBottomRow(SpanLookup spanLookup, int itemPosition,
+      int childCount) {
+    int latestCheckedPosition = 0;
+    for (int i = childCount - 1; i >= 0; i--) {
+      latestCheckedPosition = i;
+      int spanIndex = spanLookup.getSpanIndex(i);
+      if (spanIndex == 0) {
+        break;
+      }
+    }
+    return itemPosition >= latestCheckedPosition;
+  }
+
+  @Override public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+      RecyclerView.State state) {
     RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) view.getLayoutParams();
     int itemPosition = layoutParams.getViewPosition();
     int childCount = parent.getAdapter().getItemCount();
 
     SpanLookup spanLookup = getSpanLookup(view, parent);
     applyItemHorizontalOffsets(spanLookup, itemPosition, outRect);
-    applyItemVerticalOffsets(outRect, itemPosition, childCount, spanLookup.getSpanCount(), spanLookup);
+    applyItemVerticalOffsets(outRect, itemPosition, childCount, spanLookup.getSpanCount(),
+        spanLookup);
   }
 
   protected SpanLookup getSpanLookup(View view, RecyclerView parent) {
@@ -54,8 +128,10 @@ public class SpacesItemDecoration extends RecyclerView.ItemDecoration{
     return SpanLookupFactory.singleSpan();
   }
 
-  private void applyItemVerticalOffsets(Rect outRect, int itemPosition, int childCount, int spanCount, SpanLookup spanLookup) {
-    outRect.top = getItemTopSpacing(spanLookup, verticalSpacing, itemPosition, spanCount, childCount);
+  private void applyItemVerticalOffsets(Rect outRect, int itemPosition, int childCount,
+      int spanCount, SpanLookup spanLookup) {
+    outRect.top =
+        getItemTopSpacing(spanLookup, verticalSpacing, itemPosition, spanCount, childCount);
     outRect.bottom = getItemBottomSpacing(spanLookup, verticalSpacing, itemPosition, childCount);
   }
 
@@ -90,65 +166,4 @@ public class SpacesItemDecoration extends RecyclerView.ItemDecoration{
       offsets.right = itemSplitMarginEven;
     }
   }
-
-  private static boolean itemIsNextToAnItemThatStartsOnTheLeftEdge(SpanLookup spanLookup, int itemPosition) {
-    return !itemStartsAtTheLeftEdge(spanLookup, itemPosition) && itemStartsAtTheLeftEdge(spanLookup, itemPosition - 1);
-  }
-
-  private static boolean itemIsNextToAnItemThatEndsOnTheRightEdge(SpanLookup spanLookup, int itemPosition) {
-    return !itemEndsAtTheRightEdge(spanLookup, itemPosition) && itemEndsAtTheRightEdge(spanLookup, itemPosition + 1);
-  }
-
-  private static boolean itemIsFullSpan(SpanLookup spanLookup, int itemPosition) {
-    return itemStartsAtTheLeftEdge(spanLookup, itemPosition) && itemEndsAtTheRightEdge(spanLookup, itemPosition);
-  }
-
-  private static boolean itemStartsAtTheLeftEdge(SpanLookup spanLookup, int itemPosition) {
-    return spanLookup.getSpanIndex(itemPosition) == 0;
-  }
-
-  private static boolean itemEndsAtTheRightEdge(SpanLookup spanLookup, int itemPosition) {
-    return spanLookup.getSpanIndex(itemPosition) + spanLookup.getSpanSize(itemPosition) == spanLookup.getSpanCount();
-  }
-
-  private static int getItemTopSpacing(SpanLookup spanLookup, int verticalSpacing, int itemPosition, int spanCount, int childCount) {
-    if (itemIsOnTheTopRow(spanLookup, itemPosition, spanCount, childCount)) {
-      return 0;
-    } else {
-      return (int) (.5f * verticalSpacing);
-    }
-  }
-
-  private static boolean itemIsOnTheTopRow(SpanLookup spanLookup, int itemPosition, int spanCount, int childCount) {
-    int latestCheckedPosition = 0;
-    for (int i = 0; i < childCount; i++) {
-      latestCheckedPosition = i;
-      int spanEndIndex = spanLookup.getSpanIndex(i) + spanLookup.getSpanSize(i) - 1;
-      if (spanEndIndex == spanCount - 1) {
-        break;
-      }
-    }
-    return itemPosition <= latestCheckedPosition;
-  }
-
-  private static int getItemBottomSpacing(SpanLookup spanLookup, int verticalSpacing, int itemPosition, int childCount) {
-    if (itemIsOnTheBottomRow(spanLookup, itemPosition, childCount)) {
-      return 0;
-    } else {
-      return (int) (.5f * verticalSpacing);
-    }
-  }
-
-  private static boolean itemIsOnTheBottomRow(SpanLookup spanLookup, int itemPosition, int childCount) {
-    int latestCheckedPosition = 0;
-    for (int i = childCount - 1; i >= 0; i--) {
-      latestCheckedPosition = i;
-      int spanIndex = spanLookup.getSpanIndex(i);
-      if (spanIndex == 0) {
-        break;
-      }
-    }
-    return itemPosition >= latestCheckedPosition;
-  }
-
 }

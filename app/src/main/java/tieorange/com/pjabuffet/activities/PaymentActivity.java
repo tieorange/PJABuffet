@@ -65,20 +65,21 @@ public class PaymentActivity extends AppCompatActivity {
       Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
       return;
     }
-    MyApplication.sReferenceOrders.child(mOrder.key).addValueEventListener(new ValueEventListener() {
-      @Override public void onDataChange(DataSnapshot dataSnapshot) {
-        Order value = dataSnapshot.getValue(Order.class);
-        if (value.status == Order.STATE_ACCEPTED) {
-          orderAccepted();
-        } else if (value.status == Order.STATE_READY) {
-          showCode();
-        }
-      }
+    MyApplication.sReferenceOrders.child(mOrder.key)
+        .addValueEventListener(new ValueEventListener() {
+          @Override public void onDataChange(DataSnapshot dataSnapshot) {
+            Order value = dataSnapshot.getValue(Order.class);
+            if (value.status == Order.STATE_ACCEPTED) {
+              orderAccepted();
+            } else if (value.status == Order.STATE_READY) {
+              showCode();
+            }
+          }
 
-      @Override public void onCancelled(DatabaseError databaseError) {
+          @Override public void onCancelled(DatabaseError databaseError) {
 
-      }
-    });
+          }
+        });
   }
 
   private void orderAccepted() {
@@ -168,7 +169,9 @@ public class PaymentActivity extends AppCompatActivity {
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
     fab.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+            .setAction("Action", null)
+            .show();
       }
     });
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);

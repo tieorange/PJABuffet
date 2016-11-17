@@ -1,7 +1,6 @@
 package tieorange.com.pjabuffet.activities.ui;
 
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.RecyclerView;
 
 /**
  * Created by tieorange on 17/10/2016.
@@ -12,7 +11,8 @@ public abstract class HidingScrollListener implements NestedScrollView.OnScrollC
   private int scrolledDistance = 0;
   private boolean controlsVisible = true;
 
-  @Override public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+  @Override public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX,
+      int oldScrollY) {
     int dy = scrollY - oldScrollY;
 
     if (scrolledDistance > HIDE_THRESHOLD && controlsVisible) {

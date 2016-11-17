@@ -2,7 +2,6 @@ package tieorange.com.pjabuffet.activities.ui;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
 /**
@@ -44,7 +43,8 @@ public class GridItemSpacingDecorator extends RecyclerView.ItemDecoration {
   }
 */
 
-  @Override public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+  @Override public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+      RecyclerView.State state) {
     // We always want to add right/bottom spaceInPixels
     outRect.bottom = spaceInPixels;
     outRect.top = spaceInPixels;

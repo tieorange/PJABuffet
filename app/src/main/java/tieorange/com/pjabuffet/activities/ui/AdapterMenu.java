@@ -61,7 +61,10 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     holder.price.setText(product.getStringPrice());
     String cookingTimeText = String.valueOf(product.cookingTime) + " min";
     holder.cookingTime.setText(cookingTimeText);
-    Picasso.with(mContext).load(product.photoUrl).placeholder(R.drawable.pierogi_ruskie).into(holder.image);
+    Picasso.with(mContext)
+        .load(product.photoUrl)
+        .placeholder(R.drawable.pierogi_ruskie)
+        .into(holder.image);
   }
 
   @Override public int getItemCount() {

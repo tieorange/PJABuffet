@@ -13,9 +13,6 @@ public class EventProductTouch {
   }
 
   @Override public String toString() {
-    return "EventProductTouch{" +
-        "x=" + x +
-        ", y=" + y +
-        '}';
+    return "EventProductTouch{" + "x=" + x + ", y=" + y + '}';
   }
 }

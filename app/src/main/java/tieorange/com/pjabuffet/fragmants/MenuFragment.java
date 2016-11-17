@@ -50,7 +50,8 @@ public class MenuFragment extends Fragment {
     return fragment;
   }
 
-  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_menu, container, false);
     ButterKnife.bind(this, view);
@@ -64,7 +65,8 @@ public class MenuFragment extends Fragment {
 
   private void initRetrofit() {
     MyApplication.sApiService.getAllProducts().enqueue(new Callback<List<ProductSheet>>() {
-      @Override public void onResponse(Call<List<ProductSheet>> call, Response<List<ProductSheet>> response) {
+      @Override
+      public void onResponse(Call<List<ProductSheet>> call, Response<List<ProductSheet>> response) {
         if (response == null || response.body() == null) return;
         initAdapter(response.body());
         //FirebaseTools.pushProducts(response.body());
@@ -112,7 +114,8 @@ public class MenuFragment extends Fragment {
       spanCount = 3;
     }
 
-    StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
+    StaggeredGridLayoutManager layoutManager =
+        new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
     //layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
     mRecycler.setLayoutManager(layoutManager);
     int spacing = 20;
@@ -127,11 +130,12 @@ public class MenuFragment extends Fragment {
   }
 
   private void setItemClickListener() {
-    ItemClickSupport.addTo(mRecycler).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-      @Override public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-        Product product = mAdapter.mProducts.get(position);
-        MyApplication.sProductsInCart.add(product);
-        EventBus.getDefault().post(new EventProductAddedToCart());
+    ItemClickSupport.addTo(mRecycler)
+        .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+          @Override public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+            Product product = mAdapter.mProducts.get(position);
+            MyApplication.sProductsInCart.add(product);
+            EventBus.getDefault().post(new EventProductAddedToCart());
 
        /* View price = v.findViewById(R.id.price);
 
@@ -146,10 +150,10 @@ public class MenuFragment extends Fragment {
         button.setX(x);
         button.setY(y);
 */
-        //ArcAnimator arcAnimator = ArcAnimator.createArcAnimator(price, 0, 1000, 100, Side.LEFT).setDuration(3000);
-        //arcAnimator.start();
-      }
-    });
+            //ArcAnimator arcAnimator = ArcAnimator.createArcAnimator(price, 0, 1000, 100, Side.LEFT).setDuration(3000);
+            //arcAnimator.start();
+          }
+        });
   }
 
   private void setRecyclerScrollListener() {
@@ -161,7 +165,9 @@ public class MenuFragment extends Fragment {
         Log.d(TAG, "onScrolled: dy = " + dy);
         if (dy > SENSITIVITY_HIDE) {
           EventBus.getDefault().post(new EventToolbarSetVisibility(false));
-        } else if (dy < SENSITIVITY_SHOW) EventBus.getDefault().post(new EventToolbarSetVisibility(true));
+        } else if (dy < SENSITIVITY_SHOW) {
+          EventBus.getDefault().post(new EventToolbarSetVisibility(true));
+        }
       }
     });
   }

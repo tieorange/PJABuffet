@@ -1,10 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="tieorange.com.pjabuffet.fragmants.OrdersFragment"
->
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="tieorange.com.pjabuffet.fragmants.OrdersFragment"
+    >
 
 
   <android.support.v7.widget.RecyclerView
@@ -16,24 +16,27 @@
       android:paddingBottom="8dp"
       tools:listitem="@layout/item_order"
       style="@style/recyclerViewWithToolbar"
-  />
+      />
 
 
-  <RelativeLayout android:id="@+id/footerLayout"
+  <RelativeLayout
+      android:id="@+id/footerLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="65dp"
       android:alpha="0.7"
       android:background="#FFEB3B"
       android:padding="8dp"
-  >
-    <TextView android:id="@+id/footerTotalPrice"
+      >
+    <TextView
+        android:id="@+id/footerTotalPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="Total = 15 zł"
         android:textSize="20dp"
-        android:textStyle="bold"/>
-  </RelativeLayout>
+        android:textStyle="bold"
+        />
+  </RelativeLayout >
 
-</LinearLayout>
+</LinearLayout >

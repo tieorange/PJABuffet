@@ -7,10 +7,9 @@ import android.os.Build;
  */
 
 public class User {
-    public String name;
+  public String name;
 
-    public User() {
-        name = Build.MODEL; // TODO: 17/11/2016
-    }
-
+  public User() {
+    name = Build.MODEL; // TODO: 17/11/2016
+  }
 }
