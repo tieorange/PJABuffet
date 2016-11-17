@@ -36,6 +36,22 @@ import org.parceler.Parcel;
     return clientName.equals(Build.MODEL);
   }
 
+  public boolean isStatusAccepted() {
+    return status.equals(STATE_ACCEPTED);
+  }
+
+  public boolean isStatusReady() {
+    return status.equals(STATE_READY);
+  }
+
+  public boolean isStatusOrdered() {
+    return status.equals(STATE_ORDERED);
+  }
+
+  public boolean isStatusRejected() {
+    return status.equals(STATE_REJECTED);
+  }
+
   interface IStatesSwitch {
     void ordered();
 

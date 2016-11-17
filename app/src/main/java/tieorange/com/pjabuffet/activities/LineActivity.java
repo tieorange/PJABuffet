@@ -1,6 +1,7 @@
 package tieorange.com.pjabuffet.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -13,11 +14,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.f2prateek.dart.Dart;
 import com.f2prateek.dart.InjectExtra;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.api.Order;
+import tieorange.com.pjabuffet.utils.Constants;
 import tieorange.com.pjabuffet.utils.FirebaseTools;
 
 public class LineActivity extends AppCompatActivity {
@@ -29,10 +36,30 @@ public class LineActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_line);
     ButterKnife.bind(this);
+    Dart.inject(this);
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
     initRecycler();
+    initOrderAcceptedListener();
+  }
+
+  private void initOrderAcceptedListener() {
+    MyApplication.sReferenceOrders.child(mOrder.key)
+        .addValueEventListener(new ValueEventListener() {
+          @Override public void onDataChange(DataSnapshot dataSnapshot) {
+            final Order value = dataSnapshot.getValue(Order.class);
+            if (value.isStatusAccepted() || value.isStatusReady()) {
+              final Intent intent =
+                  Henson.with(LineActivity.this).gotoPaymentActivity().mOrder(mOrder).build();
+              startActivity(intent);
+            }
+          }
+
+          @Override public void onCancelled(DatabaseError databaseError) {
+
+          }
+        });
   }
 
   private void initRecycler() {
@@ -50,6 +77,7 @@ public class LineActivity extends AppCompatActivity {
             R.layout.item_line_order, ViewHolderLineOrder.class, query) {
           @Override protected void populateViewHolder(ViewHolderLineOrder viewHolder, Order model,
               int position) {
+            model.key = getRef(position).getKey();
             viewHolder.init(LineActivity.this, model);
           }
         };

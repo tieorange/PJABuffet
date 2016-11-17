@@ -51,7 +51,6 @@ public class PaymentActivity extends AppCompatActivity {
     setContentView(R.layout.activity_payment);
     ButterKnife.bind(this);
     Dart.inject(this);
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
     initFAB();
@@ -69,9 +68,9 @@ public class PaymentActivity extends AppCompatActivity {
         .addValueEventListener(new ValueEventListener() {
           @Override public void onDataChange(DataSnapshot dataSnapshot) {
             Order value = dataSnapshot.getValue(Order.class);
-            if (value.status == Order.STATE_ACCEPTED) {
+            if (value.isStatusAccepted()) {
               orderAccepted();
-            } else if (value.status == Order.STATE_READY) {
+            } else if (value.isStatusReady()) {
               showCode();
             }
           }
@@ -174,6 +173,5 @@ public class PaymentActivity extends AppCompatActivity {
             .show();
       }
     });
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
   }
 }
