@@ -11,14 +11,15 @@ import org.parceler.Parcel;
  */
 
 @Parcel public class Order {
-  public static final String ORDERED_ORDERS_START_WITH = "3";
-  public static final String ORDERED_ORDERS_ENDS_WITH = ORDERED_ORDERS_START_WITH + "\\uf8ff";
-  public static final String FINISHED_ORDERS_START_WITH = "2";
-
   public static final String STATE_ORDERED = "39";
   public static final String STATE_ACCEPTED = "38";
   public static final String STATE_READY = "29";
   public static final String STATE_REJECTED = "20";
+
+  public static final String ORDERED_ORDERS_START_WITH = STATE_ORDERED.substring(0, 1);
+  public static final String ORDERED_ORDERS_ENDS_WITH = ORDERED_ORDERS_START_WITH + "\\uf8ff";
+  public static final String FINISHED_ORDERS_START_WITH = STATE_READY.substring(0,1);
+  public static final String FINISHED_ORDERS_END_WITH = FINISHED_ORDERS_START_WITH + "\\uf8ff";
 
   public List<Product> products = new ArrayList<>();
   public String clientName;
