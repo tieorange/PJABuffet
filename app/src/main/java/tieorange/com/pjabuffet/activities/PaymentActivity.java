@@ -42,11 +42,6 @@ public class PaymentActivity extends AppCompatActivity {
   @BindView(R.id.fab) FloatingActionButton fab;
   @BindView(R.id.tvAccepted) TextView mTvAccepted;
 
-  public static Intent buildIntent(Context context) {
-    Intent intent = new Intent(context, PaymentActivity.class);
-    return intent;
-  }
-
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_payment);
@@ -62,7 +57,7 @@ public class PaymentActivity extends AppCompatActivity {
 
   private void initFirebase() {
     if (mOrder == null || mOrder.key == null) {
-      Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
+      Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
       return;
     }
     MyApplication.sReferenceOrders.child(mOrder.key)
@@ -78,7 +73,7 @@ public class PaymentActivity extends AppCompatActivity {
           }
 
           @Override public void onCancelled(DatabaseError databaseError) {
-
+            Toast.makeText(PaymentActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
           }
         });
   }
