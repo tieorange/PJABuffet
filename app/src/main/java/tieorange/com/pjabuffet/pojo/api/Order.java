@@ -23,6 +23,7 @@ import org.parceler.Parcel;
   public List<Product> products = new ArrayList<>();
   public String clientName;
   public String status;
+  public String secretCode;
   @Exclude public String key;
 
   @Exclude private int position;

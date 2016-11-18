@@ -24,7 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.api.Order;
-import tieorange.com.pjabuffet.utils.Constants;
 import tieorange.com.pjabuffet.utils.FirebaseTools;
 
 public class LineActivity extends AppCompatActivity {

@@ -20,12 +20,13 @@ import com.f2prateek.dart.Dart;
 import com.f2prateek.dart.InjectExtra;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularfillableloaders.CircularFillableLoaders;
-import java.util.UUID;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.api.Order;
+import tieorange.com.pjabuffet.utils.OrderTools;
 import tieorange.com.pjabuffet.utils.Tools;
 
 public class PaymentActivity extends AppCompatActivity {
@@ -127,7 +128,14 @@ public class PaymentActivity extends AppCompatActivity {
     CodeLayout.setVisibility(View.VISIBLE);
     CodeLayout.startAnimation(fadeInCode);
 
-    code.setText(getRandomCode());
+    // Server stuff:
+    OrderTools.setSecretCodeToFirebase(mOrder, new OrderTools.ISecretCodeSetCompleted() {
+      @Override
+      public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+        // TODO: 18/11/2016 check errors
+        code.setText(mOrder.secretCode);
+      }
+    });
   }
 
   private void simulateLoading(final ISimulatedLoadingFinished loadingFinished) {
@@ -156,12 +164,6 @@ public class PaymentActivity extends AppCompatActivity {
       }
     });
     t.start();
-  }
-
-  private String getRandomCode() {
-    String uuid = UUID.randomUUID().toString();
-    uuid = uuid.substring(0, 3);
-    return uuid.toUpperCase();
   }
 
   private void initFAB() {
