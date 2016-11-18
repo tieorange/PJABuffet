@@ -23,7 +23,7 @@ public class OrderTools {
     return order;
   }
 
-  public static String getRandomCode() {
+ /* public static String getRandomCode() {
     String uuid = UUID.randomUUID().toString();
     uuid = uuid.substring(0, 3);
     return uuid.toUpperCase();
@@ -45,5 +45,5 @@ public class OrderTools {
 
   public interface ISecretCodeSetCompleted {
     void onComplete(DatabaseError databaseError, DatabaseReference databaseReference);
-  }
+  }*/
 }

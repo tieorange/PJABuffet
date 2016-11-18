@@ -69,10 +69,11 @@ public class PaymentActivity extends AppCompatActivity {
         .addValueEventListener(new ValueEventListener() {
           @Override public void onDataChange(DataSnapshot dataSnapshot) {
             Order value = dataSnapshot.getValue(Order.class);
+            mOrder = value;
             if (value.isStatusAccepted()) {
               orderAccepted();
             } else if (value.isStatusReady()) {
-              showCode();
+              showSecretCodeView();
             }
           }
 
@@ -92,7 +93,7 @@ public class PaymentActivity extends AppCompatActivity {
 
     //simulateLoading(new ISimulatedLoadingFinished() {
     //  @Override public void finished() {
-    //    showCode();
+    //    showSecretCodeView();
     //  }
     //});
 
@@ -103,7 +104,7 @@ public class PaymentActivity extends AppCompatActivity {
     code.setText(getRandomCode());*/
   }
 
-  private void showCode() {
+  private void showSecretCodeView() {
     Tools.setViewVisibility(mTvAccepted, View.GONE);
     circularFillableLoaders.setProgress(0);
 
@@ -128,14 +129,7 @@ public class PaymentActivity extends AppCompatActivity {
     CodeLayout.setVisibility(View.VISIBLE);
     CodeLayout.startAnimation(fadeInCode);
 
-    // Server stuff:
-    OrderTools.setSecretCodeToFirebase(mOrder, new OrderTools.ISecretCodeSetCompleted() {
-      @Override
-      public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-        // TODO: 18/11/2016 check errors
-        code.setText(mOrder.secretCode);
-      }
-    });
+    code.setText(mOrder.secretCode);
   }
 
   private void simulateLoading(final ISimulatedLoadingFinished loadingFinished) {

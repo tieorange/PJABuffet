@@ -10,7 +10,7 @@ import org.parceler.Parcel;
  * Created by tieorange on 03/11/2016.
  */
 
-@Parcel public class Order {
+@Parcel public class Order{
   public static final String STATE_ORDERED = "39";
   public static final String STATE_ACCEPTED = "38";
   public static final String STATE_READY = "29";
