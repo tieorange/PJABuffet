@@ -10,7 +10,7 @@ import org.parceler.Parcel;
  * Created by tieorange on 03/11/2016.
  */
 
-@Parcel public class Order{
+@Parcel public class Order {
   public static final String STATE_ORDERED = "39";
   public static final String STATE_ACCEPTED = "38";
   public static final String STATE_READY = "29";
@@ -18,7 +18,7 @@ import org.parceler.Parcel;
 
   public static final String ORDERED_ORDERS_START_WITH = STATE_ORDERED.substring(0, 1);
   public static final String ORDERED_ORDERS_ENDS_WITH = ORDERED_ORDERS_START_WITH + "\\uf8ff";
-  public static final String FINISHED_ORDERS_START_WITH = STATE_READY.substring(0,1);
+  public static final String FINISHED_ORDERS_START_WITH = STATE_READY.substring(0, 1);
   public static final String FINISHED_ORDERS_END_WITH = FINISHED_ORDERS_START_WITH + "\\uf8ff";
 
   public List<Product> products = new ArrayList<>();
@@ -62,5 +62,13 @@ import org.parceler.Parcel;
     void ready();
 
     void rejected();
+  }
+
+  public int getSumOfTimeToWait() {
+    int result = 0;
+    for (Product product : products) {
+      result += product.cookingTime;
+    }
+    return result;
   }
 }

@@ -22,14 +22,20 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.pusher.client.Pusher;
+import com.pusher.client.PusherOptions;
+import com.pusher.client.channel.Channel;
+import com.pusher.client.channel.SubscriptionEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 import io.codetail.animation.arcanimator.ArcAnimator;
 import io.codetail.animation.arcanimator.Side;
+import java.util.Collections;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -79,6 +85,34 @@ public class MainActivity extends AppCompatActivity {
     initFragments();
     mHandler = new Handler();
     initViews();
+
+    experimentPusher();
+
+  }
+
+  private void experimentPusher() {
+    PusherOptions options = new PusherOptions();
+    options.setCluster("eu");
+    Pusher pusher = new Pusher("a53ab27b8c366f3151ff", options);
+
+    Channel channel = pusher.subscribe("test_channel");
+
+    channel.bind("my_event", new SubscriptionEventListener() {
+      @Override
+      public void onEvent(String channelName, String eventName, final String data) {
+        Log.d(TAG, "onEvent() called with: channelName = ["
+            + channelName
+            + "], eventName = ["
+            + eventName
+            + "], data = ["
+            + data
+            + "]");
+
+        Toast.makeText(MainActivity.this, data, Toast.LENGTH_SHORT).show();
+      }
+    });
+
+    pusher.connect();
   }
 
   @Override public void onStart() {
