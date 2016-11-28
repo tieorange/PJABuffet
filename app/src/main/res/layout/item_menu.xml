@@ -10,6 +10,7 @@
                                     app:cardCornerRadius="4dp"
                                     app:cardElevation="6dp"
                                     tools:layout_width="170dp"
+                                    tools:layout_height="300dp"
     >
 
   <android.support.constraint.ConstraintLayout
@@ -22,12 +23,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image"
-        app:layout_constraintVertical_bias="0.0"
-        tools:visibility="visible"
+        app:layout_constraintDimensionRatio="h,1:1"
         >
       <View
           android:id="@+id/revealView"
@@ -35,6 +34,7 @@
           android:layout_height="match_parent"
           android:background="@color/white"
           android:visibility="visible"
+          tools:background="@color/material_color_green_100"
           tools:visibility="visible"
           />
     </io.codetail.widget.RevealFrameLayout >
@@ -80,6 +80,7 @@
         app:layout_constraintTop_toBottomOf="@+id/name"
         tools:text="8.50 zł"
         style="@style/productPrice"
+        app:layout_constraintVertical_bias="0.0"
         />
     <TextView
         android:id="@+id/cookingTime"
