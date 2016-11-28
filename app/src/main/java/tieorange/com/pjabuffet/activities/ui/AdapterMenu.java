@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -15,6 +17,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
+import org.w3c.dom.Text;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.api.Product;
@@ -71,11 +74,13 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     return mProducts.size();
   }
 
-  static class ViewHolderMenuItem extends RecyclerView.ViewHolder {
+  public class ViewHolderMenuItem extends RecyclerView.ViewHolder {
     @BindView(R.id.image) ImageView image;
     @BindView(R.id.name) TextView name;
     @BindView(R.id.price) TextView price;
     @BindView(R.id.cookingTime) TextView cookingTime;
+    @BindView(R.id.amount) TextView amount;
+    int currentAmount = 0;
 
     public ViewHolderMenuItem(View itemView) {
       super(itemView);
@@ -84,7 +89,37 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
       //experimentAnimation(itemView);
     }
 
-    private void experimentAnimation(View itemView) {
+    public void amountIncrement() {
+      // alpha animation:
+      amountAlphaAnimation();
+
+      currentAmount++;
+      amount.setText("" + currentAmount);
+    }
+
+    public void amountDecrement() {
+      currentAmount--;
+      amount.setText("" + currentAmount);
+      if (currentAmount <= 0) {
+        amount.setVisibility(View.GONE);
+        return;
+      }
+
+      amountAlphaAnimation();
+    }
+
+    private void amountAlphaAnimation() {
+      // alpha animation:
+      Animation fadeInCode = AnimationUtils.loadAnimation(mContext, R.anim.fade_in_anim);
+      fadeInCode.setDuration(300);
+      amount.setVisibility(View.VISIBLE);
+      amount.startAnimation(fadeInCode);
+    }
+
+    public int getCurrentAmount() {
+      return currentAmount;
+    }
+   /* private void experimentAnimation(View itemView) {
       itemView.setOnTouchListener(new View.OnTouchListener() {
         @Override public boolean onTouch(View v, MotionEvent event) {
           Log.d(TAG, "onTouch() called with: v = [" + v + "], event = [" + event + "]");
@@ -97,6 +132,6 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
           return true;
         }
       });
-    }
+    }*/
   }
 }

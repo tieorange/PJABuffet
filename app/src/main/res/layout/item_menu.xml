@@ -9,8 +9,8 @@
                                     android:orientation="vertical"
                                     app:cardCornerRadius="4dp"
                                     app:cardElevation="6dp"
+                                    tools:layout_height="200dp"
                                     tools:layout_width="170dp"
-                                    tools:layout_height="300dp"
     >
 
   <android.support.constraint.ConstraintLayout
@@ -23,10 +23,11 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="h,1:1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image"
-        app:layout_constraintDimensionRatio="h,1:1"
+        tools:visibility="gone"
         >
       <View
           android:id="@+id/revealView"
@@ -78,22 +79,30 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name"
+        app:layout_constraintVertical_bias="0.0"
         tools:text="8.50 zł"
         style="@style/productPrice"
-        app:layout_constraintVertical_bias="0.0"
         />
     <TextView
         android:id="@+id/cookingTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0.8"
-        android:background="@android:color/darker_gray"
         android:drawableLeft="@drawable/ic_time_white_18dp"
-        android:paddingRight="4dp"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/image"
         app:layout_constraintRight_toRightOf="@+id/image"
         tools:text="15min"
+        style="@style/menu_item_cooking_time"
+        />
+    <TextView
+        android:id="@+id/amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:text="1"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="@+id/image"
+        app:layout_constraintTop_toTopOf="@+id/image"
+        tools:visibility="visible"
+        style="@style/menu_item_cooking_time"
         />
 
   </android.support.constraint.ConstraintLayout >

@@ -137,11 +137,16 @@ public class MenuFragment extends Fragment {
     ItemClickSupport.addTo(mRecycler)
         .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
           @Override public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+            final AdapterMenu.ViewHolderMenuItem vh =
+                (AdapterMenu.ViewHolderMenuItem) recyclerView.findViewHolderForAdapterPosition(
+                    position);
             Product product = mAdapter.mProducts.get(position);
             MyApplication.sProductsInCart.add(product);
             EventBus.getDefault().post(new EventProductAddedToCart());
+            circularReveal(v, vh.getCurrentAmount());
+            vh.amountIncrement();
 
-            circularReveal(v);
+            // amount show on ui:
 
        /* View price = v.findViewById(R.id.price);
 
@@ -160,11 +165,33 @@ public class MenuFragment extends Fragment {
             //arcAnimator.start();
           }
         });
+
+    ItemClickSupport.addTo(mRecycler)
+        .setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
+          @Override
+          public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
+            final AdapterMenu.ViewHolderMenuItem vh =
+                (AdapterMenu.ViewHolderMenuItem) recyclerView.findViewHolderForAdapterPosition(
+                    position);
+            Product product = mAdapter.mProducts.get(position);
+            MyApplication.sProductsInCart.remove(product);
+            EventBus.getDefault()
+                .post(
+                    new EventProductAddedToCart()); // TODO: 28/11/2016 decrease badge on bottomBar
+
+            circularReveal(v, vh.getCurrentAmount());
+            vh.amountDecrement();
+            return true;
+          }
+        });
   }
 
-  private void circularReveal(View cardView) {
+  private void circularReveal(View cardView, int amount) {
+    if (amount > 0) return;
+
     final View revealView = cardView.findViewById(R.id.revealView);
-    final int newBackgroundColor = R.color.material_color_green_50;
+    final int newBackgroundColor = R.color.material_color_green_100;
+    final int duration = 400;
 
     int cx = (revealView.getLeft() + revealView.getRight()) / 2;
     int cy = (revealView.getTop() + revealView.getBottom()) / 2;
@@ -177,7 +204,7 @@ public class MenuFragment extends Fragment {
     // Android native animator
     Animator animator = ViewAnimationUtils.createCircularReveal(revealView, cx, cy, 0, finalRadius);
     animator.setInterpolator(new AccelerateDecelerateInterpolator());
-    animator.setDuration(300);
+    animator.setDuration(duration);
     revealView.setBackgroundColor(ContextCompat.getColor(getContext(), newBackgroundColor));
     animator.start();
   }
