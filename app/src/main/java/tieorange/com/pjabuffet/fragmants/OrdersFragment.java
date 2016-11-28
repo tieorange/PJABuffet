@@ -30,7 +30,6 @@ public class OrdersFragment extends Fragment {
   @BindView(R.id.recycler) RecyclerView mRecycler;
   @BindView(R.id.footerLayout) RelativeLayout footerLayout;
   @BindView(R.id.footerTotalPrice) TextView footerTotalPrice;
-  private List<String> mAddedIds = new ArrayList<>();
   private AdapterOrderItem mAdapter;
 
   public OrdersFragment() {
@@ -54,7 +53,6 @@ public class OrdersFragment extends Fragment {
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    //EventBus.getDefault().register(this);
     initRecycler();
   }
 
@@ -80,7 +78,6 @@ public class OrdersFragment extends Fragment {
   }
 
   @Override public void onStop() {
-    //EventBus.getDefault().unregister(this);
     super.onStop();
   }
 }

@@ -70,7 +70,7 @@ public class MenuFragment extends Fragment {
         if (response == null || response.body() == null) return;
         initAdapter(response.body());
         //FirebaseTools.pushProducts(response.body());
-        addTestProductsToCart(response.body());
+        //addTestProductsToCart(response.body());
       }
 
       @Override public void onFailure(Call<List<ProductSheet>> call, Throwable t) {

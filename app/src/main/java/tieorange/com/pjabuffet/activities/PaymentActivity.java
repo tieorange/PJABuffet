@@ -57,33 +57,9 @@ public class PaymentActivity extends AppCompatActivity {
 
     initViews();
     initFirebase();
-
-    experimentPusher();
   }
 
-  private void experimentPusher() {
-    PusherOptions options = new PusherOptions();
-    options.setCluster("eu");
-    Pusher pusher = new Pusher("a53ab27b8c366f3151ff", options);
 
-    Channel channel = pusher.subscribe("test_channel");
-
-    channel.bind("my_event", new SubscriptionEventListener() {
-      @Override public void onEvent(String channelName, String eventName, final String data) {
-        Log.d(TAG, "onEvent() called with: channelName = ["
-            + channelName
-            + "], eventName = ["
-            + eventName
-            + "], data = ["
-            + data
-            + "]");
-
-        Toast.makeText(PaymentActivity.this, data, Toast.LENGTH_SHORT).show();
-      }
-    });
-
-    pusher.connect();
-  }
 
   private void initFirebase() {
     if (mOrder == null || mOrder.key == null) {

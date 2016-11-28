@@ -87,6 +87,7 @@ public class LineActivity extends AppCompatActivity {
   public static class ViewHolderLineOrder extends RecyclerView.ViewHolder {
     @BindView(R.id.rootLayout) LinearLayout mRootLayout;
     @BindView(R.id.productAmount) TextView mProductsAmount;
+    @BindView(R.id.waitingTime) TextView mWaitingTime;
     private Context mContext;
 
     public ViewHolderLineOrder(View itemView) {
@@ -108,9 +109,11 @@ public class LineActivity extends AppCompatActivity {
     private boolean isCurrentUserOrder(Order model) {
       if (!model.isCurrentUser()) return false;
 
+      // Root:
       int bgColor = ContextCompat.getColor(mContext, R.color.material_color_amber_100);
       mRootLayout.setBackgroundColor(bgColor);
 
+      // Amount:
       mProductsAmount.setTypeface(null, Typeface.BOLD);
       final String textViewContent = mContext.getString(R.string.your_order)
           + "\n"
@@ -119,7 +122,11 @@ public class LineActivity extends AppCompatActivity {
           + mContext.getString(R.string.products_ordered);
       mProductsAmount.setText(textViewContent);
 
+      // Waiting time:
+      mWaitingTime.setText(mContext.getString(R.string.estimated_waiting_time) + model.getSumOfTimeToWait() + " min.");
+
       return true;
+
     }
   }
 }

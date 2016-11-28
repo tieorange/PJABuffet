@@ -86,33 +86,7 @@ public class MainActivity extends AppCompatActivity {
     mHandler = new Handler();
     initViews();
 
-    experimentPusher();
 
-  }
-
-  private void experimentPusher() {
-    PusherOptions options = new PusherOptions();
-    options.setCluster("eu");
-    Pusher pusher = new Pusher("a53ab27b8c366f3151ff", options);
-
-    Channel channel = pusher.subscribe("test_channel");
-
-    channel.bind("my_event", new SubscriptionEventListener() {
-      @Override
-      public void onEvent(String channelName, String eventName, final String data) {
-        Log.d(TAG, "onEvent() called with: channelName = ["
-            + channelName
-            + "], eventName = ["
-            + eventName
-            + "], data = ["
-            + data
-            + "]");
-
-        Toast.makeText(MainActivity.this, data, Toast.LENGTH_SHORT).show();
-      }
-    });
-
-    pusher.connect();
   }
 
   @Override public void onStart() {
@@ -202,6 +176,10 @@ public class MainActivity extends AppCompatActivity {
       }
     });
 
+    initToolbarHiding();
+  }
+
+  private void initToolbarHiding() {
     nestedScroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
       int SENSITIVITY_HIDE = 30;
       int SENSITIVITY_SHOW = -30;
@@ -286,7 +264,8 @@ public class MainActivity extends AppCompatActivity {
   @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventProductAddedToCart event) {
     //Toast.makeText(MainActivity.this, event.id, Toast.LENGTH_SHORT).show();
     mBadgeCount++;
-    mBottomTabOrders.setBadgeCount(mBadgeCount - 1);
+    //mBottomTabOrders.setBadgeCount(mBadgeCount - 1);
+    mBottomTabOrders.setBadgeCount(mBadgeCount);
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventToolbarSetVisibility event) {
