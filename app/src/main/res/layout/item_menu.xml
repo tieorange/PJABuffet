@@ -18,6 +18,26 @@
       tools:layout_editor_absoluteX="0dp"
       tools:layout_editor_absoluteY="0dp"
       >
+    <io.codetail.widget.RevealFrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image"
+        app:layout_constraintVertical_bias="0.0"
+        tools:visibility="visible"
+        >
+      <View
+          android:id="@+id/revealView"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@color/white"
+          android:visibility="visible"
+          tools:visibility="visible"
+          />
+    </io.codetail.widget.RevealFrameLayout >
     <ImageView
         android:id="@+id/image"
         android:layout_width="0dp"

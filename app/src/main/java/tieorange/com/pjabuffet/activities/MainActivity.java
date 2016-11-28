@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.NestedScrollView;
@@ -85,8 +86,6 @@ public class MainActivity extends AppCompatActivity {
     initFragments();
     mHandler = new Handler();
     initViews();
-
-
   }
 
   @Override public void onStart() {
@@ -266,6 +265,13 @@ public class MainActivity extends AppCompatActivity {
     mBadgeCount++;
     //mBottomTabOrders.setBadgeCount(mBadgeCount - 1);
     mBottomTabOrders.setBadgeCount(mBadgeCount);
+
+    // Show snackbar:
+    showSnackBar(event);
+  }
+
+  private void showSnackBar(EventProductAddedToCart event) {
+    //Snackbar.make(rootLayout, "Had a snack at Snackbar", Snackbar.LENGTH_LONG).show();
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventToolbarSetVisibility event) {

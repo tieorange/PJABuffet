@@ -1,14 +1,18 @@
 package tieorange.com.pjabuffet.fragmants;
 
+import android.animation.Animator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RelativeLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -137,6 +141,8 @@ public class MenuFragment extends Fragment {
             MyApplication.sProductsInCart.add(product);
             EventBus.getDefault().post(new EventProductAddedToCart());
 
+            circularReveal(v);
+
        /* View price = v.findViewById(R.id.price);
 
         int[] coordinatesArray = new int[2];
@@ -154,6 +160,26 @@ public class MenuFragment extends Fragment {
             //arcAnimator.start();
           }
         });
+  }
+
+  private void circularReveal(View cardView) {
+    final View revealView = cardView.findViewById(R.id.revealView);
+    final int newBackgroundColor = R.color.material_color_green_50;
+
+    int cx = (revealView.getLeft() + revealView.getRight()) / 2;
+    int cy = (revealView.getTop() + revealView.getBottom()) / 2;
+
+    // get the final radius for the clipping circle
+    int dx = Math.max(cx, revealView.getWidth() - cx);
+    int dy = Math.max(cy, revealView.getHeight() - cy);
+    float finalRadius = (float) Math.hypot(dx, dy);
+
+    // Android native animator
+    Animator animator = ViewAnimationUtils.createCircularReveal(revealView, cx, cy, 0, finalRadius);
+    animator.setInterpolator(new AccelerateDecelerateInterpolator());
+    animator.setDuration(300);
+    revealView.setBackgroundColor(ContextCompat.getColor(getContext(), newBackgroundColor));
+    animator.start();
   }
 
   private void setRecyclerScrollListener() {
