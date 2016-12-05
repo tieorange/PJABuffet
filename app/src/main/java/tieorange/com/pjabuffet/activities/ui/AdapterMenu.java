@@ -2,13 +2,12 @@ package tieorange.com.pjabuffet.activities.ui;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -16,13 +15,11 @@ import butterknife.ButterKnife;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
-import org.greenrobot.eventbus.EventBus;
-import org.w3c.dom.Text;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.api.Product;
 import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
-import tieorange.com.pjabuffet.pojo.events.EventProductTouch;
+import tieorange.com.pjabuffet.utils.Tools;
 
 /**
  * Created by tieorange on 15/10/2016.
@@ -80,21 +77,29 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     @BindView(R.id.price) TextView price;
     @BindView(R.id.cookingTime) TextView cookingTime;
     @BindView(R.id.amount) TextView amount;
+    @BindView(R.id.cancel) ImageButton cancel;
     int currentAmount = 0;
 
     public ViewHolderMenuItem(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
-
-      //experimentAnimation(itemView);
     }
 
     public void amountIncrement() {
-      // alpha animation:
       amountAlphaAnimation();
 
       currentAmount++;
       amount.setText("" + currentAmount);
+
+      checkCancelButton();
+    }
+
+    private void checkCancelButton() {
+      if (currentAmount >= 1) {
+        Tools.setViewVisibility(cancel, View.VISIBLE);
+      } else {
+        Tools.setViewVisibility(cancel, View.GONE);
+      }
     }
 
     public void amountDecrement() {
@@ -106,6 +111,7 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
       }
 
       amountAlphaAnimation();
+      checkCancelButton();
     }
 
     private void amountAlphaAnimation() {

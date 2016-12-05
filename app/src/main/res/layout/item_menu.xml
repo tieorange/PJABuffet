@@ -42,7 +42,7 @@
     <ImageView
         android:id="@+id/image"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="90dp"
         android:adjustViewBounds="false"
         android:cropToPadding="false"
         android:scaleType="centerCrop"
@@ -50,6 +50,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/pierogi_ruskie"
+        tools:src="@mipmap/ic_launcher"
         />
     <TextView
         android:id="@+id/name"
@@ -85,7 +86,9 @@
         />
     <TextView
         android:id="@+id/cookingTime"
-        android:drawableLeft="@drawable/ic_time_white_18dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:drawableStart="@drawable/ic_time_white_18dp"
         app:layout_constraintBottom_toBottomOf="@+id/image"
         app:layout_constraintRight_toRightOf="@+id/image"
         tools:text="15min"
@@ -95,14 +98,29 @@
         android:id="@+id/amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="2dp"
-        android:text="1"
+        android:background="@color/material_color_green_300"
+        android:padding="6dp"
         android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="@+id/image"
         app:layout_constraintTop_toTopOf="@+id/image"
+        tools:text="1"
         tools:visibility="visible"
         style="@style/menu_item_cooking_time"
+        />
+    <ImageButton
+        android:id="@+id/cancel"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="0dp"
+        android:alpha="0.7"
+        android:background="@android:color/darker_gray"
+        android:clickable="true"
+        android:visibility="gone"
+        app:layout_constraintRight_toRightOf="@+id/image"
+        app:layout_constraintTop_toTopOf="@+id/image"
+        app:srcCompat="@drawable/ic_close"
         />
 
   </android.support.constraint.ConstraintLayout >

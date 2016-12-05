@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.NestedScrollView;
@@ -23,25 +22,20 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.pusher.client.Pusher;
-import com.pusher.client.PusherOptions;
-import com.pusher.client.channel.Channel;
-import com.pusher.client.channel.SubscriptionEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 import io.codetail.animation.arcanimator.ArcAnimator;
 import io.codetail.animation.arcanimator.Side;
-import java.util.Collections;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.ui.HidingScrollListener;
+import tieorange.com.pjabuffet.fragmants.EventProductRemovedFromCart;
 import tieorange.com.pjabuffet.fragmants.MenuFragment;
 import tieorange.com.pjabuffet.fragmants.OrdersFragment;
 import tieorange.com.pjabuffet.fragmants.ProfileFragment;
@@ -260,6 +254,10 @@ public class MainActivity extends AppCompatActivity {
     return super.onOptionsItemSelected(item);
   }
 
+  private void showSnackBar(EventProductAddedToCart event) {
+    //Snackbar.make(rootLayout, "Had a snack at Snackbar", Snackbar.LENGTH_LONG).show();
+  }
+
   @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventProductAddedToCart event) {
     //Toast.makeText(MainActivity.this, event.id, Toast.LENGTH_SHORT).show();
     mBadgeCount++;
@@ -270,8 +268,9 @@ public class MainActivity extends AppCompatActivity {
     showSnackBar(event);
   }
 
-  private void showSnackBar(EventProductAddedToCart event) {
-    //Snackbar.make(rootLayout, "Had a snack at Snackbar", Snackbar.LENGTH_LONG).show();
+  @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventProductRemovedFromCart event) {
+    mBadgeCount--;
+    mBottomTabOrders.setBadgeCount(mBadgeCount);
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventToolbarSetVisibility event) {

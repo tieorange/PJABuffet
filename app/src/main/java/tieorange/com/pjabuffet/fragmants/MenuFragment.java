@@ -127,6 +127,7 @@ public class MenuFragment extends Fragment {
     mRecycler.addItemDecoration(new GridItemSpacingDecorator(spanCount, spacing));
 
     setItemClickListener();
+    setItemLongClickListener();
 
     setRecyclerScrollListener();
 
@@ -145,27 +146,12 @@ public class MenuFragment extends Fragment {
             EventBus.getDefault().post(new EventProductAddedToCart());
             circularReveal(v, vh.getCurrentAmount());
             vh.amountIncrement();
-
-            // amount show on ui:
-
-       /* View price = v.findViewById(R.id.price);
-
-        int[] coordinatesArray = new int[2];
-        price.getLocationOnScreen(coordinatesArray);
-
-        int x = coordinatesArray[0];
-        int y = coordinatesArray[1];
-
-        Log.d(TAG, "onItemClicked: x= " + x + "; y = " + y + " fragmentSizeY = " + rootLayout.getMeasuredHeight());
-
-        button.setX(x);
-        button.setY(y);
-*/
-            //ArcAnimator arcAnimator = ArcAnimator.createArcAnimator(price, 0, 1000, 100, Side.LEFT).setDuration(3000);
-            //arcAnimator.start();
           }
         });
 
+  }
+
+  private void setItemLongClickListener() {
     ItemClickSupport.addTo(mRecycler)
         .setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
           @Override
@@ -177,7 +163,7 @@ public class MenuFragment extends Fragment {
             MyApplication.sProductsInCart.remove(product);
             EventBus.getDefault()
                 .post(
-                    new EventProductAddedToCart()); // TODO: 28/11/2016 decrease badge on bottomBar
+                    new EventProductRemovedFromCart());
 
             circularReveal(v, vh.getCurrentAmount());
             vh.amountDecrement();
