@@ -58,7 +58,7 @@ dependencies {
   provided 'com.f2prateek.dart:henson-processor:2.0.1'
   compile 'com.pusher:pusher-java-client:1.4.0'
 
-  compile ('com.github.ozodrukh:CircularReveal:2.0.1@aar') {
+  compile ('com.github.ozodrukh:CircularReveal:2.0.0@aar') {
     transitive = true;
   }
 }

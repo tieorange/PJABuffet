@@ -144,11 +144,10 @@ public class MenuFragment extends Fragment {
             Product product = mAdapter.mProducts.get(position);
             MyApplication.sProductsInCart.add(product);
             EventBus.getDefault().post(new EventProductAddedToCart());
-            circularReveal(v, vh.getCurrentAmount());
+            circularReveal(v, vh.getCurrentAmount(), false);
             vh.amountIncrement();
           }
         });
-
   }
 
   private void setItemLongClickListener() {
@@ -161,22 +160,21 @@ public class MenuFragment extends Fragment {
                     position);
             Product product = mAdapter.mProducts.get(position);
             MyApplication.sProductsInCart.remove(product);
-            EventBus.getDefault()
-                .post(
-                    new EventProductRemovedFromCart());
+            EventBus.getDefault().post(new EventProductRemovedFromCart());
 
-            circularReveal(v, vh.getCurrentAmount());
+            circularReveal(v, vh.getCurrentAmount(), true);
             vh.amountDecrement();
             return true;
           }
         });
   }
 
-  private void circularReveal(View cardView, int amount) {
+  private void circularReveal(View cardView, int amount, boolean isInverted) {
     if (amount > 0) return;
 
     final View revealView = cardView.findViewById(R.id.revealView);
-    final int newBackgroundColor = R.color.material_color_green_100;
+    final int selectedBackgroundColor = R.color.material_color_green_100;
+    final int unselectedBackgroundColor = R.color.white;
     final int duration = 400;
 
     int cx = (revealView.getLeft() + revealView.getRight()) / 2;
@@ -188,10 +186,23 @@ public class MenuFragment extends Fragment {
     float finalRadius = (float) Math.hypot(dx, dy);
 
     // Android native animator
+
     Animator animator = ViewAnimationUtils.createCircularReveal(revealView, cx, cy, 0, finalRadius);
+
+    if (isInverted) {
+      animator = ViewAnimationUtils.createCircularReveal(revealView, cx, cy, finalRadius, 0);
+    }
+
     animator.setInterpolator(new AccelerateDecelerateInterpolator());
+
     animator.setDuration(duration);
-    revealView.setBackgroundColor(ContextCompat.getColor(getContext(), newBackgroundColor));
+    if (isInverted) {
+      revealView.setBackgroundColor(
+          ContextCompat.getColor(getContext(), unselectedBackgroundColor));
+    } else {
+      revealView.setBackgroundColor(ContextCompat.getColor(getContext(), selectedBackgroundColor));
+    }
+
     animator.start();
   }
 
