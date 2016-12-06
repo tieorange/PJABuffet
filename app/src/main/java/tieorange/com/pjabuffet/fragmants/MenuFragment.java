@@ -43,7 +43,6 @@ public class MenuFragment extends Fragment {
   @BindView(R.id.recycler) RecyclerView mRecycler;
   @BindView(R.id.rootLayout) RelativeLayout rootLayout;
   private AdapterMenu mAdapter;
-  private Bundle savedState;
 
   public MenuFragment() {
     // Required empty public constructor
@@ -61,8 +60,6 @@ public class MenuFragment extends Fragment {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_menu, container, false);
     ButterKnife.bind(this, view);
-
-    savedState = null;
 
     return view;
   }
@@ -147,7 +144,7 @@ public class MenuFragment extends Fragment {
                 (AdapterMenu.ViewHolderMenuItem) recyclerView.findViewHolderForAdapterPosition(
                     position);
             Product product = mAdapter.mProducts.get(position);
-            MyApplication.sProductsInCart.add(product);
+            //MyApplication.sProductsInCart.add(product);
             EventBus.getDefault().post(new EventProductAddedToCart());
             //circularReveal(view, viewHolder.getCurrentAmount(), false, getContext());
             viewHolder.amountIncrement();
@@ -164,7 +161,7 @@ public class MenuFragment extends Fragment {
                 (AdapterMenu.ViewHolderMenuItem) recyclerView.findViewHolderForAdapterPosition(
                     position);
             Product product = mAdapter.mProducts.get(position);
-            MyApplication.sProductsInCart.remove(product);
+            //MyApplication.sProductsInCart.remove(product);
             EventBus.getDefault().post(new EventProductRemovedFromCart());
 
             viewHolder.amountDecrement();

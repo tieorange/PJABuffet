@@ -13,12 +13,14 @@
       android:icon="@drawable/ic_history_black_24dp"
       android:orderInCategory="101"
       android:title="Orders History"
+      android:visible="false"
       app:showAsAction="ifRoom" />
   <item
       android:id="@+id/action_search"
       android:actionViewClass="android.widget.SearchView"
       android:icon="@drawable/ic_search_black_24dp"
       android:orderInCategory="102"
-      app:showAsAction="collapseActionView|ifRoom"
-      android:title="Search" />
+      android:title="Search"
+      android:visible="false"
+      app:showAsAction="collapseActionView|ifRoom" />
 </menu >

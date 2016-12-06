@@ -90,7 +90,10 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     public ViewHolderMenuItem(View view) {
       super(view);
       ButterKnife.bind(this, view);
+      setCancelClickListener();
+    }
 
+    private void setCancelClickListener() {
       cancel.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
           EventBus.getDefault().post(new EventProductRemovedFromCart());
@@ -108,6 +111,9 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     }
 
     public void amountIncrement() {
+      final Product product = mProducts.get(getAdapterPosition());
+      MyApplication.sProductsInCart.add(product);
+
       amountAlphaAnimation();
 
       currentAmount++;
@@ -119,6 +125,9 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     }
 
     public void amountDecrement() {
+      final Product product = mProducts.get(getAdapterPosition());
+      MyApplication.sProductsInCart.remove(product);
+
       currentAmount--;
       amount.setText("" + currentAmount);
       checkCancelButton();
@@ -173,7 +182,6 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
 
       animator.setDuration(duration);
       if (isInverted) {
-        //revealView.setBackgroundColor(unselectedBackgroundColor);
         setAnimatorListener(whiteColor, animator);
       } else {
         revealView.setBackgroundColor(selectedBackgroundColor);
@@ -205,19 +213,5 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     public int getCurrentAmount() {
       return currentAmount;
     }
-   /* private void experimentAnimation(View itemView) {
-      itemView.setOnTouchListener(new View.OnTouchListener() {
-        @Override public boolean onTouch(View v, MotionEvent event) {
-          Log.d(TAG, "onTouch() called with: v = [" + v + "], event = [" + event + "]");
-
-          if (event.getAction() == MotionEvent.ACTION_UP) {
-            float x = event.getRawX();
-            float y = event.getRawY();
-            EventBus.getDefault().post(new EventProductTouch(x, y));
-          }
-          return true;
-        }
-      });
-    }*/
   }
 }
