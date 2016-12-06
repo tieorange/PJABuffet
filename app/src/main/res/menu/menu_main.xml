@@ -1,4 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="tieorange.com.pjabuffet.activities.MainActivity" >
@@ -9,9 +10,16 @@
       android:visible="false"
       app:showAsAction="never" />
   <item
-      android:id="@+id/action_history"
-      android:icon="@drawable/ic_history_white_24dp"
+      android:id="@+id/action_orders_history"
+      android:icon="@drawable/ic_history_black_24dp"
       android:orderInCategory="101"
       android:title="Orders History"
       app:showAsAction="ifRoom" />
+  <item
+      android:id="@+id/action_search"
+      android:actionViewClass="android.widget.SearchView"
+      android:icon="@drawable/ic_search_black_24dp"
+      android:orderInCategory="102"
+      app:showAsAction="collapseActionView|ifRoom"
+      android:title="Search" />
 </menu >

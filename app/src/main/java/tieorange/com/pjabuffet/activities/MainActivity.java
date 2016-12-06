@@ -249,6 +249,10 @@ public class MainActivity extends AppCompatActivity {
     //noinspection SimplifiableIfStatement
     if (id == R.id.action_settings) {
       return true;
+    } else if(id == R.id.action_search){
+
+    } else if(id == R.id.action_orders_history){
+
     }
 
     return super.onOptionsItemSelected(item);
