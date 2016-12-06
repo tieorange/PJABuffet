@@ -86,11 +86,9 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     @BindView(R.id.cancel) ImageButton cancel;
     @BindView(R.id.revealView) View revealView;
     int currentAmount = 0;
-    private View mView;
 
     public ViewHolderMenuItem(View view) {
       super(view);
-      mView = view;
       ButterKnife.bind(this, view);
 
       cancel.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +149,9 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
 
       final int selectedBackgroundColor =
           ContextCompat.getColor(context, R.color.material_color_green_50);
-      final int unselectedBackgroundColor = ContextCompat.getColor(context, R.color.white);
+      final int whiteColor = ContextCompat.getColor(context, R.color.white);
+      final int unselectedBackgroundColor =
+          ContextCompat.getColor(context, R.color.material_color_red_500);
       final int duration = 400;
 
       int cx = (revealView.getLeft() + revealView.getRight()) / 2;
@@ -173,12 +173,33 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
 
       animator.setDuration(duration);
       if (isInverted) {
-        revealView.setBackgroundColor(unselectedBackgroundColor);
+        //revealView.setBackgroundColor(unselectedBackgroundColor);
+        setAnimatorListener(whiteColor, animator);
       } else {
         revealView.setBackgroundColor(selectedBackgroundColor);
       }
 
       animator.start();
+    }
+
+    private void setAnimatorListener(final int whiteColor, Animator animator) {
+      animator.addListener(new Animator.AnimatorListener() {
+        @Override public void onAnimationStart(Animator animator) {
+
+        }
+
+        @Override public void onAnimationEnd(Animator animator) {
+          revealView.setBackgroundColor(whiteColor);
+        }
+
+        @Override public void onAnimationCancel(Animator animator) {
+
+        }
+
+        @Override public void onAnimationRepeat(Animator animator) {
+
+        }
+      });
     }
 
     public int getCurrentAmount() {
