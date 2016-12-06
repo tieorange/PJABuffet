@@ -71,6 +71,7 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
         .load(product.photoUrl)
         .placeholder(R.drawable.pierogi_ruskie)
         .into(holder.image);
+    holder.checkIfAlreadyAddedToCart(product);
   }
 
   @Override public int getItemCount() {
@@ -78,6 +79,7 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
   }
 
   public class ViewHolderMenuItem extends RecyclerView.ViewHolder {
+    public static final int ANIMATION_DURATION_MILLIS = 300;
     @BindView(R.id.image) ImageView image;
     @BindView(R.id.name) TextView name;
     @BindView(R.id.price) TextView price;
@@ -85,12 +87,37 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     @BindView(R.id.amount) TextView amount;
     @BindView(R.id.cancel) ImageButton cancel;
     @BindView(R.id.revealView) View revealView;
-    int currentAmount = 0;
+    private int mSelectedBackgroundColor;
+    private int mUnselectedBackgroundColor;
 
     public ViewHolderMenuItem(View view) {
       super(view);
       ButterKnife.bind(this, view);
+      init();
       setCancelClickListener();
+    }
+
+    private void init() {
+      mSelectedBackgroundColor = ContextCompat.getColor(mContext, R.color.material_color_green_50);
+      mUnselectedBackgroundColor = ContextCompat.getColor(mContext, R.color.white);
+    }
+
+    private Product getProduct() {
+      final int position = getAdapterPosition();
+      if (position >= 0) {
+        return MyApplication.sProducts.get(position);
+      } else {
+        return null;
+      }
+    }
+
+    private void checkIfAlreadyAddedToCart(Product product) {
+      if (product == null || product.amount <= 0) return;
+
+      revealView.setBackgroundColor(mSelectedBackgroundColor);
+      amount.setVisibility(View.VISIBLE);
+      amount.setText("" + getCurrentAmount());
+      cancel.setVisibility(View.VISIBLE);
     }
 
     private void setCancelClickListener() {
@@ -103,7 +130,7 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     }
 
     private void checkCancelButton() {
-      if (currentAmount >= 1) {
+      if (getCurrentAmount() >= 1) {
         Tools.setViewVisibility(cancel, View.VISIBLE);
       } else {
         Tools.setViewVisibility(cancel, View.GONE);
@@ -111,27 +138,27 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     }
 
     public void amountIncrement() {
-      final Product product = mProducts.get(getAdapterPosition());
-      MyApplication.sProductsInCart.add(product);
+      MyApplication.sProductsInCart.add(getProduct());
 
       amountAlphaAnimation();
 
-      currentAmount++;
-      amount.setText("" + currentAmount);
+      //currentAmount++; // TODO: 06/12/2016
+      setCurrentAmount(getCurrentAmount() + 1);
+      amount.setText("" + getCurrentAmount());
 
       checkCancelButton();
 
-      circularReveal(currentAmount, false, mContext);
+      circularReveal(getCurrentAmount(), false, mContext);
     }
 
     public void amountDecrement() {
-      final Product product = mProducts.get(getAdapterPosition());
-      MyApplication.sProductsInCart.remove(product);
+      MyApplication.sProductsInCart.remove(getProduct());
 
-      currentAmount--;
-      amount.setText("" + currentAmount);
+      //currentAmount--; // TODO: 06/12/2016
+      setCurrentAmount(getCurrentAmount() - 1);
+      amount.setText("" + getCurrentAmount());
       checkCancelButton();
-      if (currentAmount <= 0) {
+      if (getCurrentAmount() <= 0) {
         zeroAmount();
         return;
       }
@@ -140,28 +167,21 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     }
 
     private void zeroAmount() {
-      currentAmount = 0;
+      setCurrentAmount(0);
       amount.setVisibility(View.GONE);
-      circularReveal(currentAmount, true, mContext);
+      circularReveal(getCurrentAmount(), true, mContext);
     }
 
     private void amountAlphaAnimation() {
       // alpha animation:
       Animation fadeInCode = AnimationUtils.loadAnimation(mContext, R.anim.fade_in_anim);
-      fadeInCode.setDuration(300);
+      fadeInCode.setDuration(ANIMATION_DURATION_MILLIS);
       amount.setVisibility(View.VISIBLE);
       amount.startAnimation(fadeInCode);
     }
 
     public void circularReveal(int amount, boolean isInverted, Context context) {
       if (amount < 0) return;
-
-      final int selectedBackgroundColor =
-          ContextCompat.getColor(context, R.color.material_color_green_50);
-      final int whiteColor = ContextCompat.getColor(context, R.color.white);
-      final int unselectedBackgroundColor =
-          ContextCompat.getColor(context, R.color.material_color_red_500);
-      final int duration = 400;
 
       int cx = (revealView.getLeft() + revealView.getRight()) / 2;
       int cy = (revealView.getTop() + revealView.getBottom()) / 2;
@@ -180,11 +200,11 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
 
       animator.setInterpolator(new AccelerateDecelerateInterpolator());
 
-      animator.setDuration(duration);
+      animator.setDuration(ANIMATION_DURATION_MILLIS);
       if (isInverted) {
-        setAnimatorListener(whiteColor, animator);
+        setAnimatorListener(mUnselectedBackgroundColor, animator);
       } else {
-        revealView.setBackgroundColor(selectedBackgroundColor);
+        revealView.setBackgroundColor(mSelectedBackgroundColor);
       }
 
       animator.start();
@@ -211,7 +231,11 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     }
 
     public int getCurrentAmount() {
-      return currentAmount;
+      return getProduct().amount;
+    }
+
+    public void setCurrentAmount(int amount) {
+      getProduct().amount = amount;
     }
   }
 }

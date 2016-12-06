@@ -16,8 +16,10 @@ import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
   public int price;
   public int cookingTime;
   public String photoUrl;
+  public int amount;
 
   @ParcelConstructor public Product() {
+    amount = 0;
   }
 
   public Product(String name, double price, int cookingTime) {
