@@ -61,6 +61,8 @@ dependencies {
   compile ('com.github.ozodrukh:CircularReveal:2.0.0@aar') {
     transitive = true;
   }
+
+  compile 'com.miguelcatalan:materialsearchview:1.4.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

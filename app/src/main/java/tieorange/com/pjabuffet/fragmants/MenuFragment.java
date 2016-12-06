@@ -1,6 +1,7 @@
 package tieorange.com.pjabuffet.fragmants;
 
 import android.animation.Animator;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -42,6 +43,7 @@ public class MenuFragment extends Fragment {
   @BindView(R.id.recycler) RecyclerView mRecycler;
   @BindView(R.id.rootLayout) RelativeLayout rootLayout;
   private AdapterMenu mAdapter;
+  private Bundle savedState;
 
   public MenuFragment() {
     // Required empty public constructor
@@ -59,6 +61,9 @@ public class MenuFragment extends Fragment {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_menu, container, false);
     ButterKnife.bind(this, view);
+
+    savedState = null;
+
     return view;
   }
 
@@ -137,15 +142,15 @@ public class MenuFragment extends Fragment {
   private void setItemClickListener() {
     ItemClickSupport.addTo(mRecycler)
         .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-          @Override public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-            final AdapterMenu.ViewHolderMenuItem vh =
+          @Override public void onItemClicked(RecyclerView recyclerView, int position, View view) {
+            final AdapterMenu.ViewHolderMenuItem viewHolder =
                 (AdapterMenu.ViewHolderMenuItem) recyclerView.findViewHolderForAdapterPosition(
                     position);
             Product product = mAdapter.mProducts.get(position);
             MyApplication.sProductsInCart.add(product);
             EventBus.getDefault().post(new EventProductAddedToCart());
-            circularReveal(v, vh.getCurrentAmount(), false);
-            vh.amountIncrement();
+            //circularReveal(view, viewHolder.getCurrentAmount(), false, getContext());
+            viewHolder.amountIncrement();
           }
         });
   }
@@ -154,26 +159,27 @@ public class MenuFragment extends Fragment {
     ItemClickSupport.addTo(mRecycler)
         .setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
           @Override
-          public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
-            final AdapterMenu.ViewHolderMenuItem vh =
+          public boolean onItemLongClicked(RecyclerView recyclerView, int position, View view) {
+            final AdapterMenu.ViewHolderMenuItem viewHolder =
                 (AdapterMenu.ViewHolderMenuItem) recyclerView.findViewHolderForAdapterPosition(
                     position);
             Product product = mAdapter.mProducts.get(position);
             MyApplication.sProductsInCart.remove(product);
             EventBus.getDefault().post(new EventProductRemovedFromCart());
 
-            circularReveal(v, vh.getCurrentAmount(), true);
-            vh.amountDecrement();
+            viewHolder.amountDecrement();
+            //circularReveal(view, viewHolder.getCurrentAmount(), true, getContext());
             return true;
           }
         });
   }
 
-  private void circularReveal(View cardView, int amount, boolean isInverted) {
+  public static void circularReveal(View cardView, int amount, boolean isInverted,
+      Context context) {
     if (amount > 0) return;
 
     final View revealView = cardView.findViewById(R.id.revealView);
-    final int selectedBackgroundColor = R.color.material_color_green_100;
+    final int selectedBackgroundColor = R.color.material_color_green_50;
     final int unselectedBackgroundColor = R.color.white;
     final int duration = 400;
 
@@ -197,10 +203,9 @@ public class MenuFragment extends Fragment {
 
     animator.setDuration(duration);
     if (isInverted) {
-      revealView.setBackgroundColor(
-          ContextCompat.getColor(getContext(), unselectedBackgroundColor));
+      revealView.setBackgroundColor(ContextCompat.getColor(context, unselectedBackgroundColor));
     } else {
-      revealView.setBackgroundColor(ContextCompat.getColor(getContext(), selectedBackgroundColor));
+      revealView.setBackgroundColor(ContextCompat.getColor(context, selectedBackgroundColor));
     }
 
     animator.start();
