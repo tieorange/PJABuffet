@@ -45,10 +45,17 @@ public class AdapterOrderItem extends RecyclerView.Adapter<AdapterOrderItem.View
   public class ViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.name) TextView name;
     @BindView(R.id.price) TextView price;
+    @BindView(R.id.amount) TextView amount;
 
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
+
+      amount.setText("" + getAmount());
+    }
+
+    public int getAmount() {
+      return 1;
     }
   }
 }
