@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -25,6 +26,8 @@ import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.fragmants.EventProductRemovedFromCart;
 import tieorange.com.pjabuffet.pojo.api.Product;
 import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
+import tieorange.com.pjabuffet.pojo.events.EventProductAddedToCart;
+import tieorange.com.pjabuffet.utils.CartTools;
 import tieorange.com.pjabuffet.utils.Tools;
 
 /**
@@ -71,7 +74,7 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
         .load(product.photoUrl)
         .placeholder(R.drawable.pierogi_ruskie)
         .into(holder.image);
-    holder.checkIfAlreadyAddedToCart(product);
+    holder.checkIfAlreadyAddedToCart(position);
   }
 
   @Override public int getItemCount() {
@@ -111,8 +114,13 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
       }
     }
 
-    private void checkIfAlreadyAddedToCart(Product product) {
-      if (product == null || product.amount <= 0) return;
+    private void checkIfAlreadyAddedToCart(int position) {
+
+      final Pair<Product, Integer> productPair = MyApplication.sProductsInCart.getEntry(position);
+
+      //final boolean isNotAdded =
+      //    productPair == null || productPair.first == null || productPair.second <= 0;
+      if (productPair == null || productPair.first == null || productPair.second <= 0) return;
 
       revealView.setBackgroundColor(mSelectedBackgroundColor);
       amount.setVisibility(View.VISIBLE);
@@ -138,12 +146,13 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     }
 
     public void amountIncrement() {
-      MyApplication.sProductsInCart.add(getProduct());
+      EventBus.getDefault().post(new EventProductAddedToCart());
+
+      CartTools.addProductToCart(getProduct());
 
       amountAlphaAnimation();
 
-      //currentAmount++; // TODO: 06/12/2016
-      setCurrentAmount(getCurrentAmount() + 1);
+      //setCurrentAmount(getCurrentAmount() + 1);
       amount.setText("" + getCurrentAmount());
 
       checkCancelButton();
@@ -152,10 +161,11 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     }
 
     public void amountDecrement() {
-      MyApplication.sProductsInCart.remove(getProduct());
+      EventBus.getDefault().post(new EventProductRemovedFromCart());
 
-      //currentAmount--; // TODO: 06/12/2016
-      setCurrentAmount(getCurrentAmount() - 1);
+      CartTools.removeProductFromCart(getProduct());
+
+      //setCurrentAmount(getCurrentAmount() - 1);
       amount.setText("" + getCurrentAmount());
       checkCancelButton();
       if (getCurrentAmount() <= 0) {
@@ -186,7 +196,7 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
       int cx = (revealView.getLeft() + revealView.getRight()) / 2;
       int cy = (revealView.getTop() + revealView.getBottom()) / 2;
 
-      // get the final radius for the clipping circle
+      // getProduct the final radius for the clipping circle
       int dx = Math.max(cx, revealView.getWidth() - cx);
       int dy = Math.max(cy, revealView.getHeight() - cy);
       float finalRadius = (float) Math.hypot(dx, dy);
@@ -231,11 +241,11 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     }
 
     public int getCurrentAmount() {
-      return getProduct().amount;
+      return MyApplication.sProductsInCart.getAmount(getProduct());
     }
 
     public void setCurrentAmount(int amount) {
-      getProduct().amount = amount;
+      MyApplication.sProductsInCart.setAmount(getProduct(), amount);
     }
   }
 }

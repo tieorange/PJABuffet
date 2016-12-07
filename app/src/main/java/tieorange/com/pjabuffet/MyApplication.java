@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import tieorange.com.pjabuffet.pojo.Cart;
 import tieorange.com.pjabuffet.pojo.User;
 import tieorange.com.pjabuffet.pojo.api.MyEndpointInterface;
 import tieorange.com.pjabuffet.pojo.api.Product;
@@ -19,7 +20,8 @@ import tieorange.com.pjabuffet.utils.Constants;
 public class MyApplication extends Application {
   private static final String BASE_URL = "https://sheetlabs.com/";
   public static List<Product> sProducts = new ArrayList<>();
-  public static List<Product> sProductsInCart = new ArrayList<>();
+  //public static List<Product> sProductsInCart = new ArrayList<>();
+  public static Cart sProductsInCart = new Cart();
   public static String sSheetsLink = "https://sheetlabs.com/TIEO/jadlopis";
   public static Retrofit sRetrofit;
   public static MyEndpointInterface sApiService;

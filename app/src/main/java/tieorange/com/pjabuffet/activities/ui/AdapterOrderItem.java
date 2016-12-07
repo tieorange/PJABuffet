@@ -2,15 +2,15 @@ package tieorange.com.pjabuffet.activities.ui;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import java.util.ArrayList;
-import java.util.List;
 import tieorange.com.pjabuffet.R;
+import tieorange.com.pjabuffet.pojo.Cart;
 import tieorange.com.pjabuffet.pojo.api.Product;
 
 /**
@@ -20,11 +20,11 @@ import tieorange.com.pjabuffet.pojo.api.Product;
 public class AdapterOrderItem extends RecyclerView.Adapter<AdapterOrderItem.ViewHolder> {
 
   private final Context mContext;
-  private List<Product> mProducts = new ArrayList<>();
+  private Cart mCart;
 
-  public AdapterOrderItem(Context context, List<Product> productList) {
+  public AdapterOrderItem(Context context, Cart productList) {
     mContext = context;
-    this.mProducts = new ArrayList<>(productList);
+    mCart = productList;
   }
 
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -33,13 +33,17 @@ public class AdapterOrderItem extends RecyclerView.Adapter<AdapterOrderItem.View
   }
 
   @Override public void onBindViewHolder(ViewHolder holder, int position) {
-    Product product = mProducts.get(position);
+    final Pair<Product, Integer> entry = mCart.getEntry(position);
+    Product product = entry.first;
+    final Integer amount = entry.second;
+
     holder.name.setText(product.name);
     holder.price.setText(product.getStringPrice());
+    holder.amount.setText("" + amount);
   }
 
   @Override public int getItemCount() {
-    return mProducts.size();
+    return mCart.size();
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder {
@@ -50,12 +54,6 @@ public class AdapterOrderItem extends RecyclerView.Adapter<AdapterOrderItem.View
     public ViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
-
-      amount.setText("" + getAmount());
-    }
-
-    public int getAmount() {
-      return 1;
     }
   }
 }

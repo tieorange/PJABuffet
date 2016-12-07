@@ -1,19 +1,14 @@
 package tieorange.com.pjabuffet.fragmants;
 
-import android.animation.Animator;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RelativeLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,29 +80,13 @@ public class MenuFragment extends Fragment {
     });
   }
 
-  private void addTestProductsToCart(List<ProductSheet> products) {
-    if (MyApplication.sIsAddedTestProductsToCart) return;
-
-    for (int i = 0; i < 6; i++) {
-      ProductSheet product = products.get(i);
-      Product addedProducts = Product.createProduct(product);
-      if (addedProducts != null) {
-        MyApplication.sProductsInCart.add(addedProducts);
-      }
-      EventBus.getDefault().post(new EventProductAddedToCart());
-    }
-    MyApplication.sIsAddedTestProductsToCart = true;
-  }
-
   @Override public void onStart() {
     super.onStart();
 
     initRetrofit();
-    //EventBus.getDefault().register(this);
   }
 
   @Override public void onStop() {
-    //EventBus.getDefault().unregister(this);
     super.onStop();
   }
 
@@ -133,7 +112,7 @@ public class MenuFragment extends Fragment {
 
     setRecyclerScrollListener();
 
-    initAdapter(null);
+    //initAdapter(null);
   }
 
   private void setItemClickListener() {
@@ -143,10 +122,6 @@ public class MenuFragment extends Fragment {
             final AdapterMenu.ViewHolderMenuItem viewHolder =
                 (AdapterMenu.ViewHolderMenuItem) recyclerView.findViewHolderForAdapterPosition(
                     position);
-            Product product = mAdapter.mProducts.get(position);
-            //MyApplication.sProductsInCart.add(product);
-            EventBus.getDefault().post(new EventProductAddedToCart());
-            //circularReveal(view, viewHolder.getCurrentAmount(), false, getContext());
             viewHolder.amountIncrement();
           }
         });
@@ -160,52 +135,11 @@ public class MenuFragment extends Fragment {
             final AdapterMenu.ViewHolderMenuItem viewHolder =
                 (AdapterMenu.ViewHolderMenuItem) recyclerView.findViewHolderForAdapterPosition(
                     position);
-            Product product = mAdapter.mProducts.get(position);
-            //MyApplication.sProductsInCart.remove(product);
-            EventBus.getDefault().post(new EventProductRemovedFromCart());
 
             viewHolder.amountDecrement();
-            //circularReveal(view, viewHolder.getCurrentAmount(), true, getContext());
             return true;
           }
         });
-  }
-
-  public static void circularReveal(View cardView, int amount, boolean isInverted,
-      Context context) {
-    if (amount > 0) return;
-
-    final View revealView = cardView.findViewById(R.id.revealView);
-    final int selectedBackgroundColor = R.color.material_color_green_50;
-    final int unselectedBackgroundColor = R.color.white;
-    final int duration = 400;
-
-    int cx = (revealView.getLeft() + revealView.getRight()) / 2;
-    int cy = (revealView.getTop() + revealView.getBottom()) / 2;
-
-    // get the final radius for the clipping circle
-    int dx = Math.max(cx, revealView.getWidth() - cx);
-    int dy = Math.max(cy, revealView.getHeight() - cy);
-    float finalRadius = (float) Math.hypot(dx, dy);
-
-    // Android native animator
-
-    Animator animator = ViewAnimationUtils.createCircularReveal(revealView, cx, cy, 0, finalRadius);
-
-    if (isInverted) {
-      animator = ViewAnimationUtils.createCircularReveal(revealView, cx, cy, finalRadius, 0);
-    }
-
-    animator.setInterpolator(new AccelerateDecelerateInterpolator());
-
-    animator.setDuration(duration);
-    if (isInverted) {
-      revealView.setBackgroundColor(ContextCompat.getColor(context, unselectedBackgroundColor));
-    } else {
-      revealView.setBackgroundColor(ContextCompat.getColor(context, selectedBackgroundColor));
-    }
-
-    animator.start();
   }
 
   private void setRecyclerScrollListener() {

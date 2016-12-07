@@ -16,10 +16,8 @@ import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
   public int price;
   public int cookingTime;
   public String photoUrl;
-  public int amount;
 
   @ParcelConstructor public Product() {
-    amount = 0;
   }
 
   public Product(String name, double price, int cookingTime) {
@@ -50,7 +48,8 @@ import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
     Random random = new Random();
     for (int i = 0; i < count; i++) {
       int cookingTime = random.nextInt(20);
-      double price = random.nextDouble() * 20;
+      //double price = random.nextDouble() * 20;
+      double price = 5;
       productList.add(new Product("Pierogi", price, cookingTime));
     }
     return productList;
@@ -78,5 +77,18 @@ import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
 
   public double getDoublePrice() {
     return price / 100f;
+  }
+
+  @Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Product product = (Product) o;
+
+    return name.equals(product.name);
+  }
+
+  @Override public int hashCode() {
+    return name.hashCode();
   }
 }

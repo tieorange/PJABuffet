@@ -1,13 +1,9 @@
 package tieorange.com.pjabuffet.utils;
 
 import android.support.annotation.NonNull;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import java.util.List;
-import java.util.UUID;
 import tieorange.com.pjabuffet.MyApplication;
+import tieorange.com.pjabuffet.pojo.Cart;
 import tieorange.com.pjabuffet.pojo.api.Order;
-import tieorange.com.pjabuffet.pojo.api.Product;
 
 /**
  * Created by stud on 17/11/2016.
@@ -15,10 +11,10 @@ import tieorange.com.pjabuffet.pojo.api.Product;
 
 public class OrderTools {
   @NonNull public static Order getCurrentOrder() {
-    List<Product> productsInCart = MyApplication.sProductsInCart;
+    final Cart productsCart = MyApplication.sProductsInCart;
     Order order = new Order();
     order.clientName = MyApplication.sUser.name;
-    order.products = productsInCart;
+    order.productsCart = productsCart;
     order.status = Order.STATE_ORDERED;
     return order;
   }

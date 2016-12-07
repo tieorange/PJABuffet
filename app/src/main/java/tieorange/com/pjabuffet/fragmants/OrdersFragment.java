@@ -12,13 +12,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import java.util.ArrayList;
-import java.util.List;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.ui.AdapterOrderItem;
 import tieorange.com.pjabuffet.utils.Constants;
-import tieorange.com.pjabuffet.utils.Repository;
+import tieorange.com.pjabuffet.utils.CartTools;
 
 import static android.view.View.GONE;
 
@@ -69,7 +67,7 @@ public class OrdersFragment extends Fragment {
       footerLayout.setVisibility(View.VISIBLE);
     }
 
-    footerTotalPrice.setText("Total price: " + Repository.getCartTotalPrice() + Constants.CURRENCY);
+    footerTotalPrice.setText("Total price: " + CartTools.getCartTotalPrice() + Constants.CURRENCY);
   }
 
   private void initAdapter() {

@@ -102,7 +102,7 @@ public class LineActivity extends AppCompatActivity {
       if (model.status.equals(Order.STATE_ACCEPTED)) {
         mProductsAmount.setTypeface(null, Typeface.BOLD);
       }
-      String text = model.products.size() + " " + context.getString(R.string.products_ordered);
+      String text = model.productsCart.size() + " " + context.getString(R.string.products_ordered);
       mProductsAmount.setText(text);
     }
 
@@ -117,7 +117,7 @@ public class LineActivity extends AppCompatActivity {
       mProductsAmount.setTypeface(null, Typeface.BOLD);
       final String textViewContent = mContext.getString(R.string.your_order)
           + "\n"
-          + model.products.size()
+          + model.productsCart.size()
           + " "
           + mContext.getString(R.string.products_ordered);
       mProductsAmount.setText(textViewContent);

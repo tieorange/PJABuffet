@@ -2,9 +2,8 @@ package tieorange.com.pjabuffet.pojo.api;
 
 import android.os.Build;
 import com.google.firebase.database.Exclude;
-import java.util.ArrayList;
-import java.util.List;
 import org.parceler.Parcel;
+import tieorange.com.pjabuffet.pojo.Cart;
 
 /**
  * Created by tieorange on 03/11/2016.
@@ -21,7 +20,7 @@ import org.parceler.Parcel;
   public static final String FINISHED_ORDERS_START_WITH = STATE_READY.substring(0, 1);
   public static final String FINISHED_ORDERS_END_WITH = FINISHED_ORDERS_START_WITH + "\\uf8ff";
 
-  public List<Product> products = new ArrayList<>();
+  public Cart productsCart = new Cart();
   public String clientName;
   public String status;
   public String secretCode;
@@ -65,10 +64,7 @@ import org.parceler.Parcel;
   }
 
   public int getSumOfTimeToWait() {
-    int result = 0;
-    for (Product product : products) {
-      result += product.cookingTime;
-    }
-    return result;
+
+    return productsCart.getSumOfTimeToWait();
   }
 }
