@@ -131,7 +131,6 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     private void setCancelClickListener() {
       cancel.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
-          EventBus.getDefault().post(new EventProductRemovedFromCart());
           amountDecrement();
         }
       });
@@ -152,7 +151,6 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
 
       amountAlphaAnimation();
 
-      //setCurrentAmount(getCurrentAmount() + 1);
       amount.setText("" + getCurrentAmount());
 
       checkCancelButton();
@@ -165,7 +163,6 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
 
       CartTools.removeProductFromCart(getProduct());
 
-      //setCurrentAmount(getCurrentAmount() - 1);
       amount.setText("" + getCurrentAmount());
       checkCancelButton();
       if (getCurrentAmount() <= 0) {

@@ -263,13 +263,10 @@ public class MainActivity extends AppCompatActivity {
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventProductAddedToCart event) {
-    //Toast.makeText(MainActivity.this, event.id, Toast.LENGTH_SHORT).show();
     mBadgeCount++;
-    //mBottomTabOrders.setBadgeCount(mBadgeCount - 1);
     mBottomTabOrders.setBadgeCount(mBadgeCount);
 
-    // Show snackbar:
-    showSnackBar(event);
+    //showSnackBar(event);
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN) public void onEvent(EventProductRemovedFromCart event) {
