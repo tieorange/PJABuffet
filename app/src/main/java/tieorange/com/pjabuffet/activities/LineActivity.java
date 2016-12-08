@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +32,21 @@ public class LineActivity extends AppCompatActivity {
   @BindView(R.id.recycler) RecyclerView mRecycler;
 
   @InjectExtra Order mOrder;
+  @BindView(R.id.toolbar) Toolbar mToolbar;
+  @BindView(R.id.line2) View mLine2;
+  @BindView(R.id.circleYourOrder) View mCircleYourOrder;
+  @BindView(R.id.circleOtherOrders) View mCircleOtherOrders;
+  @BindView(R.id.circleFinish) View mCircleFinish;
+  @BindView(R.id.line1) View mLine1;
+  @BindView(R.id.timeToWait) TextView mTimeToWait;
+  @BindView(R.id.timeToWaitTextView) TextView mTimeToWaitTextView;
+  @BindView(R.id.constraintLayout) ConstraintLayout mConstraintLayout;
+  @BindView(R.id.otherOrdersTextView) TextView mOtherOrdersTextView;
+  @BindView(R.id.otherOrders) TextView mOtherOrders;
+  @BindView(R.id.yourOrderTextView) TextView mYourOrderTextView;
+  @BindView(R.id.yourOrder) TextView mYourOrder;
+  @BindView(R.id.finishTextView) TextView mFinishTextView;
+  @BindView(R.id.content_line) ConstraintLayout mContentLine;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -42,6 +58,16 @@ public class LineActivity extends AppCompatActivity {
 
     initRecycler();
     initOrderAcceptedListener();
+
+    initDummy();
+  }
+
+  private void initDummy() {
+    mTimeToWait.setText("~ 15 min.");
+
+    mOtherOrders.setText("~ 10 min.");
+
+    mYourOrder.setText("~ 5 min.");
   }
 
   private void initOrderAcceptedListener() {
@@ -124,10 +150,11 @@ public class LineActivity extends AppCompatActivity {
       mProductsAmount.setText(textViewContent);
 
       // Waiting time:
-      mWaitingTime.setText(mContext.getString(R.string.estimated_waiting_time) + model.getSumOfTimeToWait() + " min.");
+      mWaitingTime.setText(mContext.getString(R.string.estimated_waiting_time)
+          + model.getSumOfTimeToWait()
+          + " min.");
 
       return true;
-
     }
   }
 }

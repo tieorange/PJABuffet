@@ -10,6 +10,26 @@
                                              tools:showIn="@layout/activity_line"
     >
 
+  <View
+      android:id="@+id/line2"
+      android:layout_width="3dp"
+      android:layout_height="100dp"
+      android:background="@color/material_color_black"
+      android:text="TextView"
+      app:layout_constraintLeft_toLeftOf="@+id/circleYourOrder"
+      app:layout_constraintRight_toRightOf="@+id/circleYourOrder"
+      app:layout_constraintTop_toBottomOf="@+id/circleYourOrder"
+      />
+  <View
+      android:id="@+id/circleYourOrder"
+      android:layout_width="30dp"
+      android:layout_height="30dp"
+      android:background="@drawable/circle"
+      android:text="TextView"
+      tools:layout_editor_absoluteY="282dp"
+      android:layout_marginStart="16dp"
+      app:layout_constraintLeft_toLeftOf="parent"
+      />
   <android.support.v7.widget.RecyclerView
       android:id="@+id/recycler"
       android:layout_width="0dp"
@@ -28,20 +48,25 @@
       tools:listitem="@layout/item_line_order"
       />
   <View
-      android:id="@+id/circle1"
+      android:id="@+id/circleOtherOrders"
       android:layout_width="30dp"
       android:layout_height="30dp"
-      android:layout_marginBottom="212dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginTop="8dp"
       android:background="@drawable/circle"
       android:text="TextView"
-      app:layout_constraintBottom_toBottomOf="parent"
+      android:layout_marginStart="16dp"
       app:layout_constraintLeft_toLeftOf="parent"
+      android:layout_marginTop="8dp"
       app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-      tools:layout_constraintBottom_creator="1"
-      tools:layout_constraintLeft_creator="1"
-      app:layout_constraintVertical_bias="0.0"
+      />
+  <View
+      android:id="@+id/circleFinish"
+      android:layout_width="30dp"
+      android:layout_height="30dp"
+      android:background="@drawable/circle"
+      android:text="TextView"
+      app:layout_constraintLeft_toLeftOf="@+id/circleYourOrder"
+      app:layout_constraintRight_toRightOf="@+id/circleYourOrder"
+      app:layout_constraintTop_toBottomOf="@+id/line2"
       />
   <View
       android:id="@+id/line1"
@@ -49,9 +74,8 @@
       android:layout_height="100dp"
       android:background="@color/material_color_black"
       android:text="TextView"
-      app:layout_constraintTop_toBottomOf="@+id/circle1"
-      app:layout_constraintLeft_toLeftOf="@+id/circle1"
-      app:layout_constraintRight_toRightOf="@+id/circle1"
+      tools:layout_editor_absoluteY="182dp"
+      tools:layout_editor_absoluteX="30dp"
       />
   <android.support.constraint.ConstraintLayout
       android:id="@+id/constraintLayout"
@@ -97,6 +121,54 @@
         tools:layout_constraintTop_creator="1"
         />
   </android.support.constraint.ConstraintLayout >
+  <TextView
+      android:id="@+id/otherOrdersTextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Other orders"
+      app:layout_constraintBottom_toBottomOf="@+id/circleOtherOrders"
+      app:layout_constraintLeft_toRightOf="@+id/circleOtherOrders"
+      app:layout_constraintTop_toTopOf="@+id/circleOtherOrders"
+      />
+  <TextView
+      android:id="@+id/otherOrders"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      app:layout_constraintLeft_toLeftOf="@+id/otherOrdersTextView"
+      app:layout_constraintRight_toRightOf="@+id/otherOrdersTextView"
+      app:layout_constraintTop_toBottomOf="@+id/otherOrdersTextView"
+      tools:text="~ 10 min."
+      />
+  <TextView
+      android:id="@+id/yourOrderTextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:text="Your order"
+      app:layout_constraintBottom_toBottomOf="@+id/circleYourOrder"
+      app:layout_constraintLeft_toRightOf="@+id/circleYourOrder"
+      app:layout_constraintTop_toTopOf="@+id/circleYourOrder"
+      />
+  <TextView
+      android:id="@+id/yourOrder"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintLeft_toLeftOf="@+id/yourOrderTextView"
+      app:layout_constraintRight_toRightOf="@+id/yourOrderTextView"
+      app:layout_constraintTop_toBottomOf="@+id/yourOrderTextView"
+      tools:text="~ 5 min."
+      />
+  <TextView
+      android:id="@+id/finishTextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:text="Finish"
+      app:layout_constraintBottom_toBottomOf="@+id/circleFinish"
+      app:layout_constraintLeft_toRightOf="@+id/circleFinish"
+      app:layout_constraintTop_toTopOf="@+id/circleFinish"
+      />
 
 
 </android.support.constraint.ConstraintLayout >
