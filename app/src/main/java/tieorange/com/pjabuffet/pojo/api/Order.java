@@ -4,6 +4,7 @@ import android.os.Build;
 import com.google.firebase.database.Exclude;
 import org.parceler.Parcel;
 import tieorange.com.pjabuffet.pojo.Cart;
+import tieorange.com.pjabuffet.utils.CartTools;
 
 /**
  * Created by tieorange on 03/11/2016.
@@ -65,6 +66,6 @@ import tieorange.com.pjabuffet.pojo.Cart;
 
   public int getSumOfTimeToWait() {
 
-    return productsCart.getSumOfTimeToWait();
+    return CartTools.getSumOfTimeToWait();
   }
 }

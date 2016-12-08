@@ -20,14 +20,12 @@ import butterknife.ButterKnife;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
-import org.greenrobot.eventbus.EventBus;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
-import tieorange.com.pjabuffet.fragmants.EventProductRemovedFromCart;
 import tieorange.com.pjabuffet.pojo.api.Product;
 import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
-import tieorange.com.pjabuffet.pojo.events.EventProductAddedToCart;
 import tieorange.com.pjabuffet.utils.CartTools;
+import tieorange.com.pjabuffet.utils.ProductsTools;
 import tieorange.com.pjabuffet.utils.Tools;
 
 /**
@@ -105,18 +103,9 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
       mUnselectedBackgroundColor = ContextCompat.getColor(mContext, R.color.white);
     }
 
-    private Product getProduct() {
-      final int position = getAdapterPosition();
-      if (position >= 0) {
-        return MyApplication.sProducts.get(position);
-      } else {
-        return null;
-      }
-    }
-
     private void checkIfAlreadyAddedToCart(int position) {
 
-      final Pair<Product, Integer> productPair = MyApplication.sProductsInCart.getEntry(position);
+      final Pair<Product, Integer> productPair = CartTools.getEntry(position);
 
       //final boolean isNotAdded =
       //    productPair == null || productPair.first == null || productPair.second <= 0;
@@ -124,7 +113,7 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
 
       revealView.setBackgroundColor(mSelectedBackgroundColor);
       amount.setVisibility(View.VISIBLE);
-      amount.setText("" + getCurrentAmount());
+      amount.setText("" + CartTools.getCurrentAmount(getProduct()));
       cancel.setVisibility(View.VISIBLE);
     }
 
@@ -137,7 +126,7 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     }
 
     private void checkCancelButton() {
-      if (getCurrentAmount() >= 1) {
+      if (CartTools.getCurrentAmount(getProduct()) >= 1) {
         Tools.setViewVisibility(cancel, View.VISIBLE);
       } else {
         Tools.setViewVisibility(cancel, View.GONE);
@@ -145,27 +134,23 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     }
 
     public void amountIncrement() {
-      EventBus.getDefault().post(new EventProductAddedToCart());
-
-      CartTools.addProductToCart(getProduct());
+      CartTools.addProductToCart(ProductsTools.getProduct(getAdapterPosition()));
 
       amountAlphaAnimation();
 
-      amount.setText("" + getCurrentAmount());
+      amount.setText("" + CartTools.getCurrentAmount(getProduct()));
 
       checkCancelButton();
 
-      circularReveal(getCurrentAmount(), false, mContext);
+      circularReveal(CartTools.getCurrentAmount(getProduct()), false, mContext);
     }
 
     public void amountDecrement() {
-      EventBus.getDefault().post(new EventProductRemovedFromCart());
+      CartTools.removeProductFromCart(ProductsTools.getProduct(getAdapterPosition()));
 
-      CartTools.removeProductFromCart(getProduct());
-
-      amount.setText("" + getCurrentAmount());
+      amount.setText("" + CartTools.getCurrentAmount(getProduct()));
       checkCancelButton();
-      if (getCurrentAmount() <= 0) {
+      if (CartTools.getCurrentAmount(getProduct()) <= 0) {
         zeroAmount();
         return;
       }
@@ -174,9 +159,10 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
     }
 
     private void zeroAmount() {
-      setCurrentAmount(0);
+      CartTools.setCurrentAmount(0, ProductsTools.getProduct(getAdapterPosition()));
       amount.setVisibility(View.GONE);
-      circularReveal(getCurrentAmount(), true, mContext);
+      circularReveal(CartTools.getCurrentAmount(ProductsTools.getProduct(getAdapterPosition())), true,
+          mContext);
     }
 
     private void amountAlphaAnimation() {
@@ -237,12 +223,8 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
       });
     }
 
-    public int getCurrentAmount() {
-      return MyApplication.sProductsInCart.getAmount(getProduct());
-    }
-
-    public void setCurrentAmount(int amount) {
-      MyApplication.sProductsInCart.setAmount(getProduct(), amount);
+    public Product getProduct() {
+      return ProductsTools.getProduct(getAdapterPosition());
     }
   }
 }

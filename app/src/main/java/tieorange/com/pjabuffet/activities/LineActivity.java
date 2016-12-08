@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.api.Order;
+import tieorange.com.pjabuffet.utils.CartTools;
 import tieorange.com.pjabuffet.utils.FirebaseTools;
 
 public class LineActivity extends AppCompatActivity {
@@ -102,7 +103,7 @@ public class LineActivity extends AppCompatActivity {
       if (model.status.equals(Order.STATE_ACCEPTED)) {
         mProductsAmount.setTypeface(null, Typeface.BOLD);
       }
-      String text = model.productsCart.size() + " " + context.getString(R.string.products_ordered);
+      String text = CartTools.size() + " " + context.getString(R.string.products_ordered);
       mProductsAmount.setText(text);
     }
 
@@ -117,7 +118,7 @@ public class LineActivity extends AppCompatActivity {
       mProductsAmount.setTypeface(null, Typeface.BOLD);
       final String textViewContent = mContext.getString(R.string.your_order)
           + "\n"
-          + model.productsCart.size()
+          + CartTools.size()
           + " "
           + mContext.getString(R.string.products_ordered);
       mProductsAmount.setText(textViewContent);

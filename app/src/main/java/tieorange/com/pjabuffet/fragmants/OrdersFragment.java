@@ -61,7 +61,7 @@ public class OrdersFragment extends Fragment {
   }
 
   private void initFooter() {
-    if (MyApplication.sProductsInCart.isEmpty()) {
+    if (CartTools.isEmpty()) {
       footerLayout.setVisibility(GONE);
     } else {
       footerLayout.setVisibility(View.VISIBLE);
