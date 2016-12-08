@@ -10,4 +10,7 @@
   <string name="your_order" >Your order</string >
   <string name="error" >Error</string >
   <string name="estimated_waiting_time" >Estimated waiting time: </string >
+  <string name="OK" >OK</string >
+  <string name="No" >No</string >
+  <string name="would_you_like_to_remove" >Would you like to remove?</string >
 </resources >

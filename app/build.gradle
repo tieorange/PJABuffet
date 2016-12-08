@@ -3,7 +3,7 @@ apply plugin: 'android-apt'
 
 android {
   compileSdkVersion 25
-  buildToolsVersion '25.0.0'
+  buildToolsVersion '25.0.1'
   defaultConfig {
     applicationId "tieorange.com.pjabuffet"
     minSdkVersion 23
@@ -63,6 +63,8 @@ dependencies {
   }
 
   compile 'com.miguelcatalan:materialsearchview:1.4.0'
+
+  compile 'com.afollestad.material-dialogs:core:0.9.1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -1,6 +1,8 @@
 package tieorange.com.pjabuffet.activities.ui;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -15,6 +17,8 @@ import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.Cart;
 import tieorange.com.pjabuffet.pojo.api.Product;
 import tieorange.com.pjabuffet.utils.CartTools;
+import tieorange.com.pjabuffet.utils.DialogTools;
+import tieorange.com.pjabuffet.utils.Interfaces.IAllowedToRemove;
 import tieorange.com.pjabuffet.utils.ProductsTools;
 
 /**
@@ -68,8 +72,22 @@ public class AdapterOrderItem extends RecyclerView.Adapter<AdapterOrderItem.View
     }
 
     @OnClick(R.id.minus) void onClickMinus() {
-      CartTools.removeProductFromCart(getProduct());
-      updateAmountUI();
+      isAllowedToRemove(new IAllowedToRemove() {
+        @Override public void remove() {
+          CartTools.removeProductFromCart(getProduct());
+          updateAmountUI();
+        }
+      });
+    }
+
+    private void isAllowedToRemove(final IAllowedToRemove iAllowedToRemove) {
+      final int amount = CartTools.getAmount(getProduct());
+
+      if (amount > 1) {
+        iAllowedToRemove.remove();
+      } else {
+        DialogTools.getRemoveProduct(iAllowedToRemove, mContext, getProduct()).show();
+      }
     }
 
     private Product getProduct() {
@@ -77,8 +95,19 @@ public class AdapterOrderItem extends RecyclerView.Adapter<AdapterOrderItem.View
     }
 
     private void updateAmountUI() {
-      String productAmount = String.valueOf(CartTools.getAmount(getProduct()));
-      amount.setText(productAmount);
+      int productAmount = CartTools.getAmount(getProduct());
+      amount.setText("" + productAmount);
+
+      // change icon:
+      if (productAmount <= 1) {
+        Drawable removeDrawable =
+            ContextCompat.getDrawable(mContext, R.drawable.ic_remove_circle_black_24dp);
+        minus.setImageDrawable(removeDrawable);
+      } else {
+        Drawable removeDrawable =
+            ContextCompat.getDrawable(mContext, R.drawable.ic_minus_black_24dp);
+        minus.setImageDrawable(removeDrawable);
+      }
     }
   }
 }
