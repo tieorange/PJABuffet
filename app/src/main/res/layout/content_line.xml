@@ -12,16 +12,91 @@
 
   <android.support.v7.widget.RecyclerView
       android:id="@+id/recycler"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_marginBottom="16dp"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:visibility="gone"
+      app:layout_constraintBottom_toTopOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toLeftOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.0"
+      tools:layout_constraintBottom_creator="1"
+      tools:layout_constraintLeft_creator="1"
+      tools:layout_constraintRight_creator="1"
+      tools:layout_constraintTop_creator="1"
+      tools:listitem="@layout/item_line_order"
+      />
+  <View
+      android:id="@+id/circle1"
+      android:layout_width="30dp"
+      android:layout_height="30dp"
+      android:layout_marginBottom="212dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      android:background="@drawable/circle"
+      android:text="TextView"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+      tools:layout_constraintBottom_creator="1"
+      tools:layout_constraintLeft_creator="1"
+      app:layout_constraintVertical_bias="0.0"
+      />
+  <View
+      android:id="@+id/line1"
+      android:layout_width="3dp"
+      android:layout_height="100dp"
+      android:background="@color/material_color_black"
+      android:text="TextView"
+      app:layout_constraintTop_toBottomOf="@+id/circle1"
+      app:layout_constraintLeft_toLeftOf="@+id/circle1"
+      app:layout_constraintRight_toRightOf="@+id/circle1"
+      />
+  <android.support.constraint.ConstraintLayout
+      android:id="@+id/constraintLayout"
+      android:layout_width="0dp"
+      android:layout_height="128dp"
       android:layout_marginEnd="16dp"
       android:layout_marginStart="16dp"
       android:layout_marginTop="16dp"
-      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      tools:listitem="@layout/item_line_order"
-      />
+      tools:layout_constraintLeft_creator="1"
+      tools:layout_constraintRight_creator="1"
+      tools:layout_constraintTop_creator="1"
+      >
+
+    <TextView
+        android:id="@+id/timeToWait"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeToWaitTextView"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:text="~ 15 min."
+        />
+    <TextView
+        android:id="@+id/timeToWaitTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Time to wait:"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1"
+        />
+  </android.support.constraint.ConstraintLayout >
+
+
 </android.support.constraint.ConstraintLayout >

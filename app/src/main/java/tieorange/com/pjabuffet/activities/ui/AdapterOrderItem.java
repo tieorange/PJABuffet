@@ -1,8 +1,6 @@
 package tieorange.com.pjabuffet.activities.ui;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -98,17 +96,6 @@ public class AdapterOrderItem extends RecyclerView.Adapter<AdapterOrderItem.View
 
       int productAmount = CartTools.getAmount(getProduct());
       amount.setText("" + productAmount);
-
-      // change icon:
-      if (productAmount <= 1) {
-        Drawable removeDrawable =
-            ContextCompat.getDrawable(mContext, R.drawable.ic_remove_circle_black_24dp);
-        minus.setImageDrawable(removeDrawable);
-      } else {
-        Drawable removeDrawable =
-            ContextCompat.getDrawable(mContext, R.drawable.ic_minus_black_24dp);
-        minus.setImageDrawable(removeDrawable);
-      }
     }
   }
 }
