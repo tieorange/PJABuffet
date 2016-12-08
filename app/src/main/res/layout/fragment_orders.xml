@@ -7,25 +7,13 @@
     >
 
 
-  <android.support.v7.widget.RecyclerView
-      android:id="@id/recycler"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:clipToPadding="false"
-      android:overScrollMode="ifContentScrolls"
-      android:paddingBottom="8dp"
-      tools:listitem="@layout/item_order"
-      style="@style/recyclerViewWithToolbar"
-      />
-
-
   <RelativeLayout
       android:id="@+id/footerLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="65dp"
+      android:layout_marginTop="70dp"
       android:alpha="0.7"
-      android:background="#FFEB3B"
+      android:background="@color/material_color_yellow_100"
       android:padding="8dp"
       >
     <TextView
@@ -33,10 +21,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Total = 15 zł"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
+        tools:text="Total = 15 zł"
         />
   </RelativeLayout >
+
+  <android.support.v7.widget.RecyclerView
+      android:id="@id/recycler"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:clipToPadding="false"
+      android:nestedScrollingEnabled="true"
+      android:overScrollMode="ifContentScrolls"
+      android:paddingBottom="120dp"
+      tools:listitem="@layout/item_order"
+      />
+
 
 </LinearLayout >

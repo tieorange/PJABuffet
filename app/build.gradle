@@ -65,6 +65,7 @@ dependencies {
   compile 'com.miguelcatalan:materialsearchview:1.4.0'
 
   compile 'com.afollestad.material-dialogs:core:0.9.1.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

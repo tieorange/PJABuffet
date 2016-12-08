@@ -18,6 +18,7 @@ import tieorange.com.pjabuffet.pojo.api.Product;
 import tieorange.com.pjabuffet.utils.CartTools;
 import tieorange.com.pjabuffet.utils.DialogTools;
 import tieorange.com.pjabuffet.utils.Interfaces.IAllowedToRemove;
+import tieorange.com.pjabuffet.utils.Interfaces.IRefreshFooterTotalPrice;
 
 /**
  * Created by tieorange on 16/10/2016.
@@ -26,9 +27,11 @@ import tieorange.com.pjabuffet.utils.Interfaces.IAllowedToRemove;
 public class AdapterOrderItem extends RecyclerView.Adapter<AdapterOrderItem.ViewHolder> {
 
   private final Context mContext;
+  private IRefreshFooterTotalPrice mIRefreshFooterTotalPrice;
 
-  public AdapterOrderItem(Context context) {
+  public AdapterOrderItem(Context context, IRefreshFooterTotalPrice iRefreshFooterTotalPrice) {
     mContext = context;
+    mIRefreshFooterTotalPrice = iRefreshFooterTotalPrice;
   }
 
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -91,6 +94,8 @@ public class AdapterOrderItem extends RecyclerView.Adapter<AdapterOrderItem.View
     }
 
     private void updateAmountUI() {
+      mIRefreshFooterTotalPrice.refresh();
+
       int productAmount = CartTools.getAmount(getProduct());
       amount.setText("" + productAmount);
 

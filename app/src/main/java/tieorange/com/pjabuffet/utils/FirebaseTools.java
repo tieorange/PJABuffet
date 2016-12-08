@@ -29,6 +29,7 @@ public class FirebaseTools {
 
   public static void pushOrder(final Order order, final Context context,
       final IOrderPushed iOrderPushed) {
+    order.productsCart.convertProductsToFirebase();
     DatabaseReference referenceOrders = MyApplication.sReferenceOrders;
 
     referenceOrders.push().setValue(order, new DatabaseReference.CompletionListener() {

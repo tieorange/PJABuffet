@@ -16,6 +16,7 @@ import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
   public int price;
   public int cookingTime;
   public String photoUrl;
+  public Integer amount;
 
   @ParcelConstructor public Product() {
   }

@@ -1,6 +1,7 @@
 package tieorange.com.pjabuffet.fragmants;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,8 +15,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.ui.AdapterOrderItem;
-import tieorange.com.pjabuffet.utils.Constants;
 import tieorange.com.pjabuffet.utils.CartTools;
+import tieorange.com.pjabuffet.utils.Constants;
+import tieorange.com.pjabuffet.utils.Interfaces.IRefreshFooterTotalPrice;
 
 import static android.view.View.GONE;
 
@@ -56,22 +58,32 @@ public class OrdersFragment extends Fragment {
   private void initRecycler() {
     mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
     initAdapter();
-    initFooter();
+    refreshFooter();
   }
 
-  private void initFooter() {
+  private void refreshFooter() {
     if (CartTools.isEmpty()) {
       footerLayout.setVisibility(GONE);
     } else {
       footerLayout.setVisibility(View.VISIBLE);
     }
 
-    footerTotalPrice.setText("Total price: " + CartTools.getCartTotalPrice() + Constants.CURRENCY);
+    footerTotalPrice.setText(
+        getString(R.string.total_price) + CartTools.getCartTotalPrice() + Constants.CURRENCY);
   }
 
   private void initAdapter() {
-    mAdapter = new AdapterOrderItem(getContext());
+    IRefreshFooterTotalPrice iRefreshFooter = getIRefreshFooterTotalPrice();
+    mAdapter = new AdapterOrderItem(getContext(), iRefreshFooter);
     mRecycler.setAdapter(mAdapter);
+  }
+
+  @NonNull private IRefreshFooterTotalPrice getIRefreshFooterTotalPrice() {
+    return new IRefreshFooterTotalPrice() {
+      @Override public void refresh() {
+        refreshFooter();
+      }
+    };
   }
 
   @Override public void onStop() {
