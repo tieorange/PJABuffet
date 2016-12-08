@@ -14,12 +14,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import tieorange.com.pjabuffet.R;
-import tieorange.com.pjabuffet.pojo.Cart;
 import tieorange.com.pjabuffet.pojo.api.Product;
 import tieorange.com.pjabuffet.utils.CartTools;
 import tieorange.com.pjabuffet.utils.DialogTools;
 import tieorange.com.pjabuffet.utils.Interfaces.IAllowedToRemove;
-import tieorange.com.pjabuffet.utils.ProductsTools;
 
 /**
  * Created by tieorange on 16/10/2016.
@@ -28,11 +26,9 @@ import tieorange.com.pjabuffet.utils.ProductsTools;
 public class AdapterOrderItem extends RecyclerView.Adapter<AdapterOrderItem.ViewHolder> {
 
   private final Context mContext;
-  private Cart mCart;
 
-  public AdapterOrderItem(Context context, Cart productList) {
+  public AdapterOrderItem(Context context) {
     mContext = context;
-    mCart = productList;
   }
 
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -91,7 +87,7 @@ public class AdapterOrderItem extends RecyclerView.Adapter<AdapterOrderItem.View
     }
 
     private Product getProduct() {
-      return ProductsTools.getProduct(getAdapterPosition());
+      return CartTools.getProduct(getAdapterPosition());
     }
 
     private void updateAmountUI() {

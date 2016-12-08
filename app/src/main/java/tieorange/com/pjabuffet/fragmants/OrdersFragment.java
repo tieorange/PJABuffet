@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.ui.AdapterOrderItem;
 import tieorange.com.pjabuffet.utils.Constants;
@@ -71,7 +70,7 @@ public class OrdersFragment extends Fragment {
   }
 
   private void initAdapter() {
-    mAdapter = new AdapterOrderItem(getContext(), MyApplication.sProductsInCart);
+    mAdapter = new AdapterOrderItem(getContext());
     mRecycler.setAdapter(mAdapter);
   }
 
