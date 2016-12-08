@@ -3,6 +3,9 @@ package tieorange.com.pjabuffet.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
@@ -13,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import butterknife.BindColor;
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.f2prateek.dart.Dart;
@@ -27,6 +32,7 @@ import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.api.Order;
 import tieorange.com.pjabuffet.utils.CartTools;
 import tieorange.com.pjabuffet.utils.FirebaseTools;
+import tieorange.com.pjabuffet.utils.Tools;
 
 public class LineActivity extends AppCompatActivity {
   @BindView(R.id.recycler) RecyclerView mRecycler;
@@ -44,9 +50,16 @@ public class LineActivity extends AppCompatActivity {
   @BindView(R.id.otherOrdersTextView) TextView mOtherOrdersTextView;
   @BindView(R.id.otherOrders) TextView mOtherOrders;
   @BindView(R.id.yourOrderTextView) TextView mYourOrderTextView;
-  @BindView(R.id.yourOrder) TextView mYourOrder;
+  @BindView(R.id.userOrder) TextView mUserOrder;
   @BindView(R.id.finishTextView) TextView mFinishTextView;
   @BindView(R.id.content_line) ConstraintLayout mContentLine;
+
+  @BindDrawable(R.drawable.circle) Drawable mCircleDrawable;
+  @BindColor(R.color.circleBackgroundPasive) int mColorPassiveCircle;
+  @BindColor(R.color.circleBackgroundActive) int mColorActiveCircle;
+  private int mSumOfTimeToWait = 0;
+  private int mUserOrderTime;
+  private int mOtherOrderTimeSum;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -67,7 +80,55 @@ public class LineActivity extends AppCompatActivity {
 
     mOtherOrders.setText("~ 10 min.");
 
-    mYourOrder.setText("~ 5 min.");
+    mUserOrder.setText("~ 5 min.");
+
+    changeCircleColor(mCircleOtherOrders, mColorPassiveCircle);
+  }
+
+  private void changeCircleColor(View circleOtherOrders, int color) {
+    // Change color:
+    final LayerDrawable drawable = (LayerDrawable) circleOtherOrders.getBackground();
+    final GradientDrawable smallerOvalSolid =
+        (GradientDrawable) drawable.findDrawableByLayerId(R.id.smallerOvalSolid);
+    final GradientDrawable biggerOvalStroke =
+        (GradientDrawable) drawable.findDrawableByLayerId(R.id.biggerOvalStroke);
+
+    final int strokeWidth = Tools.dpToPx(this, 2);
+    smallerOvalSolid.setColor(color);
+    biggerOvalStroke.setStroke(strokeWidth, color);
+  }
+
+  private void processTimeline(Order order) {
+    // General time to wait:
+    updateSumOfTime(order);
+
+    if (order.isCurrentUser()) {
+      currentUserOrderProcess(order);
+    } else {
+      otherOrdersProcess(order);
+    }
+  }
+
+  private void updateSumOfTime(Order order) {
+    mSumOfTimeToWait += order.getSumOfTimeToWait();
+    String sumOfTimeToWaitStr = getMinuteFormatString(mSumOfTimeToWait);
+    mTimeToWait.setText(sumOfTimeToWaitStr);
+  }
+
+  private void currentUserOrderProcess(Order order) {
+    // // TODO: 08/12/2016 handle - user can order multiple orders  ( += instead of =) ?
+    mUserOrderTime = order.getSumOfTimeToWait();
+    setCircleTime(mUserOrder);
+  }
+
+  private void otherOrdersProcess(Order order) {
+    mOtherOrderTimeSum += order.getSumOfTimeToWait();
+    setCircleTime(mOtherOrders);
+  }
+
+  private void setCircleTime(TextView textView) {
+    final String minutes = getMinuteFormatString(mOtherOrderTimeSum);
+    textView.setText(minutes);
   }
 
   private void initOrderAcceptedListener() {
@@ -96,6 +157,17 @@ public class LineActivity extends AppCompatActivity {
 
   private void initAdapter() {
     Query query = FirebaseTools.getQueryOrdersOrdered();
+    query.addValueEventListener(new ValueEventListener() {
+      @Override public void onDataChange(DataSnapshot dataSnapshot) {
+        final Order order = dataSnapshot.getValue(Order.class);
+        processTimeline(order);
+      }
+
+      @Override public void onCancelled(DatabaseError databaseError) {
+
+      }
+    });
+
     //        Query query = MyApplication.sReferenceOrders.orderByChild(Constants.STATUS).startAt(1);
 
     FirebaseRecyclerAdapter<Order, ViewHolderLineOrder> adapter =
@@ -104,11 +176,17 @@ public class LineActivity extends AppCompatActivity {
           @Override protected void populateViewHolder(ViewHolderLineOrder viewHolder, Order model,
               int position) {
             model.key = getRef(position).getKey();
+
+            processTimeline(model);
             viewHolder.init(LineActivity.this, model);
           }
         };
 
     mRecycler.setAdapter(adapter);
+  }
+
+  private String getMinuteFormatString(int timeToWait) {
+    return String.format("~ " + timeToWait + " min.");
   }
 
   public static class ViewHolderLineOrder extends RecyclerView.ViewHolder {

@@ -35,7 +35,13 @@
         android:name=".activities.LineActivity"
         android:label="@string/title_activity_line"
         android:noHistory="true"
-        android:theme="@style/AppTheme.NoActionBar" ></activity >
+        android:theme="@style/AppTheme.NoActionBar" >
+      <!--<intent-filter >
+        <action android:name="android.intent.action.MAIN" />
+
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter >-->
+    </activity >
   </application >
 
 </manifest >

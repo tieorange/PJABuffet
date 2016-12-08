@@ -32,7 +32,7 @@
       android:id="@+id/recycler"
       android:layout_width="0dp"
       android:layout_height="0dp"
-      android:visibility="gone"
+      android:visibility="visible"
       app:layout_constraintBottom_toTopOf="parent"
       app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintLeft_toLeftOf="parent"
@@ -49,10 +49,10 @@
       android:id="@+id/circleOtherOrders"
       android:layout_width="30dp"
       android:layout_height="30dp"
-      android:background="@drawable/circle"
       android:layout_marginStart="16dp"
-      app:layout_constraintLeft_toLeftOf="parent"
       android:layout_marginTop="8dp"
+      android:background="@drawable/circle"
+      app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
       />
   <View
@@ -69,8 +69,8 @@
       android:layout_width="3dp"
       android:layout_height="100dp"
       android:background="@color/circleBackgroundActive"
-      app:layout_constraintRight_toRightOf="@+id/circleOtherOrders"
       app:layout_constraintLeft_toLeftOf="@+id/circleOtherOrders"
+      app:layout_constraintRight_toRightOf="@+id/circleOtherOrders"
       app:layout_constraintTop_toBottomOf="@+id/circleOtherOrders"
       />
   <android.support.constraint.ConstraintLayout
@@ -148,7 +148,7 @@
       app:layout_constraintTop_toTopOf="@+id/circleYourOrder"
       />
   <TextView
-      android:id="@+id/yourOrder"
+      android:id="@+id/userOrder"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       app:layout_constraintLeft_toLeftOf="@+id/yourOrderTextView"
