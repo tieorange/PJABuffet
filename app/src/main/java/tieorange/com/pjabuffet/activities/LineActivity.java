@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -118,16 +119,16 @@ public class LineActivity extends AppCompatActivity {
   private void currentUserOrderProcess(Order order) {
     // // TODO: 08/12/2016 handle - user can order multiple orders  ( += instead of =) ?
     mUserOrderTime = order.getSumOfTimeToWait();
-    setCircleTime(mUserOrder);
+    setCircleTime(mUserOrder, mUserOrderTime);
   }
 
   private void otherOrdersProcess(Order order) {
     mOtherOrderTimeSum += order.getSumOfTimeToWait();
-    setCircleTime(mOtherOrders);
+    setCircleTime(mOtherOrders, mOtherOrderTimeSum);
   }
 
-  private void setCircleTime(TextView textView) {
-    final String minutes = getMinuteFormatString(mOtherOrderTimeSum);
+  private void setCircleTime(TextView textView, int time) {
+    final String minutes = getMinuteFormatString(time);
     textView.setText(minutes);
   }
 
@@ -157,10 +158,14 @@ public class LineActivity extends AppCompatActivity {
 
   private void initAdapter() {
     Query query = FirebaseTools.getQueryOrdersOrdered();
-    query.addValueEventListener(new ValueEventListener() {
+
+    query.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override public void onDataChange(DataSnapshot dataSnapshot) {
-        final Order order = dataSnapshot.getValue(Order.class);
-        processTimeline(order);
+        Log.e("Count ", "" + dataSnapshot.getChildrenCount());
+        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+          Order order = postSnapshot.getValue(Order.class);
+          processTimeline(order);
+        }
       }
 
       @Override public void onCancelled(DatabaseError databaseError) {
@@ -170,7 +175,8 @@ public class LineActivity extends AppCompatActivity {
 
     //        Query query = MyApplication.sReferenceOrders.orderByChild(Constants.STATUS).startAt(1);
 
-    FirebaseRecyclerAdapter<Order, ViewHolderLineOrder> adapter =
+    // TODO: 09/12/2016 Remove
+    /*FirebaseRecyclerAdapter<Order, ViewHolderLineOrder> adapter =
         new FirebaseRecyclerAdapter<Order, ViewHolderLineOrder>(Order.class,
             R.layout.item_line_order, ViewHolderLineOrder.class, query) {
           @Override protected void populateViewHolder(ViewHolderLineOrder viewHolder, Order model,
@@ -182,7 +188,7 @@ public class LineActivity extends AppCompatActivity {
           }
         };
 
-    mRecycler.setAdapter(adapter);
+    mRecycler.setAdapter(adapter);*/
   }
 
   private String getMinuteFormatString(int timeToWait) {
