@@ -15,13 +15,14 @@
       android:layout_width="3dp"
       android:layout_height="100dp"
       android:background="@color/circleBackgroundActive"
-      app:layout_constraintLeft_toLeftOf="@+id/circleYourOrder"
-      app:layout_constraintRight_toRightOf="@+id/circleYourOrder"
-      app:layout_constraintTop_toBottomOf="@+id/circleYourOrder"
+      android:visibility="invisible"
+      app:layout_constraintLeft_toLeftOf="@+id/circleUserOrder"
+      app:layout_constraintRight_toRightOf="@+id/circleUserOrder"
+      app:layout_constraintTop_toBottomOf="@+id/circleUserOrder"
       />
   <View
-      android:id="@+id/circleYourOrder"
-      android:layout_width="30dp"
+      android:id="@+id/circleUserOrder"
+      android:layout_width="30dp" android:visibility="invisible"
       android:layout_height="30dp"
       android:layout_marginStart="16dp"
       android:background="@drawable/circle"
@@ -32,7 +33,7 @@
       android:id="@+id/recycler"
       android:layout_width="0dp"
       android:layout_height="0dp"
-      android:visibility="visible"
+      android:visibility="gone"
       app:layout_constraintBottom_toTopOf="parent"
       app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintLeft_toLeftOf="parent"
@@ -60,8 +61,8 @@
       android:layout_width="30dp"
       android:layout_height="30dp"
       android:background="@drawable/circle"
-      app:layout_constraintLeft_toLeftOf="@+id/circleYourOrder"
-      app:layout_constraintRight_toRightOf="@+id/circleYourOrder"
+      app:layout_constraintLeft_toLeftOf="@+id/circleUserOrder"
+      app:layout_constraintRight_toRightOf="@+id/circleUserOrder"
       app:layout_constraintTop_toBottomOf="@+id/line2"
       />
   <View
@@ -69,6 +70,7 @@
       android:layout_width="3dp"
       android:layout_height="100dp"
       android:background="@color/circleBackgroundActive"
+      android:visibility="invisible"
       app:layout_constraintLeft_toLeftOf="@+id/circleOtherOrders"
       app:layout_constraintRight_toRightOf="@+id/circleOtherOrders"
       app:layout_constraintTop_toBottomOf="@+id/circleOtherOrders"
@@ -138,22 +140,24 @@
       tools:text="~ 10 min."
       />
   <TextView
-      android:id="@+id/yourOrderTextView"
+      android:id="@+id/userOrderTextView"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="16dp"
       android:text="Your order:"
-      app:layout_constraintBottom_toBottomOf="@+id/circleYourOrder"
-      app:layout_constraintLeft_toRightOf="@+id/circleYourOrder"
-      app:layout_constraintTop_toTopOf="@+id/circleYourOrder"
+      android:visibility="invisible"
+      app:layout_constraintBottom_toBottomOf="@+id/circleUserOrder"
+      app:layout_constraintLeft_toRightOf="@+id/circleUserOrder"
+      app:layout_constraintTop_toTopOf="@+id/circleUserOrder"
       />
   <TextView
       android:id="@+id/userOrder"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      app:layout_constraintLeft_toLeftOf="@+id/yourOrderTextView"
-      app:layout_constraintRight_toRightOf="@+id/yourOrderTextView"
-      app:layout_constraintTop_toBottomOf="@+id/yourOrderTextView"
+      android:visibility="invisible"
+      app:layout_constraintLeft_toLeftOf="@+id/userOrderTextView"
+      app:layout_constraintRight_toRightOf="@+id/userOrderTextView"
+      app:layout_constraintTop_toBottomOf="@+id/userOrderTextView"
       tools:text="~ 5 min."
       />
   <TextView
@@ -165,6 +169,17 @@
       app:layout_constraintBottom_toBottomOf="@+id/circleFinish"
       app:layout_constraintLeft_toRightOf="@+id/circleFinish"
       app:layout_constraintTop_toTopOf="@+id/circleFinish"
+      />
+  <View
+      android:id="@+id/lineLongest"
+      android:layout_width="3dp"
+      android:layout_height="0dp"
+      android:background="@color/material_color_black"
+      app:layout_constraintBottom_toTopOf="@+id/circleFinish"
+      app:layout_constraintLeft_toLeftOf="@+id/circleOtherOrders"
+      app:layout_constraintRight_toRightOf="@+id/circleOtherOrders"
+      app:layout_constraintTop_toTopOf="@+id/line1"
+      app:layout_constraintVertical_bias="1.0"
       />
 
 
