@@ -7,8 +7,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +16,6 @@ import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.f2prateek.dart.Dart;
 import com.f2prateek.dart.InjectExtra;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,7 +28,7 @@ import tieorange.com.pjabuffet.utils.FirebaseTools;
 import tieorange.com.pjabuffet.utils.Tools;
 
 public class LineActivity extends AppCompatActivity {
-  @BindView(R.id.recycler) RecyclerView mRecycler;
+  private static final String TAG = LineActivity.class.getSimpleName();
 
   @InjectExtra Order mOrder;
   @BindView(R.id.toolbar) Toolbar mToolbar;
@@ -41,18 +39,18 @@ public class LineActivity extends AppCompatActivity {
   @BindView(R.id.line1) View mLine1;
   @BindView(R.id.timeToWait) TextView mTimeToWait;
   @BindView(R.id.timeToWaitTextView) TextView mTimeToWaitTextView;
-  @BindView(R.id.constraintLayout) ConstraintLayout mConstraintLayout;
+  @BindView(R.id.cardviewTime) CardView mCardviewTime;
   @BindView(R.id.otherOrdersTextView) TextView mOtherOrdersTextView;
   @BindView(R.id.otherOrders) TextView mOtherOrders;
   @BindView(R.id.userOrderTextView) TextView mUserOrderTextView;
   @BindView(R.id.userOrder) TextView mUserOrder;
   @BindView(R.id.finishTextView) TextView mFinishTextView;
   @BindView(R.id.content_line) ConstraintLayout mContentLine;
+  @BindView(R.id.lineLongest) View mLineLongest;
 
   @BindDrawable(R.drawable.circle) Drawable mCircleDrawable;
   @BindColor(R.color.circleBackgroundPasive) int mColorPassiveCircle;
   @BindColor(R.color.circleBackgroundActive) int mColorActiveCircle;
-  @BindView(R.id.lineLongest) View mLineLongest;
   private int mSumOfTimeToWait = 0;
   private int mUserOrderTime;
   private int mOtherOrderTimeSum;
@@ -62,31 +60,43 @@ public class LineActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_line);
     ButterKnife.bind(this);
-    Dart.inject(this);
+    //Dart.inject(this);
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
-    initRecycler();
-    initOrderAcceptedListener();
+    //initRecycler();
+    //initOrderAcceptedListener();
 
     initDummy();
   }
 
   private void initDummy() {
+    initLineListener();
+
     mTimeToWait.setText("~ 15 min.");
 
     mOtherOrders.setText("~ 10 min.");
 
     mUserOrder.setText("~ 5 min.");
 
-    changeCircleColor(mCircleOtherOrders, mColorPassiveCircle);
+    changeCircleColor(mCircleFinish, mColorPassiveCircle);
+    //initOrderAloneInQueue();
   }
 
   private void initOrderAloneInQueue() {
     mIsUserAloneInQueue = true;
+
+    // hide:
     mUserOrder.setVisibility(View.INVISIBLE);
     mUserOrderTextView.setVisibility(View.INVISIBLE);
     mCircleUserOrder.setVisibility(View.INVISIBLE);
+
+    // show:
+    Tools.setViewVisibility(mLineLongest, View.VISIBLE);
+
+    // swap textViews:
+    mOtherOrders = mUserOrder;
+    mOtherOrdersTextView.setText("Your order: ");
   }
 
   private void initOrderNotAloneInQueue() {
@@ -152,18 +162,12 @@ public class LineActivity extends AppCompatActivity {
           }
 
           @Override public void onCancelled(DatabaseError databaseError) {
-
+            Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
           }
         });
   }
 
-  private void initRecycler() {
-    mRecycler.setLayoutManager(new LinearLayoutManager(this));
-
-    initAdapter();
-  }
-
-  private void initAdapter() {
+  private void initLineListener() {
     Query query = FirebaseTools.getQueryOrdersOrdered();
 
     query.addListenerForSingleValueEvent(new ValueEventListener() {
