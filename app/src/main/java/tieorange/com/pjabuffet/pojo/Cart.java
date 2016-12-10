@@ -50,4 +50,5 @@ import tieorange.com.pjabuffet.pojo.api.Product;
   public void setProductsFirebase(List<Product> productsFirebase) {
     this.productsFirebase = productsFirebase;
   }
+
 }

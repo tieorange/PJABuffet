@@ -7,7 +7,7 @@
   <string name="title_activity_payment" >Payment</string >
   <string name="title_activity_line" >Line</string >
   <string name="products_ordered" >Products ordered</string >
-  <string name="your_order" >Your order</string >
+  <string name="your_order" >Your order:</string >
   <string name="error" >Error</string >
   <string name="estimated_waiting_time" >Estimated waiting time: </string >
   <string name="OK" >OK</string >

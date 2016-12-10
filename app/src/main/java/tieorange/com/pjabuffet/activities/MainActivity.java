@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
   @BindView(R.id.map_toolbar_container) CardView toolbarContainer;
   @BindView(R.id.nestedScroll) NestedScrollView nestedScroll;
   @BindView(R.id.rootLayout) CoordinatorLayout rootLayout;
-  @BindView(R.id.button) Button button;
+  @BindView(R.id.buttonLearnAnimation) Button button;
   private MenuFragment mMenuFragment;
   private OrdersFragment mOrdersFragment;
   private String mCurrentTabTag;

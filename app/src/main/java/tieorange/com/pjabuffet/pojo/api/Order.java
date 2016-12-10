@@ -34,6 +34,8 @@ import tieorange.com.pjabuffet.utils.CartTools;
   public Order() {
   }
 
+
+
   public boolean isCurrentUser() {
     if (clientName == null) return false;
     return clientName.equals(Build.MODEL);

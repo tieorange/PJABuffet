@@ -72,7 +72,7 @@ import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
     return String.format("%.2f", priceDouble) + " zł";
   }
 
-  protected Object clone() throws CloneNotSupportedException {
+  public Object clone() throws CloneNotSupportedException {
     return super.clone();
   }
 

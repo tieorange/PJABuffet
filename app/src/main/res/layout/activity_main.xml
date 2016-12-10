@@ -60,7 +60,7 @@
   </android.support.v4.widget.NestedScrollView >
 
   <Button
-      android:id="@+id/button"
+      android:id="@+id/buttonLearnAnimation"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="left"
@@ -79,6 +79,7 @@
       app:bb_inActiveTabAlpha="0.6"
       app:bb_inActiveTabColor="@color/white"
       app:bb_tabXmlResource="@xml/bottombar_tabs"
+      app:layout_insetEdge="top"
       />
 
 

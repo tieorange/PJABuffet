@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,8 @@ import com.google.firebase.database.ValueEventListener;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.api.Order;
+import tieorange.com.pjabuffet.pojo.api.Product;
+import tieorange.com.pjabuffet.utils.CartTools;
 import tieorange.com.pjabuffet.utils.FirebaseTools;
 import tieorange.com.pjabuffet.utils.Tools;
 
@@ -54,7 +57,7 @@ public class LineActivity extends AppCompatActivity {
   private int mSumOfTimeToWait = 0;
   private int mUserOrderTime;
   private int mOtherOrderTimeSum;
-  private boolean mIsUserAloneInQueue;
+  private boolean mIsUserAloneInQueue = true;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -80,12 +83,49 @@ public class LineActivity extends AppCompatActivity {
     mUserOrder.setText("~ 5 min.");
 
     changeCircleColor(mCircleFinish, mColorPassiveCircle);
+
     //initOrderAloneInQueue();
+
+    initDummyOrder();
+  }
+
+  // TODO: 10/12/2016 Remove
+  private void initDummyOrder() {
+    Order orderMine = getDummyOthersOrder(true, 3);
+    Order orderOther = getDummyOthersOrder(false, 3);
+
+    processTimeline(orderMine);
+    //processTimeline(orderOther);
+
+    initOrderAloneInQueue();
+  }
+
+  // TODO: 10/12/2016 Remove
+  private Order getDummyOthersOrder(boolean isUsersOrder, int productsAmount) {
+    Order order = new Order();
+    order.status = Order.STATE_ORDERED;
+
+    if (isUsersOrder) {
+      order.clientName = Build.MODEL;
+    } else {
+      order.clientName = "Not current user";
+    }
+
+    for (int i = 0; i < productsAmount; i++) {
+      Product product = null;
+      try {
+        product = (Product) MyApplication.sProducts.get(i).clone();
+        product.cookingTime = 5;
+      } catch (CloneNotSupportedException e) {
+        Log.d(TAG, "getDummyOthersOrder() called " + e.getMessage());
+      }
+      CartTools.addProductToCart(product);
+    }
+    return order;
   }
 
   private void initOrderAloneInQueue() {
-    mIsUserAloneInQueue = true;
-
+    if (!mIsUserAloneInQueue) return;
     // hide:
     mUserOrder.setVisibility(View.INVISIBLE);
     mUserOrderTextView.setVisibility(View.INVISIBLE);
@@ -96,7 +136,7 @@ public class LineActivity extends AppCompatActivity {
 
     // swap textViews:
     mOtherOrders = mUserOrder;
-    mOtherOrdersTextView.setText("Your order: ");
+    mOtherOrdersTextView.setText(R.string.your_order);
   }
 
   private void initOrderNotAloneInQueue() {
@@ -119,6 +159,10 @@ public class LineActivity extends AppCompatActivity {
   private void processTimeline(Order order) {
     // General time to wait:
     updateSumOfTime(order);
+
+    if (!order.isCurrentUser()) {
+      mIsUserAloneInQueue = false;
+    }
 
     if (order.isCurrentUser()) {
       currentUserOrderProcess(order);
@@ -175,19 +219,25 @@ public class LineActivity extends AppCompatActivity {
         Log.e("Count ", "" + dataSnapshot.getChildrenCount());
         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
           Order order = postSnapshot.getValue(Order.class);
-          final boolean isOrderFinished = order.secretCode == null || order.secretCode.isEmpty();
-          if (isOrderFinished) continue;
-          processTimeline(order);
+
+          final boolean isOrderNotFinished =
+              order.status != null && order.status.startsWith(Order.STATE_ACCEPTED.substring(0, 1));
+
+          if (isOrderNotFinished) {
+            processTimeline(order);
+          }
         }
+
+        initOrderAloneInQueue();
       }
 
       @Override public void onCancelled(DatabaseError databaseError) {
-
+        Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
       }
     });
   }
 
   private String getMinuteFormatString(int timeToWait) {
-    return String.format("~ " + timeToWait + " min.");
+    return ("~ " + timeToWait + " min.");
   }
 }

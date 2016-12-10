@@ -24,7 +24,7 @@ import static android.view.View.GONE;
  */
 public class ProfileFragment extends Fragment {
 
-  @BindView(R.id.button) Button button;
+  @BindView(R.id.buttonLearnAnimation) Button button;
   @BindView(R.id.rootLayout) RelativeLayout rootLayout;
 
   public ProfileFragment() {
@@ -50,7 +50,7 @@ public class ProfileFragment extends Fragment {
     super.onViewCreated(view, savedInstanceState);
   }
 
-  @OnClick(R.id.button) public void onClickButton() {
+  @OnClick(R.id.buttonLearnAnimation) public void onClickButton() {
     experiment();
   }
 
