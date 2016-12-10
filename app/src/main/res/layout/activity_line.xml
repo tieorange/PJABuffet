@@ -4,10 +4,31 @@
                                                  xmlns:tools="http://schemas.android.com/tools"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
+                                                 android:fitsSystemWindows="true"
                                                  tools:context="tieorange.com.pjabuffet.activities.LineActivity"
     >
 
+
   <android.support.design.widget.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:theme="@style/AppTheme.AppBarOverlay"
+      >
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary"
+        android:titleTextColor="@color/white"
+        app:layout_collapseMode="parallax"
+        android:subtitleTextColor="@color/bb_darkBackgroundColor"
+        app:layout_scrollFlags="scroll|enterAlways|snap"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        tools:title="PJA Buffet"
+        />
+  </android.support.design.widget.AppBarLayout >
+
+  <!--<android.support.design.widget.AppBarLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:theme="@style/AppTheme.AppBarOverlay"
@@ -21,7 +42,7 @@
         app:popupTheme="@style/AppTheme.PopupOverlay"
         />
 
-  </android.support.design.widget.AppBarLayout >
+  </android.support.design.widget.AppBarLayout >-->
 
   <include layout="@layout/content_line" />
 
