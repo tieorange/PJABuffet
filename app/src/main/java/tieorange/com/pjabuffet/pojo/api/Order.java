@@ -2,9 +2,12 @@ package tieorange.com.pjabuffet.pojo.api;
 
 import android.os.Build;
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.ServerValue;
+import java.util.HashMap;
 import org.parceler.Parcel;
 import tieorange.com.pjabuffet.pojo.Cart;
 import tieorange.com.pjabuffet.utils.CartTools;
+import tieorange.com.pjabuffet.utils.Constants;
 
 /**
  * Created by tieorange on 03/11/2016.
@@ -25,6 +28,9 @@ import tieorange.com.pjabuffet.utils.CartTools;
   public String clientName;
   public String status;
   public String secretCode;
+  private HashMap<String, Object> dateCreated = new HashMap<>();
+  private HashMap<String, Object> dateLastChanged = new HashMap<>();
+
   @Exclude public String key;
 
   @Exclude private int position;
@@ -34,26 +40,52 @@ import tieorange.com.pjabuffet.utils.CartTools;
   public Order() {
   }
 
+  public HashMap<String, Object> getDateLastChanged() {
+    return dateLastChanged;
+  }
 
+  public HashMap<String, Object> getDateCreated() {
+    if (dateCreated != null) {
+      return dateCreated;
+    }
+    final HashMap<String, Object> dateCreated = new HashMap<>();
+    dateCreated.put("date", ServerValue.TIMESTAMP);
+    return dateCreated;
+  }
+
+  @Exclude public long getDateLastChangedLong() {
+    return (long) dateLastChanged.get(Constants.DATE);
+  }
+
+  @Exclude public long getDateCreatedLong() {
+    return (long) dateCreated.get("date");
+  }
+
+  @Exclude public void initTimeStampManually() {
+    dateCreated.put(Constants.DATE, ServerValue.TIMESTAMP);
+  }
 
   public boolean isCurrentUser() {
     if (clientName == null) return false;
     return clientName.equals(Build.MODEL);
   }
 
-  public boolean isStatusAccepted() {
+  @Exclude public boolean isStatusAccepted() {
     return status.equals(STATE_ACCEPTED);
   }
 
-  public boolean isStatusReady() {
+  @Exclude public boolean isStatusReady() {
+    if (status == null) {
+      return false;
+    }
     return status.equals(STATE_READY);
   }
 
-  public boolean isStatusOrdered() {
+  @Exclude public boolean isStatusOrdered() {
     return status.equals(STATE_ORDERED);
   }
 
-  public boolean isStatusRejected() {
+  @Exclude public boolean isStatusRejected() {
     return status.equals(STATE_REJECTED);
   }
 

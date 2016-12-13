@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +16,7 @@ import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.f2prateek.dart.Dart;
 import com.f2prateek.dart.InjectExtra;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,9 +25,8 @@ import com.google.firebase.database.ValueEventListener;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.api.Order;
-import tieorange.com.pjabuffet.pojo.api.Product;
-import tieorange.com.pjabuffet.utils.CartTools;
 import tieorange.com.pjabuffet.utils.FirebaseTools;
+import tieorange.com.pjabuffet.utils.OrderTools;
 import tieorange.com.pjabuffet.utils.Tools;
 
 public class LineActivity extends AppCompatActivity {
@@ -63,12 +62,12 @@ public class LineActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_line);
     ButterKnife.bind(this);
-    //Dart.inject(this);
+    Dart.inject(this);
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
     //initRecycler();
-    //initOrderAcceptedListener();
+    initOrderAcceptedListener();
 
     initDummy();
   }
@@ -77,51 +76,50 @@ public class LineActivity extends AppCompatActivity {
     initLineListener();
 
     mTimeToWait.setText("~ 15 min.");
-
     mOtherOrders.setText("~ 10 min.");
-
     mUserOrder.setText("~ 5 min.");
 
     changeCircleColor(mCircleFinish, mColorPassiveCircle);
 
     //initOrderAloneInQueue();
 
-    initDummyOrder();
+    //initDummyOrder();
+  }
+
+  private void initLineListener() {
+    Query query = FirebaseTools.getQueryOrdersOrdered();
+
+    query.addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override public void onDataChange(DataSnapshot dataSnapshot) {
+        Log.e("Count ", "" + dataSnapshot.getChildrenCount());
+        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+          Order order = postSnapshot.getValue(Order.class);
+
+          final boolean isOrderNotFinished =
+              order.status != null && order.status.startsWith(Order.STATE_ACCEPTED.substring(0, 1));
+          if (isOrderNotFinished) {
+            processTimeline(order);
+          }
+        }
+
+        initOrderAloneInQueue();
+      }
+
+      @Override public void onCancelled(DatabaseError databaseError) {
+        Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
+      }
+    });
   }
 
   // TODO: 10/12/2016 Remove
   private void initDummyOrder() {
-    Order orderMine = getDummyOthersOrder(true, 3);
-    Order orderOther = getDummyOthersOrder(false, 3);
+    Order orderMine = OrderTools.getDummyOthersOrder(true, 3);
+    Order orderOther = OrderTools.getDummyOthersOrder(false, 3);
 
     processTimeline(orderMine);
-    //processTimeline(orderOther);
+    processTimeline(orderOther);
 
-    initOrderAloneInQueue();
-  }
-
-  // TODO: 10/12/2016 Remove
-  private Order getDummyOthersOrder(boolean isUsersOrder, int productsAmount) {
-    Order order = new Order();
-    order.status = Order.STATE_ORDERED;
-
-    if (isUsersOrder) {
-      order.clientName = Build.MODEL;
-    } else {
-      order.clientName = "Not current user";
-    }
-
-    for (int i = 0; i < productsAmount; i++) {
-      Product product = null;
-      try {
-        product = (Product) MyApplication.sProducts.get(i).clone();
-        product.cookingTime = 5;
-      } catch (CloneNotSupportedException e) {
-        Log.d(TAG, "getDummyOthersOrder() called " + e.getMessage());
-      }
-      CartTools.addProductToCart(product);
-    }
-    return order;
+    //initOrderAloneInQueue();
   }
 
   private void initOrderAloneInQueue() {
@@ -209,32 +207,6 @@ public class LineActivity extends AppCompatActivity {
             Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
           }
         });
-  }
-
-  private void initLineListener() {
-    Query query = FirebaseTools.getQueryOrdersOrdered();
-
-    query.addListenerForSingleValueEvent(new ValueEventListener() {
-      @Override public void onDataChange(DataSnapshot dataSnapshot) {
-        Log.e("Count ", "" + dataSnapshot.getChildrenCount());
-        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-          Order order = postSnapshot.getValue(Order.class);
-
-          final boolean isOrderNotFinished =
-              order.status != null && order.status.startsWith(Order.STATE_ACCEPTED.substring(0, 1));
-
-          if (isOrderNotFinished) {
-            processTimeline(order);
-          }
-        }
-
-        initOrderAloneInQueue();
-      }
-
-      @Override public void onCancelled(DatabaseError databaseError) {
-        Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
-      }
-    });
   }
 
   private String getMinuteFormatString(int timeToWait) {

@@ -25,14 +25,21 @@ import android.widget.FrameLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 import io.codetail.animation.arcanimator.ArcAnimator;
 import io.codetail.animation.arcanimator.Side;
+import java.util.Date;
+import java.util.Map;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.ui.HidingScrollListener;
 import tieorange.com.pjabuffet.fragmants.EventProductRemovedFromCart;
@@ -46,6 +53,7 @@ import tieorange.com.pjabuffet.pojo.events.EventToolbarSetVisibility;
 import tieorange.com.pjabuffet.utils.FirebaseTools;
 import tieorange.com.pjabuffet.utils.Interfaces.IOrderPushed;
 import tieorange.com.pjabuffet.utils.OrderTools;
+import tieorange.com.pjabuffet.utils.Tools;
 
 import static android.view.View.GONE;
 
@@ -80,6 +88,28 @@ public class MainActivity extends AppCompatActivity {
     initFragments();
     mHandler = new Handler();
     initViews();
+
+    // TODO: 13/12/2016 REMOVE:
+    experimentTimeStamp();
+  }
+
+  private void experimentTimeStamp() {
+    MyApplication.sReferenceOrders.addValueEventListener(new ValueEventListener() {
+      @Override public void onDataChange(DataSnapshot dataSnapshot) {
+        final Order order = dataSnapshot.getValue(Order.class);
+        final Map<String, String> timestamp = order.timestamp;
+        Log.d(TAG, "onDataChange() called with: dataSnapshot = [" + android.R.attr.value + "]");
+        final Date date = Tools.getDate(android.R.attr.value);
+        final String s = date.toString();
+      }
+
+      @Override public void onCancelled(DatabaseError databaseError) {
+        Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
+      }
+    });
+    final Order o = OrderTools.getCurrentOrder();
+    o.timestamp = ServerValue.TIMESTAMP;
+    MyApplication.sReferenceOrders.push().setValue(o);
   }
 
   @Override public void onStart() {
@@ -249,9 +279,9 @@ public class MainActivity extends AppCompatActivity {
     //noinspection SimplifiableIfStatement
     if (id == R.id.action_settings) {
       return true;
-    } else if(id == R.id.action_search){
+    } else if (id == R.id.action_search) {
 
-    } else if(id == R.id.action_orders_history){
+    } else if (id == R.id.action_orders_history) {
 
     }
 
