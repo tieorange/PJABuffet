@@ -21,6 +21,7 @@ public class OrderTools {
     order.clientName = MyApplication.sUser.name;
     order.productsCart = productsCart;
     order.status = Order.STATE_ORDERED;
+    order.initTimeStamp();
     return order;
   }
 
@@ -45,7 +46,7 @@ public class OrderTools {
       }
       //CartTools.addProductToCart(product);
     }
-    order.initTimeStampManually();
+    order.initTimeStamp();
     return order;
   }
 

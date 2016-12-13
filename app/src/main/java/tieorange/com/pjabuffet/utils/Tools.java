@@ -30,7 +30,7 @@ public class Tools {
   }
 
   public static Date getDate(long time) {
-    time = time * 1000;
+    //time = time * 1000;
     Calendar cal = Calendar.getInstance(Locale.ENGLISH);
     cal.setTimeInMillis(time);
 

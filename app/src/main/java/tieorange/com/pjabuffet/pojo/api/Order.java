@@ -3,11 +3,10 @@ package tieorange.com.pjabuffet.pojo.api;
 import android.os.Build;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
-import java.util.HashMap;
 import org.parceler.Parcel;
+import org.parceler.Transient;
 import tieorange.com.pjabuffet.pojo.Cart;
 import tieorange.com.pjabuffet.utils.CartTools;
-import tieorange.com.pjabuffet.utils.Constants;
 
 /**
  * Created by tieorange on 03/11/2016.
@@ -28,8 +27,10 @@ import tieorange.com.pjabuffet.utils.Constants;
   public String clientName;
   public String status;
   public String secretCode;
-  private HashMap<String, Object> dateCreated = new HashMap<>();
-  private HashMap<String, Object> dateLastChanged = new HashMap<>();
+  @Transient public Object createdAt;
+  // TODO: 13/12/2016 RM:
+  /*private HashMap<String, Object> dateCreated = new HashMap<>();
+  private HashMap<String, Object> dateLastChanged = new HashMap<>();*/
 
   @Exclude public String key;
 
@@ -40,7 +41,8 @@ import tieorange.com.pjabuffet.utils.Constants;
   public Order() {
   }
 
-  public HashMap<String, Object> getDateLastChanged() {
+  // TODO: 13/12/2016 REMOVE:
+  /*public HashMap<String, Object> getDateLastChanged() {
     return dateLastChanged;
   }
 
@@ -63,6 +65,17 @@ import tieorange.com.pjabuffet.utils.Constants;
 
   @Exclude public void initTimeStampManually() {
     dateCreated.put(Constants.DATE, ServerValue.TIMESTAMP);
+  }*/
+
+  @Exclude public void initTimeStamp() {
+    createdAt = ServerValue.TIMESTAMP;
+  }
+
+  @Exclude public Long getCreatedAt() {
+    if (createdAt instanceof Long) {
+      return (Long) createdAt;
+    }
+    return null;
   }
 
   public boolean isCurrentUser() {

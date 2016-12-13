@@ -25,17 +25,15 @@ import android.widget.FrameLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ServerValue;
-import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 import io.codetail.animation.arcanimator.ArcAnimator;
 import io.codetail.animation.arcanimator.Side;
 import java.util.Date;
-import java.util.Map;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -94,21 +92,52 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void experimentTimeStamp() {
-    MyApplication.sReferenceOrders.addValueEventListener(new ValueEventListener() {
+   /* MyApplication.sReferenceOrders.addValueEventListener(new ValueEventListener() {
       @Override public void onDataChange(DataSnapshot dataSnapshot) {
-        final Order order = dataSnapshot.getValue(Order.class);
-        final Map<String, String> timestamp = order.timestamp;
-        Log.d(TAG, "onDataChange() called with: dataSnapshot = [" + android.R.attr.value + "]");
-        final Date date = Tools.getDate(android.R.attr.value);
-        final String s = date.toString();
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+          Log.d(TAG,
+              "onDataChange() called with: dataSnapshot = [" + dataSnapshot.getValue() + "]");
+          final Order order = snapshot.getValue(Order.class);
+          final Long dateCreatedLong = order.getCreatedAt();
+          if (dateCreatedLong == null) continue;
+
+          final Date date = Tools.getDate(dateCreatedLong);
+          final String s = date.toString();
+        }
       }
 
       @Override public void onCancelled(DatabaseError databaseError) {
         Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
       }
+    });*/
+
+    MyApplication.sReferenceOrders.addChildEventListener(new ChildEventListener() {
+      @Override public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        final Order order = dataSnapshot.getValue(Order.class);
+        final Long dateCreatedLong = order.getCreatedAt();
+        if (dateCreatedLong != null) {
+          final Date date = Tools.getDate(dateCreatedLong);
+          final String dateStr = date.toString();
+        }
+      }
+
+      @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+      }
+
+      @Override public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+      }
+
+      @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+      }
+
+      @Override public void onCancelled(DatabaseError databaseError) {
+
+      }
     });
     final Order o = OrderTools.getCurrentOrder();
-    o.timestamp = ServerValue.TIMESTAMP;
     MyApplication.sReferenceOrders.push().setValue(o);
   }
 
