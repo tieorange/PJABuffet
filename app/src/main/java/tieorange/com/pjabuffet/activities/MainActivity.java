@@ -28,6 +28,8 @@ import butterknife.OnClick;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -86,9 +88,20 @@ public class MainActivity extends AppCompatActivity {
     initFragments();
     mHandler = new Handler();
     initViews();
+    startPushService();
 
     // TODO: 13/12/2016 REMOVE:
     experimentTimeStamp();
+  }
+
+  private void startPushService() {
+    final String token = FirebaseInstanceId.getInstance().getToken();
+    Log.d(TAG, "startPushService() called" + token);
+    Intent intent = new Intent(this, FirebaseInstanceIdService.class);
+    startService(intent);
+/*
+    Intent intent2 = new Intent(this, FirebaseMessagingService.class);
+    startService(intent2);*/
   }
 
   private void experimentTimeStamp() {
