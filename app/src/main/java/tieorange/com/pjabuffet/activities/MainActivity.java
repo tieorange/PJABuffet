@@ -1,5 +1,7 @@
 package tieorange.com.pjabuffet.activities;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +10,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -99,9 +102,22 @@ public class MainActivity extends AppCompatActivity {
     Log.d(TAG, "startPushService() called" + token);
     Intent intent = new Intent(this, FirebaseInstanceIdService.class);
     startService(intent);
+
+    showNotification();
 /*
     Intent intent2 = new Intent(this, FirebaseMessagingService.class);
     startService(intent2);*/
+  }
+
+  private void showNotification() {
+    Context context = getBaseContext();
+    NotificationCompat.Builder mBuilder =
+        new NotificationCompat.Builder(context).setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle("title")
+            .setContentText("body");
+    NotificationManager mNotificationManager =
+        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+    mNotificationManager.notify(1, mBuilder.build());
   }
 
   private void experimentTimeStamp() {
