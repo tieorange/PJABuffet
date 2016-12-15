@@ -1,14 +1,8 @@
 package tieorange.com.pjabuffet.services;
 
-import android.app.NotificationManager;
-import android.content.Context;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.google.firebase.messaging.RemoteMessage;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import tieorange.com.pjabuffet.R;
+import tieorange.com.pjabuffet.utils.NotificationHandler;
 
 import static java.lang.Integer.parseInt;
 
@@ -34,22 +28,6 @@ public class FirebaseMessagingService
       Log.d(TAG, "onMessageReceived: " + remoteMessage.getNotification().getBody());
     }
 
-    showNotification(remoteMessage.getNotification());
-  }
-
-  private void showNotification(RemoteMessage.Notification notification) {
-    Context context = getBaseContext();
-    NotificationCompat.Builder mBuilder =
-        new NotificationCompat.Builder(context).setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(notification.getTitle())
-            .setContentText(notification.getBody());
-    NotificationManager mNotificationManager =
-        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-    mNotificationManager.notify(createID(), mBuilder.build());
-  }
-
-  public int createID() {
-    Date now = new Date();
-    return parseInt(new SimpleDateFormat("ddHHmmss", Locale.US).format(now));
+    NotificationHandler.showNotification(this, remoteMessage.getNotification());
   }
 }
