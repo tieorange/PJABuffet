@@ -28,9 +28,6 @@ import android.widget.FrameLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.roughike.bottombar.BottomBar;
@@ -38,11 +35,9 @@ import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 import io.codetail.animation.arcanimator.ArcAnimator;
 import io.codetail.animation.arcanimator.Side;
-import java.util.Date;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.ui.HidingScrollListener;
 import tieorange.com.pjabuffet.fragmants.EventProductRemovedFromCart;
@@ -92,13 +87,11 @@ public class MainActivity extends AppCompatActivity {
     mHandler = new Handler();
     initViews();
     startPushService();
-
-    // TODO: 13/12/2016 REMOVE:
-    experimentTimeStamp();
   }
 
   private void startPushService() {
     final String token = FirebaseInstanceId.getInstance().getToken();
+    Tools.changeUserToken(token);
     Log.d(TAG, "startPushService() called" + token);
     Intent intent = new Intent(this, FirebaseInstanceIdService.class);
     startService(intent);
@@ -118,56 +111,6 @@ public class MainActivity extends AppCompatActivity {
     NotificationManager mNotificationManager =
         (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     mNotificationManager.notify(1, mBuilder.build());
-  }
-
-  private void experimentTimeStamp() {
-   /* MyApplication.sReferenceOrders.addValueEventListener(new ValueEventListener() {
-      @Override public void onDataChange(DataSnapshot dataSnapshot) {
-        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-          Log.d(TAG,
-              "onDataChange() called with: dataSnapshot = [" + dataSnapshot.getValue() + "]");
-          final Order order = snapshot.getValue(Order.class);
-          final Long dateCreatedLong = order.getCreatedAt();
-          if (dateCreatedLong == null) continue;
-
-          final Date date = Tools.getDate(dateCreatedLong);
-          final String s = date.toString();
-        }
-      }
-
-      @Override public void onCancelled(DatabaseError databaseError) {
-        Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
-      }
-    });*/
-
-    MyApplication.sReferenceOrders.addChildEventListener(new ChildEventListener() {
-      @Override public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        final Order order = dataSnapshot.getValue(Order.class);
-        final Long dateCreatedLong = order.getCreatedAt();
-        if (dateCreatedLong != null) {
-          final Date date = Tools.getDate(dateCreatedLong);
-          final String dateStr = date.toString();
-        }
-      }
-
-      @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-      }
-
-      @Override public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-      }
-
-      @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-      }
-
-      @Override public void onCancelled(DatabaseError databaseError) {
-
-      }
-    });
-    final Order o = OrderTools.getCurrentOrder();
-    MyApplication.sReferenceOrders.push().setValue(o);
   }
 
   @Override public void onStart() {

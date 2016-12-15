@@ -1,6 +1,7 @@
 package tieorange.com.pjabuffet.utils;
 
 import android.content.Context;
+import android.os.Build;
 import android.widget.Toast;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -9,6 +10,7 @@ import java.util.List;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.pojo.api.Order;
 import tieorange.com.pjabuffet.pojo.api.Product;
+import tieorange.com.pjabuffet.pojo.api.User;
 import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
 import tieorange.com.pjabuffet.utils.Interfaces.IOrderPushed;
 
@@ -46,5 +48,11 @@ public class FirebaseTools {
     return MyApplication.sReferenceOrders.orderByChild(Constants.STATUS)
         .startAt(Order.ORDERED_ORDERS_START_WITH)
         .endAt(Order.ORDERED_ORDERS_ENDS_WITH);
+  }
+
+  public static void pushUserToken(String token) {
+    String uid = Build.MODEL;
+    User user = new User(token, uid);
+    MyApplication.sReferenceUsers.child(user.getUid()).setValue(user);
   }
 }

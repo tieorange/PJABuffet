@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.Locale;
 import tieorange.com.pjabuffet.R;
 
+import static java.lang.Integer.parseInt;
+
 /**
  * Created by tieorange on 14/12/2016.
  */
@@ -48,7 +50,6 @@ public class FirebaseMessagingService
 
   public int createID() {
     Date now = new Date();
-    int id = Integer.parseInt(new SimpleDateFormat("ddHHmmss", Locale.US).format(now));
-    return id;
+    return parseInt(new SimpleDateFormat("ddHHmmss", Locale.US).format(now));
   }
 }

@@ -27,45 +27,13 @@ import tieorange.com.pjabuffet.utils.CartTools;
   public String clientName;
   public String status;
   public String secretCode;
+  public User user;
   @Transient public Object createdAt;
-  // TODO: 13/12/2016 RM:
-  /*private HashMap<String, Object> dateCreated = new HashMap<>();
-  private HashMap<String, Object> dateLastChanged = new HashMap<>();*/
 
   @Exclude public String key;
 
-  @Exclude private int position;
-
-  @Exclude private int textColor;
-
   public Order() {
   }
-
-  // TODO: 13/12/2016 REMOVE:
-  /*public HashMap<String, Object> getDateLastChanged() {
-    return dateLastChanged;
-  }
-
-  public HashMap<String, Object> getDateCreated() {
-    if (dateCreated != null) {
-      return dateCreated;
-    }
-    final HashMap<String, Object> dateCreated = new HashMap<>();
-    dateCreated.put("date", ServerValue.TIMESTAMP);
-    return dateCreated;
-  }
-
-  @Exclude public long getDateLastChangedLong() {
-    return (long) dateLastChanged.get(Constants.DATE);
-  }
-
-  @Exclude public long getDateCreatedLong() {
-    return (long) dateCreated.get("date");
-  }
-
-  @Exclude public void initTimeStampManually() {
-    dateCreated.put(Constants.DATE, ServerValue.TIMESTAMP);
-  }*/
 
   @Exclude public void initTimeStamp() {
     createdAt = ServerValue.TIMESTAMP;

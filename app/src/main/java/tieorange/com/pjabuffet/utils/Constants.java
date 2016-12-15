@@ -9,4 +9,6 @@ public class Constants {
   public static final String CURRENCY = " zł";
   public static final String STATUS = "status";
   public static final String DATE = "date";
+  public static final String USERS = "users";
+  public static final String ANDROID = "android";
 }

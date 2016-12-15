@@ -18,10 +18,11 @@ public class OrderTools {
   @NonNull public static Order getCurrentOrder() {
     final Cart productsCart = MyApplication.sProductsInCart;
     Order order = new Order();
-    order.clientName = MyApplication.sUser.name;
+    order.clientName = MyApplication.sUser.getUid();
     order.productsCart = productsCart;
     order.status = Order.STATE_ORDERED;
     order.initTimeStamp();
+    order.user = Tools.getCurrentUser();
     return order;
   }
 

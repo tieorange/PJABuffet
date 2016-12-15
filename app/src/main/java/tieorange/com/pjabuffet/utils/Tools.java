@@ -1,11 +1,14 @@
 package tieorange.com.pjabuffet.utils;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import tieorange.com.pjabuffet.MyApplication;
+import tieorange.com.pjabuffet.pojo.api.User;
 
 /**
  * Created by tieorange on 16/10/2016.
@@ -30,11 +33,23 @@ public class Tools {
   }
 
   public static Date getDate(long time) {
-    //time = time * 1000;
     Calendar cal = Calendar.getInstance(Locale.ENGLISH);
     cal.setTimeInMillis(time);
 
-    //String date = DateFormat.format("dd-MM-yyyy", cal).toString();
     return cal.getTime();
+  }
+
+  public static void changeUserToken(String token) {
+    FirebaseTools.pushUserToken(token);
+    SharedPrefTools.setDeviceToken(token);
+    MyApplication.sUser.setToken(token);
+  }
+
+  public static User getCurrentUser() {
+    return MyApplication.sUser;
+  }
+
+  public static String getUserUID() {
+    return Build.MODEL;
   }
 }
