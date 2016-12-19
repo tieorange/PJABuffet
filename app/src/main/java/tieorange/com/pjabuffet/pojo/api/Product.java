@@ -1,5 +1,6 @@
 package tieorange.com.pjabuffet.pojo.api;
 
+import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
 /**
  * Created by tieorange on 15/10/2016.
  */
-@Parcel public class Product implements Cloneable {
+@Parcel public class Product implements Cloneable, Parcelable {
   public String name;
   public int price;
   public int cookingTime;
@@ -92,4 +93,36 @@ import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
   @Override public int hashCode() {
     return name.hashCode();
   }
+
+  //region Parcel
+  @Override public int describeContents() {
+    return 0;
+  }
+
+  @Override public void writeToParcel(android.os.Parcel dest, int flags) {
+    dest.writeString(this.name);
+    dest.writeInt(this.price);
+    dest.writeInt(this.cookingTime);
+    dest.writeString(this.photoUrl);
+    dest.writeValue(this.amount);
+  }
+
+  protected Product(android.os.Parcel in) {
+    this.name = in.readString();
+    this.price = in.readInt();
+    this.cookingTime = in.readInt();
+    this.photoUrl = in.readString();
+    this.amount = (Integer) in.readValue(Integer.class.getClassLoader());
+  }
+
+  public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>() {
+    @Override public Product createFromParcel(android.os.Parcel source) {
+      return new Product(source);
+    }
+
+    @Override public Product[] newArray(int size) {
+      return new Product[size];
+    }
+  };
+  //endregion
 }

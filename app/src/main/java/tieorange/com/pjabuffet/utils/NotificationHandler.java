@@ -26,10 +26,10 @@ public class NotificationHandler {
   public static final String NOTIFICATION = "Notification";
 
   public static void showNotification(Context context, RemoteMessage.Notification notification) {
-    getParsedJson(notification);
+    final PushNotificationBuffet parsedJson = getParsedJson(notification);
 
     // TODO: 15/12/2016  get Order object from backend
-    Order order = OrderTools.getCurrentOrder();
+    Order order = new Order(parsedJson);
     Intent resultIntent = Henson.with(context).gotoPaymentActivity().mOrder(order).build();
     resultIntent.setAction(NOTIFICATION);
 

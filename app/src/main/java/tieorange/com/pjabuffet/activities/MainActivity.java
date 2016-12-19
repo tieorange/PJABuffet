@@ -282,12 +282,15 @@ public class MainActivity extends AppCompatActivity {
     int id = item.getItemId();
 
     //noinspection SimplifiableIfStatement
-    if (id == R.id.action_settings) {
-      return true;
-    } else if (id == R.id.action_search) {
-
-    } else if (id == R.id.action_orders_history) {
-
+    switch (id) {
+      case R.id.action_settings:
+        return true;
+      case R.id.action_search:
+        break;
+      case R.id.action_orders_history:
+        final Intent intent = Henson.with(this).gotoOrdersHistoryActivity().build();
+        startActivity(intent);
+        break;
     }
 
     return super.onOptionsItemSelected(item);

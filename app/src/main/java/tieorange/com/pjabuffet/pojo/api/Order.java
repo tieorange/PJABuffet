@@ -1,18 +1,20 @@
 package tieorange.com.pjabuffet.pojo.api;
 
 import android.os.Build;
+import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
 import org.parceler.Parcel;
 import org.parceler.Transient;
 import tieorange.com.pjabuffet.pojo.Cart;
+import tieorange.com.pjabuffet.pojo.PushNotificationBuffet;
 import tieorange.com.pjabuffet.utils.CartTools;
 
 /**
  * Created by tieorange on 03/11/2016.
  */
 
-@Parcel public class Order {
+@Parcel public class Order implements Parcelable {
   public static final String STATE_ORDERED = "39";
   public static final String STATE_ACCEPTED = "38";
   public static final String STATE_READY = "29";
@@ -33,6 +35,10 @@ import tieorange.com.pjabuffet.utils.CartTools;
   @Exclude public String key;
 
   public Order() {
+  }
+
+  public Order(PushNotificationBuffet parsedJson) {
+    this.key = parsedJson.getOrderKey();
   }
 
   @Exclude public void initTimeStamp() {
@@ -84,4 +90,40 @@ import tieorange.com.pjabuffet.utils.CartTools;
 
     return CartTools.getSumOfTimeToWait();
   }
+
+  //region Parcel
+  @Override public int describeContents() {
+    return 0;
+  }
+
+  @Override public void writeToParcel(android.os.Parcel dest, int flags) {
+    dest.writeParcelable(this.productsCart, flags);
+    dest.writeString(this.clientName);
+    dest.writeString(this.status);
+    dest.writeString(this.secretCode);
+    dest.writeParcelable(this.user, flags);
+    dest.writeLong((Long) this.createdAt);
+    dest.writeString(this.key);
+  }
+
+  protected Order(android.os.Parcel in) {
+    this.productsCart = in.readParcelable(Cart.class.getClassLoader());
+    this.clientName = in.readString();
+    this.status = in.readString();
+    this.secretCode = in.readString();
+    this.user = in.readParcelable(User.class.getClassLoader());
+    this.createdAt = in.readParcelable(Object.class.getClassLoader());
+    this.key = in.readString();
+  }
+
+  public static final Creator<Order> CREATOR = new Creator<Order>() {
+    @Override public Order createFromParcel(android.os.Parcel source) {
+      return new Order(source);
+    }
+
+    @Override public Order[] newArray(int size) {
+      return new Order[size];
+    }
+  };
+  //endregion
 }

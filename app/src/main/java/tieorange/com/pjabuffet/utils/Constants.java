@@ -11,4 +11,5 @@ public class Constants {
   public static final String DATE = "date";
   public static final String USERS = "users";
   public static final String ANDROID = "android";
+  public static final String ORDER_CLIENT_NAME = "clientName";
 }

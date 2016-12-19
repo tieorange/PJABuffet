@@ -41,17 +41,15 @@ public class PaymentActivity extends AppCompatActivity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_payment);
-    setSupportActionBar(toolbar);
     ButterKnife.bind(this);
     Dart.inject(this);
+    setSupportActionBar(toolbar);
 
     initFAB();
 
     initViews();
     initFirebase();
   }
-
-
 
   private void initFirebase() {
     if (mOrder == null || mOrder.key == null) {
@@ -62,6 +60,8 @@ public class PaymentActivity extends AppCompatActivity {
         .addValueEventListener(new ValueEventListener() {
           @Override public void onDataChange(DataSnapshot dataSnapshot) {
             Order value = dataSnapshot.getValue(Order.class);
+            if (value == null) return;
+
             mOrder = value;
             if (value.isStatusAccepted()) {
               orderAccepted();

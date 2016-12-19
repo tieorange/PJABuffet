@@ -36,11 +36,20 @@
         android:label="@string/title_activity_line"
         android:noHistory="true"
         android:theme="@style/AppTheme.NoActionBar" >
-      <!-- <intent-filter >
+
+      <!--
+      <intent-filter >
         <action android:name="android.intent.action.MAIN" />
 
         <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter >-->
+      </intent-filter >
+            -->
+    </activity >
+
+    <activity
+        android:name=".activities.OrdersHistoryActivity"
+        android:label="@string/title_activity_orders_history"
+        android:theme="@style/AppTheme.NoActionBar" >
     </activity >
 
     <service
@@ -50,7 +59,6 @@
         <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
       </intent-filter >
     </service >
-
     <service
         android:name=".services.FirebaseMessagingService"
         android:exported="false" >
