@@ -1,7 +1,5 @@
 package tieorange.com.pjabuffet.activities;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -20,17 +18,11 @@ import com.f2prateek.dart.Dart;
 import com.f2prateek.dart.InjectExtra;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularfillableloaders.CircularFillableLoaders;
-import com.pusher.client.Pusher;
-import com.pusher.client.PusherOptions;
-import com.pusher.client.channel.Channel;
-import com.pusher.client.channel.SubscriptionEventListener;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.api.Order;
-import tieorange.com.pjabuffet.utils.OrderTools;
 import tieorange.com.pjabuffet.utils.Tools;
 
 public class PaymentActivity extends AppCompatActivity {
@@ -49,9 +41,9 @@ public class PaymentActivity extends AppCompatActivity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_payment);
+    setSupportActionBar(toolbar);
     ButterKnife.bind(this);
     Dart.inject(this);
-    setSupportActionBar(toolbar);
 
     initFAB();
 

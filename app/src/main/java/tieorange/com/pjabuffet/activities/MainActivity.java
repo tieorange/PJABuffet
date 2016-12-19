@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.google.gson.Gson;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -41,6 +42,7 @@ import tieorange.com.pjabuffet.fragmants.EventProductRemovedFromCart;
 import tieorange.com.pjabuffet.fragmants.MenuFragment;
 import tieorange.com.pjabuffet.fragmants.OrdersFragment;
 import tieorange.com.pjabuffet.fragmants.ProfileFragment;
+import tieorange.com.pjabuffet.pojo.PushNotificationBuffet;
 import tieorange.com.pjabuffet.pojo.api.Order;
 import tieorange.com.pjabuffet.pojo.events.EventProductAddedToCart;
 import tieorange.com.pjabuffet.pojo.events.EventProductTouch;
@@ -86,12 +88,29 @@ public class MainActivity extends AppCompatActivity {
     startPushService();
   }
 
+  // TODO: 19/12/2016 RM:
+  private static void parseJson() {
+    Gson gson = new Gson();
+    //final String body = notification.getBody();
+    final String body =
+        "{\"orderKey\":\"-KZCAkvHe4Cu2zGMh4Jb\",\"secretCode\":\"BA0\",\"token\":\"cvF-4BFKeKg:APA91bGsoIWgn9Y4psuYsY0Jf0tJMEq9UCsHPpdOyLIFjud49J4BtHqZB02OcAS6Qc0H85aVuR-VtduZH3VFJn2Ro8eA1Whs6R4X8bQLT4yyY1IqrSDqtwzOC7vbqtixf_q8ZhLM_IdJ\",\"userUID\":\"Pixel\"}";
+
+    final PushNotificationBuffet pushNotificationBuffet =
+        gson.fromJson(body, PushNotificationBuffet.class);
+  }
+
   private void startPushService() {
     final String token = FirebaseInstanceId.getInstance().getToken();
     Tools.changeUserToken(token);
     Log.d(TAG, "startPushService() called" + token);
     Intent intent = new Intent(this, FirebaseInstanceIdService.class);
     startService(intent);
+
+    // TODO: 16/12/2016 RM:
+    parseJson();
+    //NotificationHandler.showNotificationDummy(this);
+
+
 
 /*
     Intent intent2 = new Intent(this, FirebaseMessagingService.class);
