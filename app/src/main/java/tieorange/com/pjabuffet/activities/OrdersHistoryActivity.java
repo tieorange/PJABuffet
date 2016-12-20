@@ -70,6 +70,7 @@ import tieorange.com.pjabuffet.utils.Tools;
   private void initAdapter(List<Order> ordersList) {
     List<OrderSection> sections = getOrdersSections(ordersList);
     mAdapter = new OrderSectionAdapter(OrdersHistoryActivity.this, sections);
+
     mRecycler.setAdapter(mAdapter);
   }
 

@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
+import com.bignerdranch.expandablerecyclerview.ViewHolder.ChildViewHolder;
 import tieorange.com.pjabuffet.R;
 
 /**
@@ -17,6 +17,5 @@ public class SectionItemViewHolder extends ChildViewHolder {
   public SectionItemViewHolder(View itemView) {
     super(itemView);
     ButterKnife.bind(this, itemView);
-
   }
 }

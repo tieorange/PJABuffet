@@ -36,11 +36,11 @@ dependencies {
     transitive = true;
   }
 
-
-
   compile 'org.greenrobot:eventbus:3.0.0'
   compile 'com.android.support:appcompat-v7:25.1.0'
   compile 'com.android.support:design:25.1.0'
+
+
   compile 'com.roughike:bottom-bar:2.0.2'
   compile 'com.jakewharton:butterknife:8.4.0'
   compile 'org.immutables:gson:2.3.5'
@@ -68,8 +68,7 @@ dependencies {
   provided 'com.f2prateek.dart:dart-processor:2.0.1'
   provided 'com.f2prateek.dart:henson-processor:2.0.1'
 
-  compile 'com.thoughtbot:expandablerecyclerview:1.3'
-  compile 'com.thoughtbot:expandablecheckrecyclerview:1.4'
+  compile 'com.bignerdranch.android:expandablerecyclerview:2.1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
