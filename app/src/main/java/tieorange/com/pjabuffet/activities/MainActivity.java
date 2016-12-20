@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     Gson gson = new Gson();
     //final String body = notification.getBody();
     final String body =
-        "{\"orderKey\":\"-KZCAkvHe4Cu2zGMh4Jb\",\"secretCode\":\"BA0\",\"token\":\"cvF-4BFKeKg:APA91bGsoIWgn9Y4psuYsY0Jf0tJMEq9UCsHPpdOyLIFjud49J4BtHqZB02OcAS6Qc0H85aVuR-VtduZH3VFJn2Ro8eA1Whs6R4X8bQLT4yyY1IqrSDqtwzOC7vbqtixf_q8ZhLM_IdJ\",\"userUID\":\"Pixel\"}";
+        "{\"mOrderKey\":\"-KZCAkvHe4Cu2zGMh4Jb\",\"secretCode\":\"BA0\",\"token\":\"cvF-4BFKeKg:APA91bGsoIWgn9Y4psuYsY0Jf0tJMEq9UCsHPpdOyLIFjud49J4BtHqZB02OcAS6Qc0H85aVuR-VtduZH3VFJn2Ro8eA1Whs6R4X8bQLT4yyY1IqrSDqtwzOC7vbqtixf_q8ZhLM_IdJ\",\"userUID\":\"Pixel\"}";
 
     final PushNotificationBuffet pushNotificationBuffet =
         gson.fromJson(body, PushNotificationBuffet.class);
@@ -252,7 +252,8 @@ public class MainActivity extends AppCompatActivity {
         order.key = key;
 
         // TODO: check if there is a line:
-        Intent intent = Henson.with(MainActivity.this).gotoLineActivity().mOrder(order).build();
+        Intent intent =
+            Henson.with(MainActivity.this).gotoLineActivity().mOrderKey(order.key).build();
         startActivity(intent);
 
        /* Intent intent = Henson.with(MainActivity.this).gotoPaymentActivity().mOrder(mOrder).build();

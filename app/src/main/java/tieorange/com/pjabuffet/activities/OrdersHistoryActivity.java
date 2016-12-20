@@ -20,7 +20,6 @@ import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.ui.GridItemSpacingDecorator;
 import tieorange.com.pjabuffet.activities.ui.sections_adapter.OrderSectionAdapter;
-import tieorange.com.pjabuffet.pojo.OrderSection;
 import tieorange.com.pjabuffet.pojo.api.Order;
 import tieorange.com.pjabuffet.utils.Constants;
 import tieorange.com.pjabuffet.utils.Tools;
@@ -48,7 +47,7 @@ import tieorange.com.pjabuffet.utils.Tools;
             List<Order> ordersList = new ArrayList<>();
             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
               final Order order = snapshot.getValue(Order.class);
-              order.key = dataSnapshot.getKey();
+              order.key = snapshot.getKey();
               order.productsCart.convertProductsFromFirebase();
               ordersList.add(order);
             }
@@ -71,28 +70,7 @@ import tieorange.com.pjabuffet.utils.Tools;
   }
 
   private void initAdapter(List<Order> ordersList) {
-    List<OrderSection> sections = getOrdersSections(ordersList);
-    mAdapter = new OrderSectionAdapter(OrdersHistoryActivity.this, sections);
-
+    mAdapter = new OrderSectionAdapter(OrdersHistoryActivity.this, ordersList);
     mRecycler.setAdapter(mAdapter);
-  }
-
-  private List<OrderSection> getOrdersSections(List<Order> ordersList) {
-    List<OrderSection> sectionsList = new ArrayList<>();
-    List<Order> current = new ArrayList<>();
-    List<Order> past = new ArrayList<>();
-
-    for (Order order : ordersList) {
-      if (order.isStatusReady()) {
-        past.add(order);
-      } else {
-        current.add(order);
-      }
-    }
-
-    sectionsList.add(new OrderSection("Current", current));
-    sectionsList.add(new OrderSection("Past", past));
-
-    return sectionsList;
   }
 }

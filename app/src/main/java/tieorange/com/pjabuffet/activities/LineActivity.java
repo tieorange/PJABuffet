@@ -1,6 +1,5 @@
 package tieorange.com.pjabuffet.activities;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
@@ -12,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindView;
@@ -32,7 +32,8 @@ import tieorange.com.pjabuffet.utils.Tools;
 public class LineActivity extends AppCompatActivity {
   private static final String TAG = LineActivity.class.getSimpleName();
 
-  @InjectExtra Order mOrder;
+  @InjectExtra String mOrderKey;
+  //@InjectExtra Order mOrder;
   @BindView(R.id.toolbar) Toolbar mToolbar;
   @BindView(R.id.line2) View mLine2;
   @BindView(R.id.circleUserOrder) View mCircleUserOrder;
@@ -192,21 +193,33 @@ public class LineActivity extends AppCompatActivity {
   }
 
   private void initOrderAcceptedListener() {
-    MyApplication.sReferenceOrders.child(mOrder.key)
-        .addValueEventListener(new ValueEventListener() {
-          @Override public void onDataChange(DataSnapshot dataSnapshot) {
-            final Order value = dataSnapshot.getValue(Order.class);
-            if (value.isStatusAccepted() || value.isStatusReady()) {
-              final Intent intent =
-                  Henson.with(LineActivity.this).gotoPaymentActivity().mOrder(mOrder).build();
-              startActivity(intent);
-            }
-          }
+    final String key = getOrderKey();
+    if (key == null) {
+      Toast.makeText(this, "Wrong order's key. Try again later", Toast.LENGTH_SHORT).show();
+      return;
+    }
 
-          @Override public void onCancelled(DatabaseError databaseError) {
-            Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
-          }
-        });
+    MyApplication.sReferenceOrders.child(key).addValueEventListener(new ValueEventListener() {
+      @Override public void onDataChange(DataSnapshot dataSnapshot) {
+        final Order value = dataSnapshot.getValue(Order.class);
+        if (value.isStatusAccepted() || value.isStatusReady()) {
+          //final Intent intent =
+              //Henson.with(LineActivity.this).gotoPaymentActivity()..build();
+          //startActivity(intent);
+        }
+      }
+
+      @Override public void onCancelled(DatabaseError databaseError) {
+        Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
+      }
+    });
+  }
+
+  private String getOrderKey() {
+    if (mOrderKey != null) {
+      return mOrderKey;
+    }
+    return null;
   }
 
   private String getMinuteFormatString(int timeToWait) {

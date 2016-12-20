@@ -30,7 +30,7 @@ public class NotificationHandler {
 
     // TODO: 15/12/2016  get Order object from backend
     Order order = new Order(parsedJson);
-    Intent resultIntent = Henson.with(context).gotoPaymentActivity().mOrder(order).build();
+    Intent resultIntent = Henson.with(context).gotoPaymentActivity().mOrderKey(order.key).build();
     resultIntent.setAction(NOTIFICATION);
 
     PendingIntent pendingIntent =
@@ -56,7 +56,7 @@ public class NotificationHandler {
   public static void showNotificationDummy(Context context) {
     // TODO: 15/12/2016  get Order object from backend
     Order order = OrderTools.getCurrentOrder();
-    Intent resultIntent = Henson.with(context).gotoPaymentActivity().mOrder(order).build();
+    Intent resultIntent = Henson.with(context).gotoPaymentActivity().mOrderKey(order.key).build();
     resultIntent.setAction(NOTIFICATION);
 
     PendingIntent pendingIntent =

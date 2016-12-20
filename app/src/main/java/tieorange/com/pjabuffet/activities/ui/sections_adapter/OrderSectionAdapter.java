@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
 import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
+import java.util.ArrayList;
 import java.util.List;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.OrderSection;
@@ -22,9 +23,8 @@ public class OrderSectionAdapter
   private final LayoutInflater mInflater;
   private Context mContext;
 
-  public OrderSectionAdapter(Context context,
-      @NonNull List<? extends ParentListItem> parentItemList) {
-    super(parentItemList);
+  public OrderSectionAdapter(Context context, @NonNull List<Order> parentItemList) {
+    super(getOrdersSections(parentItemList));
     mContext = context;
     mInflater = LayoutInflater.from(context);
   }
@@ -49,5 +49,26 @@ public class OrderSectionAdapter
       Object childListItem) {
     final Order order = (Order) childListItem;
     holder.onBind(order);
+  }
+
+  private static List<OrderSection> getOrdersSections(List<Order> ordersList) {
+    List<OrderSection> sectionsList = new ArrayList<>();
+    List<Order> current = new ArrayList<>();
+    List<Order> past = new ArrayList<>();
+
+    for (Order order : ordersList) {
+      if (order.isStatusReady()) {
+        past.add(order);
+      } else {
+        current.add(order);
+      }
+    }
+
+    if (current.size() > 0) {
+      sectionsList.add(new OrderSection("Current orders", current));
+    }
+    if (past.size() > 0) sectionsList.add(new OrderSection("Past", past));
+
+    return sectionsList;
   }
 }

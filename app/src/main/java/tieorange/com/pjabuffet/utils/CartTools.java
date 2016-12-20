@@ -31,7 +31,6 @@ public class CartTools {
     return results;
   }*/
 
-
   private static void addTestProductsToCart(List<ProductSheet> products) {
     if (MyApplication.sIsAddedTestProductsToCart) return;
 
@@ -112,13 +111,7 @@ public class CartTools {
   }
 
   public static String getCartTotalPrice() {
-    int resultInt = 0;
-    for (Map.Entry<Product, Integer> productEntry : cart.getProducts().entrySet()) {
-      int productSum = productEntry.getKey().price * productEntry.getValue();
-      resultInt += productSum;
-    }
-    double resultDouble = Product.convertIntToDoublePrice(resultInt);
-    return String.format("%.2f", resultDouble);
+    return getCartTotalPrice(cart);
   }
 
   public static String getCartTotalPrice(Cart cart) {
@@ -144,8 +137,7 @@ public class CartTools {
     return resultSum;
   }
 
-  public static Pair<Product, Integer> getEntry(int position) {
-    // 1            1
+  public static Pair<Product, Integer> getEntry(int position, Cart cart) {
     if (position >= cart.getProducts().size()) return null;
 
     final Product product = getProduct(position);
@@ -155,6 +147,10 @@ public class CartTools {
 
     Pair<Product, Integer> resultPair = new Pair<>(product, amount);
     return resultPair;
+  }
+
+  public static Pair<Product, Integer> getEntry(int position) {
+    return getEntry(position, cart);
   }
 
   public static int getAmount(Product product) {

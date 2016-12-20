@@ -28,7 +28,8 @@ import tieorange.com.pjabuffet.utils.Tools;
 public class PaymentActivity extends AppCompatActivity {
 
   private static final String TAG = PaymentActivity.class.getCanonicalName();
-  @InjectExtra Order mOrder;
+  //@InjectExtra Order mOrder;
+  @InjectExtra String mOrderKey;
   @BindView(R.id.toolbar) Toolbar toolbar;
   @BindView(R.id.circularFillableLoaders) CircularFillableLoaders circularFillableLoaders;
   @BindView(R.id.tvYourCode) TextView tvYourCode;
@@ -37,6 +38,7 @@ public class PaymentActivity extends AppCompatActivity {
   @BindView(R.id.rootLayout) ConstraintLayout rootLayout;
   @BindView(R.id.fab) FloatingActionButton fab;
   @BindView(R.id.tvAccepted) TextView mTvAccepted;
+  private Order mOrder;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -52,28 +54,27 @@ public class PaymentActivity extends AppCompatActivity {
   }
 
   private void initFirebase() {
-    if (mOrder == null || mOrder.key == null) {
+    if (mOrderKey == null) {
       Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
       return;
     }
-    MyApplication.sReferenceOrders.child(mOrder.key)
-        .addValueEventListener(new ValueEventListener() {
-          @Override public void onDataChange(DataSnapshot dataSnapshot) {
-            Order value = dataSnapshot.getValue(Order.class);
-            if (value == null) return;
+    MyApplication.sReferenceOrders.child(mOrderKey).addValueEventListener(new ValueEventListener() {
+      @Override public void onDataChange(DataSnapshot dataSnapshot) {
+        Order value = dataSnapshot.getValue(Order.class);
+        if (value == null) return;
 
-            mOrder = value;
-            if (value.isStatusAccepted()) {
-              orderAccepted();
-            } else if (value.isStatusReady()) {
-              showSecretCodeView();
-            }
-          }
+        mOrder = value;
+        if (value.isStatusAccepted()) {
+          orderAccepted();
+        } else if (value.isStatusReady()) {
+          showSecretCodeView();
+        }
+      }
 
-          @Override public void onCancelled(DatabaseError databaseError) {
-            Toast.makeText(PaymentActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
-          }
-        });
+      @Override public void onCancelled(DatabaseError databaseError) {
+        Toast.makeText(PaymentActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
+      }
+    });
   }
 
   private void orderAccepted() {

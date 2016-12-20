@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
 import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
 import org.parceler.Transient;
 import tieorange.com.pjabuffet.pojo.Cart;
 import tieorange.com.pjabuffet.pojo.PushNotificationBuffet;
@@ -29,12 +30,12 @@ import tieorange.com.pjabuffet.utils.CartTools;
   public String clientName;
   public String status;
   public String secretCode;
+  public String key;
   public User user;
+
   @Transient public Object createdAt;
 
-  @Exclude public String key;
-
-  public Order() {
+  @ParcelConstructor public Order() {
   }
 
   public Order(PushNotificationBuffet parsedJson) {
@@ -92,6 +93,9 @@ import tieorange.com.pjabuffet.utils.CartTools;
   }
 
   //region Parcel
+
+  //endregion
+
   @Override public int describeContents() {
     return 0;
   }
@@ -102,7 +106,7 @@ import tieorange.com.pjabuffet.utils.CartTools;
     dest.writeString(this.status);
     dest.writeString(this.secretCode);
     dest.writeParcelable(this.user, flags);
-    dest.writeLong((Long) this.createdAt);
+    dest.writeLong((long) this.createdAt);
     dest.writeString(this.key);
   }
 
@@ -125,5 +129,4 @@ import tieorange.com.pjabuffet.utils.CartTools;
       return new Order[size];
     }
   };
-  //endregion
 }
