@@ -51,6 +51,15 @@ public class OrderTools {
     return order;
   }
 
+  // TODO: 20/12/2016
+  public static String getDateHuman(Order order) {
+    String result;
+    order.getCreatedAt();
+    //String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(TimeinMilliSeccond));
+    return order.getCreatedAt().toString();
+  }
+
+
  /* public static String getRandomCode() {
     String uuid = UUID.randomUUID().toString();
     uuid = uuid.substring(0, 3);

@@ -1,13 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="wrap_content"
+                                             android:background="@color/material_color_amber_50"
+                                             android:orientation="vertical"
+                                             tools:layout_height="wrap_content"
     >
   <TextView
       android:id="@+id/sectionText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Section"
+      android:layout_marginBottom="16dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="16dp"
+      android:textSize="18sp"
+      android:textStyle="bold"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.49"
+      tools:text="Current orders"
       />
-</LinearLayout >
+  <TextView
+      android:id="@+id/ordersAmount"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="4dp"
+      android:textSize="18sp"
+      android:textStyle="bold"
+      app:layout_constraintBaseline_toBaselineOf="@+id/sectionText"
+      app:layout_constraintLeft_toRightOf="@+id/sectionText"
+      tools:text="(3)"
+      />
+  <View
+      android:id="@+id/devider"
+      android:layout_width="0dp"
+      android:layout_height="5dp"
+      android:background="@color/md_divider_black"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      />
+
+</android.support.constraint.ConstraintLayout >

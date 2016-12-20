@@ -19,35 +19,35 @@ import tieorange.com.pjabuffet.pojo.api.Order;
 public class OrderSectionAdapter
     extends ExpandableRecyclerAdapter<SectionViewHolder, SectionItemViewHolder> {
 
-  private final LayoutInflater mInflator;
+  private final LayoutInflater mInflater;
   private Context mContext;
 
   public OrderSectionAdapter(Context context,
       @NonNull List<? extends ParentListItem> parentItemList) {
     super(parentItemList);
     mContext = context;
-    mInflator = LayoutInflater.from(context);
+    mInflater = LayoutInflater.from(context);
   }
 
   @Override public SectionViewHolder onCreateParentViewHolder(ViewGroup parentViewGroup) {
-    final View view = mInflator.inflate(R.layout.item_section, parentViewGroup, false);
+    final View view = mInflater.inflate(R.layout.item_section, parentViewGroup, false);
     return new SectionViewHolder(view);
   }
 
   @Override public SectionItemViewHolder onCreateChildViewHolder(ViewGroup childViewGroup) {
-    final View view = mInflator.inflate(R.layout.item_section_item, childViewGroup, false);
+    final View view = mInflater.inflate(R.layout.item_section_item, childViewGroup, false);
     return new SectionItemViewHolder(view);
   }
 
   @Override public void onBindParentViewHolder(SectionViewHolder holder, int position,
       ParentListItem parentListItem) {
     final OrderSection section = (OrderSection) parentListItem;
-    holder.text.setText(section.getTitle());
+    holder.onBind(section);
   }
 
   @Override public void onBindChildViewHolder(SectionItemViewHolder holder, int position,
       Object childListItem) {
     final Order order = (Order) childListItem;
-    holder.mTextView.setText(order.key);
+    holder.onBind(order);
   }
 }

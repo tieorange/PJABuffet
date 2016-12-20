@@ -121,6 +121,16 @@ public class CartTools {
     return String.format("%.2f", resultDouble);
   }
 
+  public static String getCartTotalPrice(Cart cart) {
+    int resultInt = 0;
+    for (Map.Entry<Product, Integer> productEntry : cart.getProducts().entrySet()) {
+      int productSum = productEntry.getKey().price * productEntry.getValue();
+      resultInt += productSum;
+    }
+    double resultDouble = Product.convertIntToDoublePrice(resultInt);
+    return String.format("%.2f", resultDouble);
+  }
+
   public static int size() {
     return cart.getProducts().size();
   }

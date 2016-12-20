@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
+import tieorange.com.pjabuffet.activities.ui.GridItemSpacingDecorator;
 import tieorange.com.pjabuffet.activities.ui.sections_adapter.OrderSectionAdapter;
 import tieorange.com.pjabuffet.pojo.OrderSection;
 import tieorange.com.pjabuffet.pojo.api.Order;
@@ -63,6 +64,8 @@ import tieorange.com.pjabuffet.utils.Tools;
 
   private void initRecycler(List<Order> ordersList) {
     mRecycler.setLayoutManager(new LinearLayoutManager(OrdersHistoryActivity.this));
+    final int spaceInPixels = 5;
+    mRecycler.addItemDecoration(new GridItemSpacingDecorator(1, spaceInPixels));
 
     initAdapter(ordersList);
   }
