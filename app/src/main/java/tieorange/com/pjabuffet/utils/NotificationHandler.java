@@ -5,11 +5,14 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.Henson;
 import tieorange.com.pjabuffet.pojo.PushNotificationBuffet;
@@ -23,57 +26,57 @@ import static java.lang.Integer.parseInt;
  */
 
 public class NotificationHandler {
-  public static final String NOTIFICATION = "Notification";
+    private static final String NOTIFICATION = "Notification";
 
-  public static void showNotification(Context context, RemoteMessage.Notification notification) {
-    final PushNotificationBuffet parsedJson = getParsedJson(notification);
+    public static void showNotification(Context context, RemoteMessage.Notification notification) {
+        final PushNotificationBuffet parsedJson = getParsedJson(notification);
 
-    // TODO: 15/12/2016  get Order object from backend
-    Order order = new Order(parsedJson);
-    Intent resultIntent = Henson.with(context).gotoPaymentActivity().mOrderKey(order.key).build();
-    resultIntent.setAction(NOTIFICATION);
+        Order order = new Order(parsedJson);
+        Intent resultIntent = Henson.with(context).gotoPaymentActivity().mOrderKey(order.key).build();
+        resultIntent.setAction(NOTIFICATION);
 
-    PendingIntent pendingIntent =
-        PendingIntent.getActivity(context, 0, resultIntent, FLAG_ONE_SHOT);
-    NotificationCompat.Builder mBuilder =
-        new NotificationCompat.Builder(context).setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(notification.getTitle())
-            .setContentIntent(pendingIntent)
-            .setContentText(notification.getBody());
-    NotificationManager notificationManager =
-        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        PendingIntent pendingIntent =
+                PendingIntent.getActivity(context, 0, resultIntent, FLAG_ONE_SHOT);
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification_circle)
+                        .setContentTitle(notification.getTitle())
+                        .setContentIntent(pendingIntent)
+                        .setContentText(notification.getBody());
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-    notificationManager.notify(generateNotificationID(), mBuilder.build());
-  }
+        notificationManager.notify(generateNotificationID(), mBuilder.build());
+    }
 
-  private static PushNotificationBuffet getParsedJson(RemoteMessage.Notification notification) {
-    Gson gson = new Gson();
-    final String body = notification.getBody();
+    private static PushNotificationBuffet getParsedJson(RemoteMessage.Notification notification) {
+        Gson gson = new Gson();
+        String body = notification.getBody();
+//        body = body.replace("\\", "");
 
-    return gson.fromJson(body, PushNotificationBuffet.class);
-  }
+        return gson.fromJson(body, PushNotificationBuffet.class);
+    }
 
-  public static void showNotificationDummy(Context context) {
-    // TODO: 15/12/2016  get Order object from backend
-    Order order = OrderTools.getCurrentOrder();
-    Intent resultIntent = Henson.with(context).gotoPaymentActivity().mOrderKey(order.key).build();
-    resultIntent.setAction(NOTIFICATION);
+    public static void showNotificationDummy(Context context) {
+        // TODO: 15/12/2016  get Order object from backend
+        Order order = OrderTools.getCurrentOrder();
+        Intent resultIntent = Henson.with(context).gotoPaymentActivity().mOrderKey(order.key).build();
+        resultIntent.setAction(NOTIFICATION);
 
-    PendingIntent pendingIntent =
-        PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-    NotificationCompat.Builder mBuilder =
-        new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification_circle)
-            .setContentTitle("Your meal is ready")
-            .setContentIntent(pendingIntent)
-            .setContentText("Your secret code: WT8");
-    NotificationManager notificationManager =
-        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        PendingIntent pendingIntent =
+                PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification_circle)
+                        .setContentTitle("Your meal is ready")
+                        .setContentIntent(pendingIntent)
+                        .setContentText("Your secret code: WT8");
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-    notificationManager.notify(generateNotificationID(), mBuilder.build());
-  }
+        notificationManager.notify(generateNotificationID(), mBuilder.build());
+    }
 
-  private static int generateNotificationID() {
-    Date now = new Date();
-    return parseInt(new SimpleDateFormat("ddHHmmss", Locale.US).format(now));
-  }
+    private static int generateNotificationID() {
+        Date now = new Date();
+        return parseInt(new SimpleDateFormat("ddHHmmss", Locale.US).format(now));
+    }
 }
