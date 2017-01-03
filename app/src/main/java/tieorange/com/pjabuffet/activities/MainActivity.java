@@ -15,6 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroupOverlay;
+import android.view.ViewOverlay;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -101,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
         mHandler = new Handler();
         initViews();
         startPushService();
+
+        final ViewGroupOverlay overlay = rootLayout.getOverlay();
+        overlay.add(button);
     }
 
     private void experimentParseJson() {
