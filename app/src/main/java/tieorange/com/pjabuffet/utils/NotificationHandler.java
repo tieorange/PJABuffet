@@ -40,7 +40,7 @@ public class NotificationHandler {
         final PushNotificationBuffet pushObject = getParsedJson(message.getData());
 
         Order order = new Order(pushObject);
-        Intent resultIntent = PaymentActivity.buildIntentClearBackStack(context, order.key);
+        Intent resultIntent = Henson.with(context).gotoPaymentActivity().mOrderKey(order.key).build();
         resultIntent.setAction(NOTIFICATION);
 
         PendingIntent pendingIntent =

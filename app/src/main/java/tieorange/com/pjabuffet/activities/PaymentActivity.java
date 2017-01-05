@@ -55,10 +55,6 @@ public class PaymentActivity extends AppCompatActivity {
     TextView mTvAccepted;
     private Order mOrder;
 
-    public static Intent buildIntentClearBackStack(Context context, String key) {
-        Intent intent = Henson.with(context).gotoPaymentActivity().mOrderKey(key).build();
-        return intent;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -3,6 +3,7 @@ package tieorange.com.pjabuffet.utils;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.Log;
+
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.pojo.Cart;
 import tieorange.com.pjabuffet.pojo.api.Order;
@@ -13,51 +14,52 @@ import tieorange.com.pjabuffet.pojo.api.Product;
  */
 
 public class OrderTools {
-  private static final String TAG = OrderTools.class.getSimpleName();
+    private static final String TAG = OrderTools.class.getSimpleName();
 
-  @NonNull public static Order getCurrentOrder() {
-    final Cart productsCart = MyApplication.sProductsInCart;
-    Order order = new Order();
-    order.clientName = MyApplication.sUser.getUid();
-    order.productsCart = productsCart;
-    order.status = Order.STATE_ORDERED;
-    order.initTimeStamp();
-    order.user = Tools.getCurrentUser();
-    return order;
-  }
-
-  // TODO: 10/12/2016 Remove
-  public static Order getDummyOthersOrder(boolean isUsersOrder, int productsAmount) {
-    Order order = new Order();
-    order.status = Order.STATE_ORDERED;
-
-    if (isUsersOrder) {
-      order.clientName = Build.MODEL;
-    } else {
-      order.clientName = "Not current user";
+    @NonNull
+    public static Order getCurrentOrder() {
+        final Cart productsCart = MyApplication.sProductsInCart;
+        Order order = new Order();
+        order.clientName = MyApplication.sUser.getUid();
+        order.productsCart = productsCart;
+        order.status = Order.STATE_ORDERED;
+        order.initTimeStamp ();
+        order.user = Tools.getCurrentUser(); // TODO: 1/5/17 auth
+        return order;
     }
 
-    for (int i = 0; i < productsAmount; i++) {
-      Product product = null;
-      try {
-        product = (Product) MyApplication.sProducts.get(i).clone();
-        product.cookingTime = 5;
-      } catch (CloneNotSupportedException e) {
-        Log.d(OrderTools.TAG, "getDummyOthersOrder() called " + e.getMessage());
-      }
-      //CartTools.addProductToCart(product);
-    }
-    order.initTimeStamp();
-    return order;
-  }
+    // TODO: 10/12/2016 Remove
+    public static Order getDummyOthersOrder(boolean isUsersOrder, int productsAmount) {
+        Order order = new Order();
+        order.status = Order.STATE_ORDERED;
 
-  // TODO: 20/12/2016
-  public static String getDateHuman(Order order) {
-    String result;
-    order.getCreatedAt();
-    //String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(TimeinMilliSeccond));
-    return order.getCreatedAt().toString();
-  }
+        if (isUsersOrder) {
+            order.clientName = Build.MODEL;
+        } else {
+            order.clientName = "Not current user";
+        }
+
+        for (int i = 0; i < productsAmount; i++) {
+            Product product = null;
+            try {
+                product = (Product) MyApplication.sProducts.get(i).clone();
+                product.cookingTime = 5;
+            } catch (CloneNotSupportedException e) {
+                Log.d(OrderTools.TAG, "getDummyOthersOrder() called " + e.getMessage());
+            }
+            //CartTools.addProductToCart(product);
+        }
+        order.initTimeStamp();
+        return order;
+    }
+
+    // TODO: 20/12/2016
+    public static String getDateHuman(Order order) {
+        String result;
+        order.getCreatedAt();
+        //String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(TimeinMilliSeccond));
+        return order.getCreatedAt().toString();
+    }
 
 
  /* public static String getRandomCode() {

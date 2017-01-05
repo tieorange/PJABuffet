@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
+import tieorange.com.pjabuffet.activities.ui.LoadingSpinnerDialog;
 import tieorange.com.pjabuffet.pojo.api.Order;
 import tieorange.com.pjabuffet.utils.FirebaseTools;
 import tieorange.com.pjabuffet.utils.OrderTools;
@@ -82,6 +83,7 @@ public class LineActivity extends AppCompatActivity {
     private int mUserOrderTime;
     private int mOtherOrderTimeSum;
     private boolean mIsUserAloneInQueue = true;
+    private LoadingSpinnerDialog mSpinnerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,27 +91,30 @@ public class LineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_line);
         ButterKnife.bind(this);
         Dart.inject(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
 
         //initRecycler();
         initOrderAcceptedListener();
-
         initDummy();
     }
 
     private void initDummy() {
+        initLoading();
         initLineListener();
-
-        mTimeToWait.setText("~ 15 min.");
+        /*mTimeToWait.setText("~ 15 min.");
         mOtherOrders.setText("~ 10 min.");
-        mUserOrder.setText("~ 5 min.");
+        mUserOrder.setText("~ 5 min.");*/
 
         changeCircleColor(mCircleFinish, mColorPassiveCircle);
 
         //initOrderAloneInQueue();
 
         //initDummyOrder();
+    }
+
+    private void initLoading() {
+        mSpinnerDialog = LoadingSpinnerDialog.newInstance(getSupportFragmentManager());
+        mSpinnerDialog.show();
     }
 
     private void initLineListener() {
@@ -128,6 +133,7 @@ public class LineActivity extends AppCompatActivity {
                         processTimeline(order);
                     }
                 }
+                mSpinnerDialog.dismiss();
 
                 initOrderAloneInQueue();
             }
@@ -232,7 +238,7 @@ public class LineActivity extends AppCompatActivity {
                 final Order value = dataSnapshot.getValue(Order.class);
                 if (value.isStatusAccepted() || value.isStatusReady()) {
                     final Intent intent =
-                            PaymentActivity.buildIntentClearBackStack(LineActivity.this, key);
+                            Henson.with(LineActivity.this).gotoPaymentActivity().mOrderKey(key).build();
                     startActivity(intent);
                 }
             }
