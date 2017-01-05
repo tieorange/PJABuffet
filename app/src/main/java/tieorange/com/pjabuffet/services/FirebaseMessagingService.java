@@ -28,6 +28,6 @@ public class FirebaseMessagingService
       Log.d(TAG, "onMessageReceived: " + remoteMessage.getNotification().getBody());
     }
 
-    NotificationHandler.showNotification(this, remoteMessage.getNotification());
+    NotificationHandler.showNotification(this, remoteMessage);
   }
 }

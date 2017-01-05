@@ -16,4 +16,6 @@
   <string name="total_price" >Total price:</string >
   <string name="time_to_wait" >Time to wait:</string >
   <string name="title_activity_orders_history" >OrdersHistoryActivity</string >
+  <string name="your_order_is_ready">Your order is ready</string>
+  <string name="your_secret_code">Your secret code: </string>
 </resources >

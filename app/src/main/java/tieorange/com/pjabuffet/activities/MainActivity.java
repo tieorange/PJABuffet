@@ -30,6 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import com.f2prateek.dart.HensonNavigable;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.gson.Gson;
@@ -63,6 +64,7 @@ import tieorange.com.pjabuffet.utils.Tools;
 
 import static android.view.View.GONE;
 
+@HensonNavigable
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getCanonicalName();
     @BindView(R.id.toolbar)
@@ -122,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     private void startPushService() {
         final String token = FirebaseInstanceId.getInstance().getToken();
         Tools.changeUserToken(token);
-        Log.d(TAG, "startPushService() called: " + token);
+        Log.d(TAG, "token() called: " + token);
         Intent intent = new Intent(this, FirebaseInstanceIdService.class);
         startService(intent);
 

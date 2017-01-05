@@ -35,7 +35,6 @@ public class Tools {
   public static Date getDate(long time) {
     Calendar cal = Calendar.getInstance(Locale.ENGLISH);
     cal.setTimeInMillis(time);
-
     return cal.getTime();
   }
 
