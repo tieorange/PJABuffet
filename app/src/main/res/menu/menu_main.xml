@@ -1,26 +1,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
-      tools:context="tieorange.com.pjabuffet.activities.MainActivity" >
-  <item
-      android:id="@+id/action_settings"
-      android:orderInCategory="100"
-      android:title="@string/action_settings"
-      android:visible="false"
-      app:showAsAction="never" />
-  <item
-      android:id="@+id/action_orders_history"
-      android:icon="@drawable/ic_history_black_24dp"
-      android:orderInCategory="101"
-      android:title="Orders History"
-      android:visible="true"
-      app:showAsAction="ifRoom" />
-  <item
-      android:id="@+id/action_search"
-      android:actionViewClass="android.widget.SearchView"
-      android:icon="@drawable/ic_search_black_24dp"
-      android:orderInCategory="102"
-      android:title="Search"
-      android:visible="false"
-      app:showAsAction="collapseActionView|ifRoom" />
-</menu >
+      tools:context="tieorange.com.pjabuffet.activities.MainActivity">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        android:visible="false"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_orders_history"
+        android:icon="@drawable/ic_history_black_24dp"
+        android:orderInCategory="101"
+        android:title="@string/orders_history"
+        android:visible="true"
+        android:actionLayout="@layout/menu_orders_history_layout"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_search"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:orderInCategory="102"
+        android:title="@string/search"
+        android:visible="false"
+        app:showAsAction="collapseActionView|ifRoom"/>
+</menu>

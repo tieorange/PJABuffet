@@ -18,4 +18,6 @@
   <string name="title_activity_orders_history" >OrdersHistoryActivity</string >
   <string name="your_order_is_ready">Your order is ready</string>
   <string name="your_secret_code">Your secret code: </string>
+    <string name="orders_history">Orders History</string>
+  <string name="search">Search</string>
 </resources >

@@ -4,6 +4,10 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.pojo.Cart;
 import tieorange.com.pjabuffet.pojo.api.Order;
@@ -23,7 +27,7 @@ public class OrderTools {
         order.clientName = MyApplication.sUser.getUid();
         order.productsCart = productsCart;
         order.status = Order.STATE_ORDERED;
-        order.initTimeStamp ();
+        order.initTimeStamp();
         order.user = Tools.getCurrentUser(); // TODO: 1/5/17 auth
         return order;
     }
@@ -40,7 +44,7 @@ public class OrderTools {
         }
 
         for (int i = 0; i < productsAmount; i++) {
-            Product product = null;
+            Product product;
             try {
                 product = (Product) MyApplication.sProducts.get(i).clone();
                 product.cookingTime = 5;
@@ -53,12 +57,12 @@ public class OrderTools {
         return order;
     }
 
-    // TODO: 20/12/2016
-    public static String getDateHuman(Order order) {
-        String result;
-        order.getCreatedAt();
-        //String dateString = new SimpleDateFormat("MM/dd/yyyy").format(new Date(TimeinMilliSeccond));
-        return order.getCreatedAt().toString();
+    public static String getDateStringFormatted(Order order) {
+        Long createdAt = order.getCreatedAtLong();
+        if (createdAt == null) {
+            return "Unknown date";
+        }
+        return new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(new Date(createdAt));
     }
 
 

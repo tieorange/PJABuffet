@@ -8,6 +8,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -25,6 +26,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     private ProfileFragment mProfileFragment;
     private BottomBarTab mBottomTabOrders;
     private int mBadgeCount = 0;
+    private TextView mBadgeTextView;
     //@BindView(R.id.bottomBar) public BottomBar mBottomBar;
 
     @Override
@@ -306,7 +309,30 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+
+        // badge
+        MenuItem menuItemBadge = menu.findItem(R.id.action_orders_history);
+        MenuItemCompat.setActionView(menuItemBadge, R.layout.menu_orders_history_layout);
+        View menuItemBadgeView = MenuItemCompat.getActionView(menuItemBadge);
+        mBadgeTextView = (TextView) menuItemBadgeView.findViewById(R.id.badge_text);
+
+        updateBudge(3);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void updateBudge(final int notificationsCount) {
+        if (mBadgeTextView == null) return;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (notificationsCount <= 0) {
+                    Tools.setViewVisibility(mBadgeTextView, View.INVISIBLE);
+                } else {
+                    mBadgeTextView.setText(String.valueOf(notificationsCount));
+                    Tools.setViewVisibility(mBadgeTextView, View.VISIBLE);
+                }
+            }
+        });
     }
 
     @Override

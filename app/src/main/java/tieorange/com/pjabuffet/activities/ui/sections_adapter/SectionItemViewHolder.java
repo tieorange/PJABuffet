@@ -40,7 +40,7 @@ public class SectionItemViewHolder extends ChildViewHolder {
       initClickListener(order);
     }
 
-    String dateString = OrderTools.getDateHuman(order);
+    String dateString = OrderTools.getDateStringFormatted(order);
     String totalPrice = CartTools.getCartTotalPrice(order.productsCart);
     mDate.setText(dateString);
     mTotal.setText("Total =  " + totalPrice);
