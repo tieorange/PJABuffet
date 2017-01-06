@@ -15,6 +15,7 @@
         android:layout_margin="0dp"
         android:gravity="center"
         android:src="@drawable/ic_orders_history_action"
+        android:visibility="visible"
         />
 
     <TextView
@@ -33,5 +34,6 @@
         android:paddingRight="2dp"
         android:text="@null"
         android:textColor="#ffffffff"
-        android:textSize="12sp"/>
+        android:textSize="12sp"
+        android:visibility="invisible"/>
 </RelativeLayout>

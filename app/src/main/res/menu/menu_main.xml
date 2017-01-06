@@ -10,7 +10,6 @@
         app:showAsAction="never"/>
     <item
         android:id="@+id/action_orders_history"
-        android:icon="@drawable/ic_history_black_24dp"
         android:orderInCategory="101"
         android:title="@string/orders_history"
         android:visible="true"

@@ -42,8 +42,7 @@ public class Order {
     public String key;
     public User user;
 
-    //    @Transient
-    public HashMap<String, Object> createdAt; // should be Transient and Object in this app
+    public HashMap<String, Object> createdAt;
 
     @ParcelConstructor
     public Order() {

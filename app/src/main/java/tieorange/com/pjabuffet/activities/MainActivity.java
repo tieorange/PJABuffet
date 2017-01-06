@@ -17,8 +17,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroupOverlay;
-import android.view.ViewOverlay;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -33,6 +31,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import com.f2prateek.dart.HensonNavigable;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.gson.Gson;
@@ -48,8 +50,11 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.ui.HidingScrollListener;
+import tieorange.com.pjabuffet.activities.ui.LoadingSpinnerDialog;
 import tieorange.com.pjabuffet.fragmants.EventProductRemovedFromCart;
 import tieorange.com.pjabuffet.fragmants.MenuFragment;
 import tieorange.com.pjabuffet.fragmants.OrdersFragment;
@@ -59,6 +64,7 @@ import tieorange.com.pjabuffet.pojo.api.Order;
 import tieorange.com.pjabuffet.pojo.events.EventProductAddedToCart;
 import tieorange.com.pjabuffet.pojo.events.EventProductTouch;
 import tieorange.com.pjabuffet.pojo.events.EventToolbarSetVisibility;
+import tieorange.com.pjabuffet.utils.Constants;
 import tieorange.com.pjabuffet.utils.FirebaseTools;
 import tieorange.com.pjabuffet.utils.Interfaces.IOrderPushed;
 import tieorange.com.pjabuffet.utils.OrderTools;
@@ -109,9 +115,38 @@ public class MainActivity extends AppCompatActivity {
         mHandler = new Handler();
         initViews();
         startPushService();
+        initBadgeChecking();
 
-        final ViewGroupOverlay overlay = rootLayout.getOverlay();
-        overlay.add(button);
+        checkExtras();
+    }
+
+    private void checkExtras() {
+        // Check notification extras
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) return;
+        String orderKey = extras.getString(Constants.ORDER_KEY_);
+        if (orderKey == null) return;
+        Intent intent = Henson.with(MainActivity.this).gotoPaymentActivity().mOrderKey(orderKey).build();
+        startActivity(intent);
+    }
+
+
+    private void initBadgeChecking() {
+        Query query = OrderTools.getCurrentUserOrders();
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Order> userOrders = OrderTools.processOrdersDataSnapshot(dataSnapshot);
+                List<Order> currentOrdersList = OrderTools.getCurrentOrders(userOrders);
+                if (currentOrdersList == null) return;
+                updateBudge(currentOrdersList.size());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
+            }
+        });
     }
 
     private void experimentParseJson() {
@@ -272,13 +307,17 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab)
     public void onClickFab() {
-        Order order = OrderTools.getCurrentOrder();
 
-        orderToFirebase(order);
+
+        orderToFirebase();
     }
 
-    private void orderToFirebase(final Order order) {
+    private void orderToFirebase() {
         // TODO: 06/11/2016 show progress bar
+        final LoadingSpinnerDialog loadingSpinnerDialog = LoadingSpinnerDialog.newInstance(getSupportFragmentManager());
+        loadingSpinnerDialog.show();
+
+        final Order order = OrderTools.getCurrentOrder();
 
         FirebaseTools.pushOrder(order, this, new IOrderPushed() {
             @Override
@@ -290,6 +329,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent =
                         Henson.with(MainActivity.this).gotoLineActivity().mOrderKey(order.key).build();
                 startActivity(intent);
+
+                loadingSpinnerDialog.dismiss();
 
        /* Intent intent = Henson.with(MainActivity.this).gotoPaymentActivity().mOrder(mOrder).build();
         startActivity(intent);*/
@@ -310,13 +351,19 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        // badge
+        // Badge icon
         MenuItem menuItemBadge = menu.findItem(R.id.action_orders_history);
         MenuItemCompat.setActionView(menuItemBadge, R.layout.menu_orders_history_layout);
         View menuItemBadgeView = MenuItemCompat.getActionView(menuItemBadge);
         mBadgeTextView = (TextView) menuItemBadgeView.findViewById(R.id.badge_text);
+        menuItemBadgeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = Henson.with(MainActivity.this).gotoOrdersHistoryActivity().build();
+                startActivity(intent);
+            }
+        });
 
-        updateBudge(3);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -449,5 +496,11 @@ public class MainActivity extends AppCompatActivity {
                 .setDuration(200)
                 .setInterpolator(new DecelerateInterpolator(2))
                 .start();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Bundle extras = intent.getExtras();
     }
 }
