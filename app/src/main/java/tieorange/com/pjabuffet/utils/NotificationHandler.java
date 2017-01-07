@@ -1,5 +1,6 @@
 package tieorange.com.pjabuffet.utils;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -41,8 +42,10 @@ public class NotificationHandler {
 
         final PushNotificationBuffet pushObject = getParsedJson(message.getData());
 
+        int notificationID = generateNotificationID();
+
         Order order = new Order(pushObject);
-        Intent resultIntent = Henson.with(context).gotoPaymentActivity().mOrderKey(order.key).build();
+        Intent resultIntent = Henson.with(context).gotoPaymentActivity().mOrderKey(order.key).mNotificationId(notificationID).build();
         resultIntent.setAction(NOTIFICATION);
 
         PendingIntent pendingIntent =
@@ -51,7 +54,8 @@ public class NotificationHandler {
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(generateNotificationID(), mBuilder.build());
+        Notification notification = mBuilder.build();
+        notificationManager.notify(notificationID, notification);
     }
 
 
@@ -94,5 +98,12 @@ public class NotificationHandler {
     private static int generateNotificationID() {
         Date now = new Date();
         return parseInt(new SimpleDateFormat("ddHHmmss", Locale.US).format(now));
+    }
+
+    public static void dismissNotification(Context context, Integer notificationId) {
+        if (notificationId == null) return;
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(notificationId);
     }
 }

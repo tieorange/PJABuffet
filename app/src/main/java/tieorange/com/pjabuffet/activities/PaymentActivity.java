@@ -3,6 +3,7 @@ package tieorange.com.pjabuffet.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -29,6 +30,7 @@ import com.mikhaellopez.circularfillableloaders.CircularFillableLoaders;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.api.Order;
+import tieorange.com.pjabuffet.utils.NotificationHandler;
 import tieorange.com.pjabuffet.utils.Tools;
 
 public class PaymentActivity extends AppCompatActivity {
@@ -37,6 +39,9 @@ public class PaymentActivity extends AppCompatActivity {
     //@InjectExtra Order mOrder;
     @InjectExtra
     String mOrderKey;
+    @InjectExtra
+    @Nullable
+    Integer mNotificationId;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.circularFillableLoaders)
@@ -68,6 +73,13 @@ public class PaymentActivity extends AppCompatActivity {
 
         initViews();
         initFirebase();
+        checkExtras();
+    }
+
+    private void checkExtras() {
+        if (mNotificationId != null) {
+            NotificationHandler.dismissNotification(PaymentActivity.this, mNotificationId);
+        }
     }
 
     @Override

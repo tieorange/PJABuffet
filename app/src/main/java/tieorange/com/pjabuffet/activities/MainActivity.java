@@ -1,6 +1,7 @@
 package tieorange.com.pjabuffet.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IdRes;
@@ -8,7 +9,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.MenuItemCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -16,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -24,7 +24,6 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.gson.Gson;
+import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -97,26 +97,25 @@ public class MainActivity extends AppCompatActivity {
     private String TAG_MENU = "menu";
     private String TAG_ORDER = "mOrder";
     private String TAG_PROFILE = "profile";
-    private Handler mHandler;
+    private Handler mHandlerForFAB;
     private ProfileFragment mProfileFragment;
     private BottomBarTab mBottomTabOrders;
     private int mBadgeCount = 0;
-    private TextView mBadgeTextView;
+    private MenuItem mHistoryMenuItem;
+    private ValueEventListener mFirebaseListenerBadge;
     //@BindView(R.id.bottomBar) public BottomBar mBottomBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
         initFragments();
-        mHandler = new Handler();
         initViews();
         startPushService();
-        initBadgeChecking();
-
         checkExtras();
     }
 
@@ -133,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initBadgeChecking() {
         Query query = OrderTools.getCurrentUserOrders();
-        query.addValueEventListener(new ValueEventListener() {
+        mFirebaseListenerBadge = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Order> userOrders = OrderTools.processOrdersDataSnapshot(dataSnapshot);
@@ -146,7 +145,9 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(TAG, "onCancelled() called with: databaseError = [" + databaseError + "]");
             }
-        });
+        };
+        query.addValueEventListener(mFirebaseListenerBadge);
+
     }
 
     private void experimentParseJson() {
@@ -178,15 +179,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume() called");
+        super.onResume();
+//        invalidateOptionsMenu();
+        supportInvalidateOptionsMenu();
+        initBadgeChecking();
+    }
+
+    @Override
     public void onStart() {
+        Log.d(TAG, "onStart() called");
         super.onStart();
         EventBus.getDefault().register(this);
+
     }
 
     @Override
     public void onStop() {
+        Log.d(TAG, "onStop() called");
         EventBus.getDefault().unregister(this);
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Query currentUserOrders = OrderTools.getCurrentUserOrders();
+        if (mFirebaseListenerBadge != null) {
+            currentUserOrders.removeEventListener(mFirebaseListenerBadge);
+        }
+        super.onDestroy();
     }
 
     private void initFragments() {
@@ -213,8 +235,8 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        if (mHandler != null) {
-            mHandler.post(mPendingRunnable);
+        if (mHandlerForFAB != null) {
+            mHandlerForFAB.post(mPendingRunnable);
         }
     }
 
@@ -253,7 +275,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        setStatusBarTranslucent(true);
+        mHandlerForFAB = new Handler();
+        setStatusBarTranslucent(false);
         mBottomTabOrders = bottomBar.getTabWithId(R.id.tab_orders);
         mBottomTabOrders.setBadgeCount(mBadgeCount);
 
@@ -351,32 +374,25 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        // Badge icon
-        MenuItem menuItemBadge = menu.findItem(R.id.action_orders_history);
-        MenuItemCompat.setActionView(menuItemBadge, R.layout.menu_orders_history_layout);
-        View menuItemBadgeView = MenuItemCompat.getActionView(menuItemBadge);
-        mBadgeTextView = (TextView) menuItemBadgeView.findViewById(R.id.badge_text);
-        menuItemBadgeView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = Henson.with(MainActivity.this).gotoOrdersHistoryActivity().build();
-                startActivity(intent);
-            }
-        });
+        // Badge library
+        mHistoryMenuItem = menu.findItem(R.id.action_orders_history);
 
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     private void updateBudge(final int notificationsCount) {
-        if (mBadgeTextView == null) return;
+        if (mHistoryMenuItem == null) {
+//            mHistoryMenuItem =
+            return;
+        }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (notificationsCount <= 0) {
-                    Tools.setViewVisibility(mBadgeTextView, View.INVISIBLE);
+                    ActionItemBadge.hide(mHistoryMenuItem);
                 } else {
-                    mBadgeTextView.setText(String.valueOf(notificationsCount));
-                    Tools.setViewVisibility(mBadgeTextView, View.VISIBLE);
+                    Drawable icon = ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_orders_history_action);
+                    ActionItemBadge.update(MainActivity.this, mHistoryMenuItem, icon, ActionItemBadge.BadgeStyles.RED, 3);
                 }
             }
         });

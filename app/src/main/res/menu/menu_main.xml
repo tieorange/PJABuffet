@@ -10,11 +10,12 @@
         app:showAsAction="never"/>
     <item
         android:id="@+id/action_orders_history"
+        android:actionLayout="@layout/menu_orders_history_layout"
+        android:icon="@drawable/ic_orders_history_action"
         android:orderInCategory="101"
         android:title="@string/orders_history"
         android:visible="true"
-        android:actionLayout="@layout/menu_orders_history_layout"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
     <item
         android:id="@+id/action_search"
         android:actionViewClass="android.widget.SearchView"
