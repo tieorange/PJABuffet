@@ -1,13 +1,13 @@
 <tabs >
   <tab
-      barColorWhenSelected="@color/tab_orders"
+      barColorWhenSelected="@color/tab_orders_color"
       icon="@drawable/ic_restaurant_menu_white_24dp"
       id="@+id/tab_menu"
       title="Menu" />
   <tab
       barColorWhenSelected="@color/primary"
       icon="@drawable/ic_shopping_cart_white_24dp"
-      id="@+id/tab_orders"
+      id="@+id/tab_orders_new"
       title="Orders" />
   <tab
       barColorWhenSelected="@color/tab_profile"

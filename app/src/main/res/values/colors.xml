@@ -16,7 +16,7 @@
 
   <!--TABS COLORS-->
   <color name="tab_menu" >#4e6570</color >
-  <color name="tab_orders" >#118476</color >
+  <color name="tab_orders_color" >#118476</color >
   <color name="tab_profile" >#96796e</color >
   <color name="white" >#ffffff</color >
 

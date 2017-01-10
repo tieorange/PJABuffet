@@ -76,6 +76,8 @@ public class SectionItemViewHolder extends ChildViewHolder {
     int size = order.productsCart.getProducts().size();
     for (int i = 0; i < size; i++) {
       final Pair<Product, Integer> entry = CartTools.getEntry(i, order.productsCart);
+
+
       if (entry == null) continue;
 
       final String name = entry.first.name;

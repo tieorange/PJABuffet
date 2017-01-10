@@ -42,7 +42,7 @@ public class MyApplication extends Application {
 
     initSharedPref();
     initFirebase();
-    initProducts();
+//    initProductsDummy();
     initRetrofit();
     initUser();
   }
@@ -70,7 +70,7 @@ public class MyApplication extends Application {
     sApiService = sRetrofit.create(MyEndpointInterface.class);
   }
 
-  private void initProducts() {
+  private void initProductsDummy() {
     sProducts = Product.getDummy(30);
   }
 }

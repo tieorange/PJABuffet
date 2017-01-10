@@ -21,6 +21,8 @@ import butterknife.ButterKnife;
 
 import com.squareup.picasso.Picasso;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,7 @@ import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.api.Product;
 import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
+import tieorange.com.pjabuffet.pojo.events.EventProductAddedToCart;
 import tieorange.com.pjabuffet.utils.CartTools;
 import tieorange.com.pjabuffet.utils.ProductsTools;
 import tieorange.com.pjabuffet.utils.Tools;
@@ -124,9 +127,17 @@ public class AdapterMenu extends RecyclerView.Adapter<AdapterMenu.ViewHolderMenu
             //    productPair == null || productPair.first == null || productPair.second <= 0;
             if (productAmount == null || productAmount <= 0) return;
 
+            // TODO: 1/10/17 RM:
+            // restore bottomBar.badge value
+            /*for (int i = 0; i < productAmount; i++) {
+                EventBus.getDefault().post(new EventProductAddedToCart());
+            }*/
+
             mRevealView.setBackgroundColor(mSelectedBackgroundColor);
             mAmount.setVisibility(View.VISIBLE);
-            mAmount.setText("" + CartTools.getCurrentAmount(getProduct()));
+            int currentAmount = CartTools.getCurrentAmount(getProduct());
+//            int currentAmount = productAmount;
+            mAmount.setText("" + currentAmount);
             mCancel.setVisibility(View.VISIBLE);
 
 

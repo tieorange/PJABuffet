@@ -13,4 +13,5 @@ public class Constants {
     public static final String ANDROID = "android";
     public static final String ORDER_CLIENT_NAME = "clientName";
     public static final String ORDER_KEY_ = "orderKey";
+    public static final String BADGE_COUNT = "badge_count";
 }

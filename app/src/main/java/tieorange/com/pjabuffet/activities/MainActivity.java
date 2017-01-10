@@ -38,7 +38,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.gson.Gson;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
-import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -51,6 +50,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 import tieorange.com.pjabuffet.R;
+import tieorange.com.pjabuffet.activities.ui.BottomBarFixed;
 import tieorange.com.pjabuffet.activities.ui.HidingScrollListener;
 import tieorange.com.pjabuffet.activities.ui.LoadingSpinnerDialog;
 import tieorange.com.pjabuffet.fragmants.EventProductRemovedFromCart;
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.bottomBar)
-    BottomBar mBottomBar;
+    BottomBarFixed mBottomBar;
     @BindView(R.id.fab)
     FloatingActionButton fab;
     @BindView(R.id.frameContainer)
@@ -210,6 +210,22 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState == null) return;
+        mBadgeCount = savedInstanceState.getInt(Constants.BADGE_COUNT, 0);
+        if (mBottomTabOrders == null) return;
+        mBottomTabOrders.setBadgeCount(mBadgeCount);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(Constants.BADGE_COUNT, mBadgeCount);
+        super.onSaveInstanceState(outState);
+
+    }
+
     private void initFragments() {
         mMenuFragment = MenuFragment.newInstance();
         mOrdersFragment = OrdersFragment.newInstance();
@@ -276,7 +292,8 @@ public class MainActivity extends AppCompatActivity {
     private void initViews() {
         mHandlerForFAB = new Handler();
         setStatusBarTranslucent(false);
-        mBottomTabOrders = mBottomBar.getTabWithId(R.id.tab_orders);
+        mBottomTabOrders = mBottomBar.getTabAtPosition(1); /*mBottomBar.getTabWithId(R.id.tab_orders);*/
+
         mBottomTabOrders.setBadgeCount(mBadgeCount);
 
         mBottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -284,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_menu) {
                     switchTab(TAG_MENU);
-                } else if (tabId == R.id.tab_orders) {
+                } else if (tabId == R.id.tab_orders_new) {
                     switchTab(TAG_ORDER);
                 } else if (tabId == R.id.tab_profile) {
                     switchTab(TAG_PROFILE);
@@ -387,10 +404,7 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (notificationsCount <= 0) {
-//                    ActionItemBadge.hide(mHistoryMenuItem);
-
-                } else {
+                if (notificationsCount > 0) {
                     Drawable icon = ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_orders_history_action);
                     ActionItemBadge.update(MainActivity.this, mHistoryMenuItem, icon, ActionItemBadge.BadgeStyles.RED, 3);
                 }

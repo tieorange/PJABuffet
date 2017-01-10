@@ -39,6 +39,7 @@ public class AdapterOrderItem extends RecyclerView.Adapter<AdapterOrderItem.View
 
   @Override public void onBindViewHolder(ViewHolder holder, int position) {
     final Pair<Product, Integer> entry = CartTools.getEntry(position);
+
     Product product = entry.first;
     final Integer amount = entry.second;
 

@@ -10,91 +10,90 @@
     tools:context="tieorange.com.pjabuffet.activities.MainActivity"
     >
 
-  <!-- <android.support.design.widget.AppBarLayout
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:theme="@style/AppTheme.AppBarOverlay"
-   >-->
-  <!--    <android.support.design.widget.CollapsingToolbarLayout
-          android:id="@+id/collapsing_toolbar"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:fitsSystemWindows="true"
-          app:contentScrim="?attr/colorPrimary"
-          app:expandedTitleMarginEnd="64dp"
-          app:expandedTitleMarginStart="48dp"
-          app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">-->
-  <android.support.v7.widget.CardView
-      android:id="@+id/map_toolbar_container"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_margin="8dp"
-      app:cardElevation="8dp"
-      >
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <!-- <android.support.design.widget.AppBarLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:theme="@style/AppTheme.AppBarOverlay"
+     >-->
+    <!--    <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="48dp"
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">-->
+    <android.support.v7.widget.CardView
+        android:id="@+id/map_toolbar_container"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
-        android:titleTextColor="@color/primary"
-        app:layout_collapseMode="parallax"
-        app:layout_scrollFlags="scroll|enterAlways|snap"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        tools:title="PJA Buffet"
-        />
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardElevation="8dp"
+        >
 
-  </android.support.v7.widget.CardView >
-  <!--</android.support.design.widget.AppBarLayout>-->
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            android:titleTextColor="@color/primary"
+            app:layout_collapseMode="parallax"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            tools:title="PJA Buffet"
+            />
 
-  <android.support.v4.widget.NestedScrollView
-      android:id="@+id/nestedScroll"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      >
-    <FrameLayout
-        android:id="@+id/frameContainer"
+    </android.support.v7.widget.CardView>
+    <!--</android.support.design.widget.AppBarLayout>-->
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        >
+
+        <FrameLayout
+            android:id="@+id/frameContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </android.support.v4.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/buttonLearnAnimation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="Button"
+        android:visibility="gone"
         />
-  </android.support.v4.widget.NestedScrollView >
 
-  <Button
-      android:id="@+id/buttonLearnAnimation"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="left"
-      android:text="Button"
-      android:visibility="gone"
-      />
-
-  <com.roughike.bottombar.BottomBar
-      android:id="@+id/bottomBar"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/bottomBarHeight"
-      android:layout_alignParentBottom="true"
-      android:layout_gravity="bottom"
-      app:bb_activeTabColor="@color/white"
-      app:bb_behavior="shifting"
-      app:bb_inActiveTabAlpha="0.6"
-      app:bb_inActiveTabColor="@color/white"
-      app:bb_tabXmlResource="@xml/bottombar_tabs"
-      app:layout_insetEdge="top"
-      />
+    <tieorange.com.pjabuffet.activities.ui.BottomBarFixed
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottomBarHeight"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        app:bb_activeTabColor="@color/white"
+        app:bb_behavior="shifting"
+        app:bb_inActiveTabAlpha="0.6"
+        app:bb_inActiveTabColor="@color/white"
+        app:bb_tabXmlResource="@xml/bottombar_tabs"
+        app:layout_insetEdge="top"
+        />
 
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="65dp"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_money_white_24dp"
+        />
 
 
-  <android.support.design.widget.FloatingActionButton
-      android:id="@+id/fab"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="bottom|end"
-      android:layout_marginBottom="65dp"
-      android:layout_marginRight="@dimen/fab_margin"
-      android:visibility="gone"
-      app:srcCompat="@drawable/ic_money_white_24dp"
-      />
-
-
-</android.support.design.widget.CoordinatorLayout >
+</android.support.design.widget.CoordinatorLayout>
