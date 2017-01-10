@@ -21,8 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -65,13 +63,12 @@ import tieorange.com.pjabuffet.pojo.api.Order;
 import tieorange.com.pjabuffet.pojo.events.EventProductAddedToCart;
 import tieorange.com.pjabuffet.pojo.events.EventProductTouch;
 import tieorange.com.pjabuffet.pojo.events.EventToolbarSetVisibility;
+import tieorange.com.pjabuffet.utils.CartTools;
 import tieorange.com.pjabuffet.utils.Constants;
 import tieorange.com.pjabuffet.utils.FirebaseTools;
 import tieorange.com.pjabuffet.utils.Interfaces.IOrderPushed;
 import tieorange.com.pjabuffet.utils.OrderTools;
 import tieorange.com.pjabuffet.utils.Tools;
-
-import static android.view.View.GONE;
 
 @HensonNavigable
 public class MainActivity extends AppCompatActivity {
@@ -120,8 +117,6 @@ public class MainActivity extends AppCompatActivity {
         startPushService();
         checkExtras();
 
-        // TODO: 1/10/17 RM:
-        showSnackBar();
     }
 
     private void checkExtras() {
@@ -425,11 +420,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showSnackBar(/*EventProductAddedToCart event*/) {
+    private void showSnackBar() {
         mBottomBarHeight = getResources().getDimension(R.dimen.bottomBarHeight);
-//        mBottomBarHeight = Tools.dpToPx(MainActivity.this, (int) mBottomBarHeight);
 
-        Snackbar snack = Snackbar.make(rootLayout, "Suma: " + "15 PLN", Snackbar.LENGTH_LONG).setAction("Order", new View.OnClickListener() {
+        String orderPriceSum = CartTools.getCartTotalPrice();
+        Snackbar snack = Snackbar.make(rootLayout, "Suma: " + orderPriceSum, Snackbar.LENGTH_LONG).setAction("Order", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Order", Toast.LENGTH_SHORT).show();
@@ -449,7 +444,7 @@ public class MainActivity extends AppCompatActivity {
         mBadgeCount++;
         mBottomTabOrders.setBadgeCount(mBadgeCount);
 
-        //showSnackBar(event);
+        showSnackBar();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
