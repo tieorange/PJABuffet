@@ -24,7 +24,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.bottomBar)
-    BottomBar bottomBar;
+    BottomBar mBottomBar;
     @BindView(R.id.fab)
     FloatingActionButton fab;
     @BindView(R.id.frameContainer)
@@ -101,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
     private int mBadgeCount = 0;
     private MenuItem mHistoryMenuItem;
     private ValueEventListener mFirebaseListenerBadge;
-    private float mBottomBarHeight;
-    //@BindView(R.id.bottomBar) public BottomBar mBottomBar;
+    private Snackbar mSnackBar;
+    //@BindView(R.id.mBottomBar) public BottomBar mBottomBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -277,10 +276,10 @@ public class MainActivity extends AppCompatActivity {
     private void initViews() {
         mHandlerForFAB = new Handler();
         setStatusBarTranslucent(false);
-        mBottomTabOrders = bottomBar.getTabWithId(R.id.tab_orders);
+        mBottomTabOrders = mBottomBar.getTabWithId(R.id.tab_orders);
         mBottomTabOrders.setBadgeCount(mBadgeCount);
 
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+        mBottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_menu) {
@@ -292,6 +291,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
 
         initToolbarHiding();
     }
@@ -420,22 +420,28 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showSnackBar() {
-        mBottomBarHeight = getResources().getDimension(R.dimen.bottomBarHeight);
+    private void updateSnackBarPrice() {
+        float bottomBarHeight = getResources().getDimension(R.dimen.bottomBarHeight) - 10;
 
         String orderPriceSum = CartTools.getCartTotalPrice();
-        Snackbar snack = Snackbar.make(rootLayout, "Suma: " + orderPriceSum, Snackbar.LENGTH_LONG).setAction("Order", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Order", Toast.LENGTH_SHORT).show();
-            }
-        });
+        String snackText = getString(R.string.sum) + orderPriceSum + " zł";
+        if (mSnackBar == null || !mSnackBar.isShown()) {
+            mSnackBar = Snackbar.make(rootLayout, snackText, Snackbar.LENGTH_INDEFINITE).setAction("Order", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switchTab(TAG_ORDER);
+                    mBottomBar.selectTabAtPosition(1);
+                }
+            });
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
+                    mSnackBar.getView().getLayoutParams();
+            params.setMargins(0, 0, 0, (int) bottomBarHeight);
+            mSnackBar.getView().setLayoutParams(params);
+        } else {
+            mSnackBar.setText(snackText);
+        }
 
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
-                snack.getView().getLayoutParams();
-        params.setMargins(0, 0, 30, (int) mBottomBarHeight);
-        snack.getView().setLayoutParams(params);
-        snack.show();
+        mSnackBar.show();
 
     }
 
@@ -444,13 +450,15 @@ public class MainActivity extends AppCompatActivity {
         mBadgeCount++;
         mBottomTabOrders.setBadgeCount(mBadgeCount);
 
-        showSnackBar();
+        updateSnackBarPrice();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(EventProductRemovedFromCart event) {
         mBadgeCount--;
         mBottomTabOrders.setBadgeCount(mBadgeCount);
+
+        updateSnackBarPrice();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

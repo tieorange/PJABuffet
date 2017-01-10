@@ -46,13 +46,13 @@ public class CartTools {
   }
 
   public static void addProductToCart(Product product) {
-    EventBus.getDefault().post(new EventProductAddedToCart());
     add(product);
+    EventBus.getDefault().post(new EventProductAddedToCart());
   }
 
   public static void removeProductFromCart(Product product) {
-    EventBus.getDefault().post(new EventProductRemovedFromCart());
     remove(product);
+    EventBus.getDefault().post(new EventProductRemovedFromCart());
   }
 
   public static int getCurrentAmount(Product product) {
