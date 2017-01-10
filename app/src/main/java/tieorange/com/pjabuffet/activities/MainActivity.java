@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -17,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -42,8 +44,6 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 
-import io.codetail.animation.arcanimator.ArcAnimator;
-import io.codetail.animation.arcanimator.Side;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -117,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         startPushService();
         checkExtras();
+
+        // TODO: 1/10/17 RM:
+        showSnackBar();
     }
 
     private void checkExtras() {
@@ -389,7 +392,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (notificationsCount <= 0) {
-                    ActionItemBadge.hide(mHistoryMenuItem);
+//                    ActionItemBadge.hide(mHistoryMenuItem);
+
+//                    mHistoryMenuItem.setActionView(new View(MainActivity.this));
+
+
+//                    Drawable icon = ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_orders_history_action);
+//                    ActionItemBadge.update(MainActivity.this, mHistoryMenuItem, icon, ActionItemBadge.BadgeStyles., 0);
+
                 } else {
                     Drawable icon = ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_orders_history_action);
                     ActionItemBadge.update(MainActivity.this, mHistoryMenuItem, icon, ActionItemBadge.BadgeStyles.RED, 3);
@@ -420,8 +430,15 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showSnackBar(EventProductAddedToCart event) {
-        //Snackbar.make(rootLayout, "Had a snack at Snackbar", Snackbar.LENGTH_LONG).show();
+    private void showSnackBar(/*EventProductAddedToCart event*/) {
+        Snackbar snack = Snackbar.make(rootLayout, "Had a snack at Snackbar", Snackbar.LENGTH_LONG);
+
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
+                snack.getView().getLayoutParams();
+        params.setMargins(0, 0, 0, bottomBar.getHeight());
+        snack.getView().setLayoutParams(params);
+        snack.show();
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -453,43 +470,6 @@ public class MainActivity extends AppCompatActivity {
         button.setX(event.x);
         button.setY(event.y);
         //experiment();
-    }
-
-    private void experiment() {
-        int widthPixels = getResources().getDisplayMetrics().widthPixels;
-        int heightPixels = getResources().getDisplayMetrics().heightPixels;
-
-        int endX = widthPixels / 2;
-        int endY = heightPixels;
-        ArcAnimator arcAnimator =
-                ArcAnimator.createArcAnimator(button, endX, endY, 100, Side.LEFT).setDuration(3000);
-
-        Animation animationFadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out_anim);
-        animationFadeOut.setDuration(2000);
-        animationFadeOut.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                button.setVisibility(GONE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        arcAnimator.start();
-        button.startAnimation(animationFadeOut);
-
-        //TransitionManager.beginDelayedTransition(transitionsContainer, new ChangeBounds().setPathMotion(new ArcMotion()).setDuration(500));
-
-        //ArcDebugView arcDebugView = new ArcDebugView(getContext());
-        //arcDebugView.drawArcAnimator(arcAnimator);
     }
 
     private void hideToolbar() {

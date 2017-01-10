@@ -13,8 +13,6 @@ import android.widget.RelativeLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.codetail.animation.arcanimator.ArcAnimator;
-import io.codetail.animation.arcanimator.Side;
 import tieorange.com.pjabuffet.R;
 
 import static android.view.View.GONE;
@@ -60,7 +58,7 @@ public class ProfileFragment extends Fragment {
 
     int endX = widthPixels / 2;
     int endY = heightPixels;
-    ArcAnimator arcAnimator =
+   /* ArcAnimator arcAnimator =
         ArcAnimator.createArcAnimator(button, endX, endY, 100, Side.LEFT).setDuration(3000);
 
     Animation animationFadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out_anim);
@@ -79,8 +77,8 @@ public class ProfileFragment extends Fragment {
       }
     });
 
-    arcAnimator.start();
-    button.startAnimation(animationFadeOut);
+    arcAnimator.start();*/
+//    button.startAnimation(animationFadeOut);
 
     //TransitionManager.beginDelayedTransition(transitionsContainer, new ChangeBounds().setPathMotion(new ArcMotion()).setDuration(500));
 
