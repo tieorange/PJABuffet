@@ -26,6 +26,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
     private int mBadgeCount = 0;
     private MenuItem mHistoryMenuItem;
     private ValueEventListener mFirebaseListenerBadge;
+    private float mBottomBarHeight;
     //@BindView(R.id.bottomBar) public BottomBar mBottomBar;
 
     @Override
@@ -385,7 +387,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateBudge(final int notificationsCount) {
         if (mHistoryMenuItem == null) {
-//            mHistoryMenuItem =
             return;
         }
         runOnUiThread(new Runnable() {
@@ -393,12 +394,6 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 if (notificationsCount <= 0) {
 //                    ActionItemBadge.hide(mHistoryMenuItem);
-
-//                    mHistoryMenuItem.setActionView(new View(MainActivity.this));
-
-
-//                    Drawable icon = ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_orders_history_action);
-//                    ActionItemBadge.update(MainActivity.this, mHistoryMenuItem, icon, ActionItemBadge.BadgeStyles., 0);
 
                 } else {
                     Drawable icon = ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_orders_history_action);
@@ -431,11 +426,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showSnackBar(/*EventProductAddedToCart event*/) {
-        Snackbar snack = Snackbar.make(rootLayout, "Had a snack at Snackbar", Snackbar.LENGTH_LONG);
+        mBottomBarHeight = getResources().getDimension(R.dimen.bottomBarHeight);
+//        mBottomBarHeight = Tools.dpToPx(MainActivity.this, (int) mBottomBarHeight);
+
+        Snackbar snack = Snackbar.make(rootLayout, "Suma: " + "15 PLN", Snackbar.LENGTH_LONG).setAction("Order", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Order", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
                 snack.getView().getLayoutParams();
-        params.setMargins(0, 0, 0, bottomBar.getHeight());
+        params.setMargins(0, 0, 30, (int) mBottomBarHeight);
         snack.getView().setLayoutParams(params);
         snack.show();
 
