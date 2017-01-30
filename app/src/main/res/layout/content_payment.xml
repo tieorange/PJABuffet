@@ -83,7 +83,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/code"
-        app:srcCompat="@android:drawable/sym_def_app_icon"
+        tools:srcCompat="@android:drawable/sym_def_app_icon"
         />
     <TextView
         android:id="@+id/tvYourCode"

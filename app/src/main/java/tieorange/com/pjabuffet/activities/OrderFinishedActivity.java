@@ -23,19 +23,13 @@ import com.f2prateek.dart.InjectExtra;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
 import com.mikhaellopez.circularfillableloaders.CircularFillableLoaders;
 import tieorange.com.pjabuffet.MyApplication;
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.pojo.api.Order;
 import tieorange.com.pjabuffet.utils.NotificationHandler;
 import tieorange.com.pjabuffet.utils.Tools;
-
-import static android.graphics.Color.BLACK;
-import static android.graphics.Color.WHITE;
 
 public class OrderFinishedActivity extends AppCompatActivity {
 
@@ -154,6 +148,33 @@ public class OrderFinishedActivity extends AppCompatActivity {
     codeLayout.startAnimation(fadeInCode);
 
     code.setText(mOrder.secretCode);
+    showQrCode();
+  }
+
+  private void showQrCode() {
+    if (mOrderKey == null || mOrderKey.isEmpty()) {
+      Toast.makeText(this, "Please, try again later", Toast.LENGTH_SHORT).show();
+      return;
+    }
+
+    try {
+      final Bitmap bitmapQrCode = Tools.generateQrCode(mOrderKey);
+      qrCode.setImageBitmap(bitmapQrCode);
+    } catch (WriterException e) {
+      Log.d(TAG, "showQrCode: " + e.getMessage());
+      Tools.setViewVisibility(qrCode, View.GONE);
+    }
+  }
+
+  private void initFAB() {
+    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+    fab.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+            .setAction("Action", null)
+            .show();
+      }
+    });
   }
 
   private void simulateLoading(final ISimulatedLoadingFinished loadingFinished) {
@@ -182,39 +203,5 @@ public class OrderFinishedActivity extends AppCompatActivity {
       }
     });
     t.start();
-  }
-
-  Bitmap encodeAsBitmap(String str) throws WriterException {
-    int WIDTH = 300;
-    BitMatrix result;
-    try {
-      result = new MultiFormatWriter().encode(str, BarcodeFormat.QR_CODE, WIDTH, WIDTH, null);
-    } catch (IllegalArgumentException iae) {
-      // Unsupported format
-      return null;
-    }
-    int w = result.getWidth();
-    int h = result.getHeight();
-    int[] pixels = new int[w * h];
-    for (int y = 0; y < h; y++) {
-      int offset = y * w;
-      for (int x = 0; x < w; x++) {
-        pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
-      }
-    }
-    Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-    bitmap.setPixels(pixels, 0, WIDTH, 0, 0, w, h);
-    return bitmap;
-  }
-
-  private void initFAB() {
-    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-    fab.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-            .setAction("Action", null)
-            .show();
-      }
-    });
   }
 }
