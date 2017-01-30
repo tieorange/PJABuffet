@@ -29,6 +29,27 @@ public class OrderSectionAdapter
     mInflater = LayoutInflater.from(context);
   }
 
+  private static List<OrderSection> getOrdersSections(List<Order> ordersList) {
+    List<OrderSection> sectionsList = new ArrayList<>();
+    List<Order> current = new ArrayList<>();
+    List<Order> past = new ArrayList<>();
+
+    for (Order order : ordersList) {
+      if (order.isStatusReady()) {
+        past.add(order);
+      } else {
+        current.add(order);
+      }
+    }
+
+    if (current.size() > 0) {
+      sectionsList.add(new OrderSection("Current orders", current));
+    }
+    if (past.size() > 0) sectionsList.add(new OrderSection("Past", past));
+
+    return sectionsList;
+  }
+
   @Override public SectionViewHolder onCreateParentViewHolder(ViewGroup parentViewGroup) {
     final View view = mInflater.inflate(R.layout.item_section, parentViewGroup, false);
     return new SectionViewHolder(view);
@@ -49,26 +70,5 @@ public class OrderSectionAdapter
       Object childListItem) {
     final Order order = (Order) childListItem;
     holder.onBind(order);
-  }
-
-  private static List<OrderSection> getOrdersSections(List<Order> ordersList) {
-    List<OrderSection> sectionsList = new ArrayList<>();
-    List<Order> current = new ArrayList<>();
-    List<Order> past = new ArrayList<>();
-
-    for (Order order : ordersList) {
-      if (order.isStatusReady()) {
-        past.add(order);
-      } else {
-        current.add(order);
-      }
-    }
-
-    if (current.size() > 0) {
-      sectionsList.add(new OrderSection("Current orders", current));
-    }
-    if (past.size() > 0) sectionsList.add(new OrderSection("Past", past));
-
-    return sectionsList;
   }
 }

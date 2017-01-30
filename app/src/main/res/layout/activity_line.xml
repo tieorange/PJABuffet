@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 xmlns:tools="http://schemas.android.com/tools"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-                                                 android:fitsSystemWindows="true"
-                                                 tools:context="tieorange.com.pjabuffet.activities.LineActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="tieorange.com.pjabuffet.activities.LineActivity"
     >
 
 
@@ -25,9 +25,9 @@
         app:popupTheme="@style/AppTheme.PopupOverlay"
         tools:title="PJA Buffet"
         />
-  </android.support.design.widget.AppBarLayout >
+  </android.support.design.widget.AppBarLayout>
 
-  <include layout="@layout/content_line" />
+  <include layout="@layout/content_line"/>
 
 
-</android.support.design.widget.CoordinatorLayout >
+</android.support.design.widget.CoordinatorLayout>

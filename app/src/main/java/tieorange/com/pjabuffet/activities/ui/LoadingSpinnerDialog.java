@@ -14,34 +14,30 @@ import android.support.v4.app.FragmentManager;
 
 public class LoadingSpinnerDialog extends DialogFragment {
 
+  public FragmentManager mSupportFragmentManager;
+  private Context mContext;
 
-    public FragmentManager mSupportFragmentManager;
-    private Context mContext;
+  public LoadingSpinnerDialog() {
+  }
 
-    public LoadingSpinnerDialog() {
-    }
+  public static LoadingSpinnerDialog newInstance(FragmentManager supportFragmentManager) {
+    LoadingSpinnerDialog fragment = new LoadingSpinnerDialog();
+    fragment.mSupportFragmentManager = supportFragmentManager;
+    return fragment;
+  }
 
+  @NonNull @Override public Dialog onCreateDialog(final Bundle savedInstanceState) {
 
-    public static LoadingSpinnerDialog newInstance(FragmentManager supportFragmentManager) {
-        LoadingSpinnerDialog fragment = new LoadingSpinnerDialog();
-        fragment.mSupportFragmentManager = supportFragmentManager;
-        return fragment;
-    }
+    ProgressDialog _dialog = new ProgressDialog(getActivity());
+    this.setStyle(STYLE_NO_TITLE, getTheme()); // You can use styles or inflate a view
+    _dialog.setMessage("Loading..."); // set your messages if not inflated from XML
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(final Bundle savedInstanceState) {
+    _dialog.setCancelable(false);
 
-        ProgressDialog _dialog = new ProgressDialog(getActivity());
-        this.setStyle(STYLE_NO_TITLE, getTheme()); // You can use styles or inflate a view
-        _dialog.setMessage("Loading..."); // set your messages if not inflated from XML
+    return _dialog;
+  }
 
-        _dialog.setCancelable(false);
-
-        return _dialog;
-    }
-
-    public void show() {
-        this.show(mSupportFragmentManager, "lading");
-    }
+  public void show() {
+    this.show(mSupportFragmentManager, "lading");
+  }
 }

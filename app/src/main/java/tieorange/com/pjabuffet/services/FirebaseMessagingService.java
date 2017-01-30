@@ -4,8 +4,6 @@ import android.util.Log;
 import com.google.firebase.messaging.RemoteMessage;
 import tieorange.com.pjabuffet.utils.NotificationHandler;
 
-import static java.lang.Integer.parseInt;
-
 /**
  * Created by tieorange on 14/12/2016.
  */

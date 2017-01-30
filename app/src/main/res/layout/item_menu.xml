@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                                    xmlns:tools="http://schemas.android.com/tools"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:clickable="true"
-                                    android:foreground="?android:attr/selectableItemBackground"
-                                    android:orientation="vertical"
-                                    app:cardCornerRadius="@dimen/cardview_corner_radius"
-                                    app:cardElevation="6dp"
-                                    tools:layout_height="200dp"
-                                    tools:layout_width="170dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="vertical"
+    app:cardCornerRadius="@dimen/cardview_corner_radius"
+    app:cardElevation="6dp"
+    tools:layout_height="200dp"
+    tools:layout_width="170dp"
     >
 
   <android.support.constraint.ConstraintLayout
@@ -38,7 +38,7 @@
           tools:background="@color/material_color_green_100"
           tools:visibility="visible"
           />
-    </io.codetail.widget.RevealFrameLayout >
+    </io.codetail.widget.RevealFrameLayout>
     <ImageView
         android:id="@+id/image"
         android:layout_width="0dp"
@@ -124,5 +124,5 @@
         app:srcCompat="@drawable/ic_close"
         />
 
-  </android.support.constraint.ConstraintLayout >
-</android.support.v7.widget.CardView >
+  </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

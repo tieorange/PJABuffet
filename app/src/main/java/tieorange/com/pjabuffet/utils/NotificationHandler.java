@@ -7,23 +7,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
-
 import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.Henson;
-import tieorange.com.pjabuffet.activities.LineActivity;
-import tieorange.com.pjabuffet.activities.PaymentActivity;
 import tieorange.com.pjabuffet.pojo.PushNotificationBuffet;
 import tieorange.com.pjabuffet.pojo.api.Order;
 
-import static android.app.PendingIntent.FLAG_ONE_SHOT;
 import static java.lang.Integer.parseInt;
 
 /**
@@ -31,50 +25,53 @@ import static java.lang.Integer.parseInt;
  */
 
 public class NotificationHandler {
-    private static final String TAG = NotificationHandler.class.getCanonicalName();
-    private static final String NOTIFICATION = "Notification";
+  private static final String TAG = NotificationHandler.class.getCanonicalName();
+  private static final String NOTIFICATION = "Notification";
 
-    public static void showNotification(Context context, RemoteMessage message) {
-        Map<String, String> data = message.getData();
-        System.out.println("data = " + data);
+  public static void showNotification(Context context, RemoteMessage message) {
+    Map<String, String> data = message.getData();
+    System.out.println("data = " + data);
 
-//        RemoteMessage.Notification notification = message.getNotification();
+    //        RemoteMessage.Notification notification = message.getNotification();
 
-        final PushNotificationBuffet pushObject = getParsedJson(message.getData());
+    final PushNotificationBuffet pushObject = getParsedJson(message.getData());
 
-        int notificationID = generateNotificationID();
+    int notificationID = generateNotificationID();
 
-        Order order = new Order(pushObject);
-        Intent resultIntent = Henson.with(context).gotoPaymentActivity().mOrderKey(order.key).mNotificationId(notificationID).build();
-        resultIntent.setAction(NOTIFICATION);
+    Order order = new Order(pushObject);
+    Intent resultIntent = Henson.with(context)
+        .gotoPaymentActivity()
+        .mOrderKey(order.key)
+        .mNotificationId(notificationID)
+        .build();
+    resultIntent.setAction(NOTIFICATION);
 
-        PendingIntent pendingIntent =
-                PendingIntent.getActivity(context, 1, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT); // was FLAG_ONE_SHOT
-        NotificationCompat.Builder mBuilder = getBuilder(context, pendingIntent, pushObject);
-        NotificationManager notificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+    PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, resultIntent,
+        PendingIntent.FLAG_CANCEL_CURRENT); // was FLAG_ONE_SHOT
+    NotificationCompat.Builder mBuilder = getBuilder(context, pendingIntent, pushObject);
+    NotificationManager notificationManager =
+        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Notification notification = mBuilder.build();
-        notificationManager.notify(notificationID, notification);
-    }
+    Notification notification = mBuilder.build();
+    notificationManager.notify(notificationID, notification);
+  }
 
+  private static NotificationCompat.Builder getBuilder(Context context, PendingIntent pendingIntent,
+      PushNotificationBuffet pushObject) {
+    String secretCode = pushObject.getSecretCode();
+    Log.d(TAG, "notification:  secretCode = " + secretCode);
 
-    private static NotificationCompat.Builder getBuilder(Context context, PendingIntent pendingIntent,
-                                                         PushNotificationBuffet pushObject) {
-        String secretCode = pushObject.getSecretCode();
-        Log.d(TAG, "notification:  secretCode = " + secretCode);
+    return new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification_circle)
+        .setContentTitle(context.getString(R.string.your_order_is_ready))
+        .setContentIntent(pendingIntent)
+        .setContentText(context.getString(R.string.your_secret_code) + secretCode);
+  }
 
-        return new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification_circle)
-                .setContentTitle(context.getString(R.string.your_order_is_ready))
-                .setContentIntent(pendingIntent)
-                .setContentText(context.getString(R.string.your_secret_code) + secretCode);
-    }
-
-    private static PushNotificationBuffet getParsedJson(Map<String, String> dataMap) {
-        Gson gson = new Gson();
-        String jsonStr = MapToJsonConverter.convert(dataMap);
-        return gson.fromJson(jsonStr, PushNotificationBuffet.class);
-    }
+  private static PushNotificationBuffet getParsedJson(Map<String, String> dataMap) {
+    Gson gson = new Gson();
+    String jsonStr = MapToJsonConverter.convert(dataMap);
+    return gson.fromJson(jsonStr, PushNotificationBuffet.class);
+  }
 
     /*public static void showNotificationDummy(Context context) {
         // TODO: 15/12/2016  get Order object from backend
@@ -95,15 +92,15 @@ public class NotificationHandler {
         notificationManager.notify(generateNotificationID(), mBuilder.build());
     }*/
 
-    private static int generateNotificationID() {
-        Date now = new Date();
-        return parseInt(new SimpleDateFormat("ddHHmmss", Locale.US).format(now));
-    }
+  private static int generateNotificationID() {
+    Date now = new Date();
+    return parseInt(new SimpleDateFormat("ddHHmmss", Locale.US).format(now));
+  }
 
-    public static void dismissNotification(Context context, Integer notificationId) {
-        if (notificationId == null) return;
-        NotificationManager notificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(notificationId);
-    }
+  public static void dismissNotification(Context context, Integer notificationId) {
+    if (notificationId == null) return;
+    NotificationManager notificationManager =
+        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+    notificationManager.cancel(notificationId);
+  }
 }

@@ -17,4 +17,4 @@
       tools:listitem="@layout/item_section_item"
       />
 
-</RelativeLayout >
+</RelativeLayout>

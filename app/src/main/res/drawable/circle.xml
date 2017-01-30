@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
   <!-- Larger blue circle in back -->
-  <item android:id="@+id/biggerOvalStroke" >
-    <shape android:shape="oval" >
+  <item android:id="@+id/biggerOvalStroke">
+    <shape android:shape="oval">
       <stroke
           android:color="@color/circleBackgroundActive"
-          android:width="2dp" />
-      <solid android:color="@color/white" />
+          android:width="2dp"/>
+      <solid android:color="@color/white"/>
       <size
           android:height="15dp"
-          android:width="15dp" />
-    </shape >
-  </item >
+          android:width="15dp"/>
+    </shape>
+  </item>
   <!-- Smaller red circle in front -->
-  <item android:id="@+id/smallerOvalSolid" >
-    <shape android:shape="oval" >
+  <item android:id="@+id/smallerOvalSolid">
+    <shape android:shape="oval">
       <!-- transparent stroke = larger_circle_size - smaller_circle_size -->
       <stroke
           android:color="@android:color/transparent"
-          android:width="10dp" />
-      <solid android:color="@color/circleBackgroundActive" />
+          android:width="10dp"/>
+      <solid android:color="@color/circleBackgroundActive"/>
       <size
           android:height="10dp"
-          android:width="10dp" />
-    </shape >
-  </item >
-</layer-list >
+          android:width="10dp"/>
+    </shape>
+  </item>
+</layer-list>

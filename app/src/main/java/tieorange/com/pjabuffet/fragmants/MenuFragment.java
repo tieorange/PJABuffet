@@ -22,9 +22,7 @@ import tieorange.com.pjabuffet.R;
 import tieorange.com.pjabuffet.activities.ui.AdapterMenu;
 import tieorange.com.pjabuffet.activities.ui.GridItemSpacingDecorator;
 import tieorange.com.pjabuffet.activities.ui.ItemClickSupport;
-import tieorange.com.pjabuffet.pojo.api.Product;
 import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
-import tieorange.com.pjabuffet.pojo.events.EventProductAddedToCart;
 import tieorange.com.pjabuffet.pojo.events.EventToolbarSetVisibility;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
@@ -86,14 +84,11 @@ public class MenuFragment extends Fragment {
     initRetrofit();
   }
 
-  @Override
-  public void onResume() {
+  @Override public void onResume() {
     super.onResume();
-
   }
 
-  @Override
-  public void onPause() {
+  @Override public void onPause() {
 
     super.onPause();
   }

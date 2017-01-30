@@ -1,10 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/rootLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="tieorange.com.pjabuffet.fragmants.MenuFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="tieorange.com.pjabuffet.fragmants.MenuFragment"
     >
 
   <android.support.v7.widget.RecyclerView
@@ -15,4 +15,4 @@
       style="@style/recyclerViewWithToolbar"
       />
 
-</RelativeLayout >
+</RelativeLayout>

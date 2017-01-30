@@ -9,9 +9,17 @@ import tieorange.com.pjabuffet.utils.Constants;
  */
 
 @Parcel public class User implements Parcelable {
+  public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+    @Override public User createFromParcel(android.os.Parcel source) {
+      return new User(source);
+    }
+
+    @Override public User[] newArray(int size) {
+      return new User[size];
+    }
+  };
   private final String device;
   private String uid;
-
   private String token;
 
   private User() {
@@ -22,6 +30,12 @@ import tieorange.com.pjabuffet.utils.Constants;
     this();
     this.token = token;
     this.uid = uid;
+  }
+
+  protected User(android.os.Parcel in) {
+    this.device = in.readString();
+    this.uid = in.readString();
+    this.token = in.readString();
   }
 
   public String getUid() {
@@ -54,21 +68,5 @@ import tieorange.com.pjabuffet.utils.Constants;
     dest.writeString(this.uid);
     dest.writeString(this.token);
   }
-
-  protected User(android.os.Parcel in) {
-    this.device = in.readString();
-    this.uid = in.readString();
-    this.token = in.readString();
-  }
-
-  public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
-    @Override public User createFromParcel(android.os.Parcel source) {
-      return new User(source);
-    }
-
-    @Override public User[] newArray(int size) {
-      return new User[size];
-    }
-  };
   //endregion
 }

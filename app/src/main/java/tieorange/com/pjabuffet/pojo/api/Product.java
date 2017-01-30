@@ -13,6 +13,15 @@ import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
  * Created by tieorange on 15/10/2016.
  */
 @Parcel public class Product implements Cloneable, Parcelable {
+  public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>() {
+    @Override public Product createFromParcel(android.os.Parcel source) {
+      return new Product(source);
+    }
+
+    @Override public Product[] newArray(int size) {
+      return new Product[size];
+    }
+  };
   public String name;
   public int price;
   public int cookingTime;
@@ -39,6 +48,14 @@ import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
     this.price = convertPriceDoubleToInt(productSheet.price);
     this.cookingTime = random.nextInt(20);
     this.photoUrl = productSheet.photoUrl;
+  }
+
+  protected Product(android.os.Parcel in) {
+    this.name = in.readString();
+    this.price = in.readInt();
+    this.cookingTime = in.readInt();
+    this.photoUrl = in.readString();
+    this.amount = (Integer) in.readValue(Integer.class.getClassLoader());
   }
 
   private static int convertPriceDoubleToInt(double price) {
@@ -106,23 +123,5 @@ import tieorange.com.pjabuffet.pojo.api.retro.ProductSheet;
     dest.writeString(this.photoUrl);
     dest.writeValue(this.amount);
   }
-
-  protected Product(android.os.Parcel in) {
-    this.name = in.readString();
-    this.price = in.readInt();
-    this.cookingTime = in.readInt();
-    this.photoUrl = in.readString();
-    this.amount = (Integer) in.readValue(Integer.class.getClassLoader());
-  }
-
-  public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>() {
-    @Override public Product createFromParcel(android.os.Parcel source) {
-      return new Product(source);
-    }
-
-    @Override public Product[] newArray(int size) {
-      return new Product[size];
-    }
-  };
   //endregion
 }

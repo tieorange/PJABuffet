@@ -1,6 +1,5 @@
 package tieorange.com.pjabuffet.utils;
 
-import android.animation.TimeInterpolator;
 import android.view.animation.Interpolator;
 
 /**
@@ -9,6 +8,6 @@ import android.view.animation.Interpolator;
 
 public class ReverseInterpolator implements Interpolator {
   @Override public float getInterpolation(float paramFloat) {
-    return Math.abs(paramFloat -1f);
+    return Math.abs(paramFloat - 1f);
   }
 }

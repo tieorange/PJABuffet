@@ -15,12 +15,32 @@ import tieorange.com.pjabuffet.pojo.api.Product;
  */
 
 @Parcel public class Cart implements Parcelable {
-  @Exclude private Map<Product, Integer> products = new LinkedHashMap<>();
+  public static final Parcelable.Creator<Cart> CREATOR = new Parcelable.Creator<Cart>() {
+    @Override public Cart createFromParcel(android.os.Parcel source) {
+      return new Cart(source);
+    }
 
+    @Override public Cart[] newArray(int size) {
+      return new Cart[size];
+    }
+  };
+  @Exclude private Map<Product, Integer> products = new LinkedHashMap<>();
   private List<Product> productsFirebase = new ArrayList<>();
 
   public Cart() {
     setProducts(new LinkedHashMap<Product, Integer>());
+  }
+
+  protected Cart(android.os.Parcel in) {
+    int productsSize = in.readInt();
+    this.products = new HashMap<Product, Integer>(productsSize);
+    for (int i = 0; i < productsSize; i++) {
+      Product key = in.readParcelable(Product.class.getClassLoader());
+      Integer value = (Integer) in.readValue(Integer.class.getClassLoader());
+      this.products.put(key, value);
+    }
+    this.productsFirebase = new ArrayList<Product>();
+    in.readList(this.productsFirebase, Product.class.getClassLoader());
   }
 
   @Exclude public void convertProductsToFirebase() {
@@ -65,26 +85,4 @@ import tieorange.com.pjabuffet.pojo.api.Product;
     }
     dest.writeList(this.productsFirebase);
   }
-
-  protected Cart(android.os.Parcel in) {
-    int productsSize = in.readInt();
-    this.products = new HashMap<Product, Integer>(productsSize);
-    for (int i = 0; i < productsSize; i++) {
-      Product key = in.readParcelable(Product.class.getClassLoader());
-      Integer value = (Integer) in.readValue(Integer.class.getClassLoader());
-      this.products.put(key, value);
-    }
-    this.productsFirebase = new ArrayList<Product>();
-    in.readList(this.productsFirebase, Product.class.getClassLoader());
-  }
-
-  public static final Parcelable.Creator<Cart> CREATOR = new Parcelable.Creator<Cart>() {
-    @Override public Cart createFromParcel(android.os.Parcel source) {
-      return new Cart(source);
-    }
-
-    @Override public Cart[] newArray(int size) {
-      return new Cart[size];
-    }
-  };
 }

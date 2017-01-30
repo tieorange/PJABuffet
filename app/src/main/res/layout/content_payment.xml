@@ -99,6 +99,6 @@
         tools:layout_constraintRight_creator="1"
         tools:text="KJW"
         />
-  </android.support.constraint.ConstraintLayout >
+  </android.support.constraint.ConstraintLayout>
 
-</android.support.constraint.ConstraintLayout >
+</android.support.constraint.ConstraintLayout>

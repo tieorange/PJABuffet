@@ -6,16 +6,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import tieorange.com.pjabuffet.R;
-
-import static android.view.View.GONE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -78,7 +74,7 @@ public class ProfileFragment extends Fragment {
     });
 
     arcAnimator.start();*/
-//    button.startAnimation(animationFadeOut);
+    //    button.startAnimation(animationFadeOut);
 
     //TransitionManager.beginDelayedTransition(transitionsContainer, new ChangeBounds().setPathMotion(new ArcMotion()).setDuration(500));
 

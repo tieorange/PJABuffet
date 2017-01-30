@@ -42,7 +42,7 @@ public class MyApplication extends Application {
 
     initSharedPref();
     initFirebase();
-//    initProductsDummy();
+    //    initProductsDummy();
     initRetrofit();
     initUser();
   }

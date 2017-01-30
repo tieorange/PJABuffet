@@ -1,9 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/rootLayout"
-                android:layout_width="match_parent"
-                android:layout_height="500dp"
-                tools:context="tieorange.com.pjabuffet.fragmants.ProfileFragment"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    tools:context="tieorange.com.pjabuffet.fragmants.ProfileFragment"
     >
 
   <Button
@@ -14,4 +14,4 @@
       android:layout_marginTop="200dp"
       android:text="Button"
       />
-</RelativeLayout >
+</RelativeLayout>

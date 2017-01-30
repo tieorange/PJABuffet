@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="tieorange.com.pjabuffet.fragmants.OrdersFragment"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="tieorange.com.pjabuffet.fragmants.OrdersFragment"
     >
 
 
@@ -25,7 +25,7 @@
         android:textStyle="bold"
         tools:text="Total = 15 zł"
         />
-  </RelativeLayout >
+  </RelativeLayout>
 
   <android.support.v7.widget.RecyclerView
       android:id="@id/recycler"
@@ -39,4 +39,4 @@
       />
 
 
-</LinearLayout >
+</LinearLayout>
