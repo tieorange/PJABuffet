@@ -22,7 +22,7 @@
       </intent-filter>
     </activity>
     <activity
-        android:name=".activities.PaymentActivity"
+        android:name=".activities.OrderFinishedActivity"
         android:label="@string/title_activity_payment"
         android:noHistory="true"
         android:parentActivityName=".activities.MainActivity"
