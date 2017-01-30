@@ -211,7 +211,7 @@ public class LineActivity extends AppCompatActivity {
         final Order value = dataSnapshot.getValue(Order.class);
         if (value.isStatusAccepted() || value.isStatusReady()) {
           final Intent intent =
-              Henson.with(LineActivity.this).gotoPaymentActivity().mOrderKey(key).build();
+              Henson.with(LineActivity.this).gotoOrderFinishedActivity().mOrderKey(key).build();
           startActivity(intent);
         }
       }

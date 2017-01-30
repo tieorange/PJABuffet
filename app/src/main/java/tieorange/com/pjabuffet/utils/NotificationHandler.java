@@ -40,7 +40,7 @@ public class NotificationHandler {
 
     Order order = new Order(pushObject);
     Intent resultIntent = Henson.with(context)
-        .gotoPaymentActivity()
+        .gotoOrderFinishedActivity()
         .mOrderKey(order.key)
         .mNotificationId(notificationID)
         .build();

@@ -108,7 +108,7 @@ import tieorange.com.pjabuffet.utils.Tools;
     String orderKey = extras.getString(Constants.ORDER_KEY_);
     if (orderKey == null) return;
     Intent intent =
-        Henson.with(MainActivity.this).gotoPaymentActivity().mOrderKey(orderKey).build();
+        Henson.with(MainActivity.this).gotoOrderFinishedActivity().mOrderKey(orderKey).build();
     startActivity(intent);
   }
 

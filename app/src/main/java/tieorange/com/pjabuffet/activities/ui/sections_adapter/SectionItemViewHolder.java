@@ -65,7 +65,7 @@ public class SectionItemViewHolder extends ChildViewHolder {
           final String newKey = stringBuilder.toString();
           intent = Henson.with(context).gotoLineActivity().mOrderKey(key).build();
         } else {
-          intent = Henson.with(context).gotoPaymentActivity().mOrderKey(key).build();
+          intent = Henson.with(context).gotoOrderFinishedActivity().mOrderKey(key).build();
         }
         context.startActivity(intent);
       }
