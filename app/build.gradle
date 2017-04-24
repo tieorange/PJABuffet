@@ -64,7 +64,7 @@ dependencies {
   //    compile 'com.pusher:pusher-java-client:1.4.0'
   compile 'com.miguelcatalan:materialsearchview:1.4.0'
   compile 'com.afollestad.material-dialogs:core:0.9.1.0'
-  compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+  compile 'com.android.support.constraint:constraint-layout:1.0.2'
   compile 'com.google.firebase:firebase-messaging:10.0.1'
   testCompile 'junit:junit:4.12'
   apt 'com.jakewharton:butterknife-compiler:8.4.0'
